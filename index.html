@@ -315,9 +315,76 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
 .gp-btn:focus-visible{outline:3px solid #FFC69A;outline-offset:2px}
 .fill{background:#FFF3B0;color:#13202E;padding:0 4px;border-radius:3px;font-weight:500}
 .site-foot{text-align:center;color:var(--muted);font-size:13.5px;display:flex;flex-direction:column;align-items:center;gap:6px}
-.top-admin{display:flex;justify-content:flex-end;margin-bottom:-24px}
-.admin-btn{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 18px;border-radius:21px;border:0;background:var(--navy);color:var(--navy-ink);font:600 14.5px var(--body);text-decoration:none;box-shadow:0 4px 12px rgba(5,34,59,.15);transition:transform .15s ease,opacity .15s ease}
+.top-admin{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-bottom:-24px}
+.admin-btn{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 18px;border-radius:21px;border:0;background:var(--navy);color:var(--navy-ink);font:600 14.5px var(--body);text-decoration:none;box-shadow:0 4px 12px rgba(5,34,59,.15);transition:transform .15s ease,opacity .15s ease;cursor:pointer}
 .admin-btn:hover{transform:translateY(-1px);opacity:.92}
+.admin-btn.outline{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.admin-btn.accent{background:var(--accent);color:#fff}
+.cart-badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#fff;color:var(--accent);font-size:12.5px;font-weight:700}
+.buy{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:4px}
+@media (max-width:820px){.buy{grid-template-columns:1fr}}
+.buy-actions{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+.buy-btn.sec{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.login-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;width:100%;margin-top:8px}
+@media (max-width:680px){.login-form{grid-template-columns:1fr}}
+.login-form input,.kassa-field input,.kassa-field select{min-height:46px;padding:0 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:15px var(--body);width:100%}
+.login-form input:focus,.kassa-field input:focus{outline:2px solid var(--accent);border-color:var(--accent)}
+/* Kassa & Varukorg */
+.kassa-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:start}
+@media (max-width:860px){.kassa-grid{grid-template-columns:1fr}}
+.kassa-card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:16px}
+.kassa-card h3{margin:0;font-family:var(--display);font-size:22px;font-weight:600}
+.cart-list{display:flex;flex-direction:column;gap:12px}
+.cart-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
+@media (max-width:540px){.cart-item{flex-direction:column;align-items:flex-start}}
+.cart-item-info{display:flex;flex-direction:column;gap:2px}
+.cart-item-info strong{font-size:16px}
+.cart-item-info span{font-size:13.5px;color:var(--muted)}
+.cart-qty{display:flex;align-items:center;gap:8px}
+.qty-btn{width:34px;height:34px;border-radius:17px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 16px var(--body);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.qty-remove{background:none;border:0;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;margin-left:6px}
+.quick-add{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:16px}
+.quick-add-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.quick-add-grid{grid-template-columns:1fr}}
+.quick-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:14px}
+.quick-item button{min-height:36px;padding:0 12px;border-radius:18px;border:0;background:var(--navy);color:var(--navy-ink);font:600 13px var(--body);cursor:pointer;flex-shrink:0}
+.kassa-form{display:flex;flex-direction:column;gap:14px}
+.kassa-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.kassa-row{grid-template-columns:1fr}}
+.kassa-field{display:flex;flex-direction:column;gap:5px}
+.kassa-field label{font-size:13.5px;font-weight:600}
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay-opt{border:2px solid var(--line);border-radius:14px;padding:12px 14px;cursor:pointer;display:flex;flex-direction:column;gap:4px;background:var(--bg)}
+.pay-opt.active{border-color:var(--navy);background:var(--surface)}
+.pay-opt strong{font-size:15px;display:flex;align-items:center;gap:6px}
+.pay-opt span{font-size:12.5px;color:var(--muted)}
+.summary-rows{display:flex;flex-direction:column;gap:8px;border-top:1px solid var(--line);padding-top:12px;font-size:15px}
+.summary-row{display:flex;justify-content:space-between}
+.summary-row.total{font-size:20px;font-weight:700;border-top:1px solid var(--line);padding-top:10px;margin-top:4px}
+.order-done{background:var(--surface);border:2px solid var(--navy);border-radius:20px;padding:28px;display:flex;flex-direction:column;gap:16px}
+.license-badge{background:var(--accent-soft);border:2px dashed var(--accent);border-radius:16px;padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.license-code-big{font:700 24px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);letter-spacing:.06em;user-select:all}
+/* E-boksläsare */
+.reader-shell{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 12px 36px rgba(5,34,59,.1)}
+.reader-shell[data-rtheme="sepia"]{--surface:#F4ECD8;--bg:#EAE0C8;--ink:#2C221E;--muted:#6E5D4F;--line:#D8CBB0}
+.reader-shell[data-rtheme="dark"]{--surface:#121921;--bg:#0B1016;--ink:#E4E8EC;--muted:#94A0AC;--line:#263240}
+.reader-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:16px 22px;background:var(--bg);border-bottom:1px solid var(--line)}
+.reader-controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.r-btn{min-height:38px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 13.5px var(--body);cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.r-btn.primary{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.r-btn.accent{background:var(--accent);color:#fff;border-color:var(--accent)}
+.reader-layout{display:grid;grid-template-columns:260px minmax(0,1fr);min-height:620px}
+@media (max-width:800px){.reader-layout{grid-template-columns:1fr}}
+.reader-toc{background:var(--bg);border-right:1px solid var(--line);padding:18px;display:flex;flex-direction:column;gap:6px}
+@media (max-width:800px){.reader-toc{border-right:0;border-bottom:1px solid var(--line)}}
+.toc-btn{text-align:left;padding:10px 12px;border-radius:10px;border:0;background:transparent;color:var(--ink);font:500 14px/1.35 var(--body);cursor:pointer}
+.toc-btn:hover{background:rgba(181,82,12,.08)}
+.toc-btn.active{background:var(--navy);color:var(--navy-ink);font-weight:600}
+.reader-page{padding:clamp(24px,5vw,48px);max-width:72ch;margin:0 auto;display:flex;flex-direction:column;gap:20px;color:var(--ink);background:var(--surface)}
+.reader-page h3{font-family:var(--display);font-size:clamp(24px,4vw,32px);margin:0;line-height:1.2}
+.reader-body{font-family:Georgia,"Times New Roman",serif;font-size:18px;line-height:1.75;white-space:pre-line}
+.reader-nav-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:24px;border-top:1px solid var(--line);margin-top:auto}
+.toast-cart{position:fixed;bottom:24px;right:24px;z-index:150;background:var(--navy);color:#fff;padding:14px 20px;border-radius:16px;box-shadow:0 12px 30px rgba(0,0,0,.3);display:flex;align-items:center;gap:12px;font-weight:500}
 .admin-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .admin-btn svg{width:16px;height:16px;color:#FFC69A}
 @media (prefers-reduced-motion:reduce){.choice,.admin-btn{transition:none}.choice:hover,.admin-btn:hover{transform:none}}
@@ -428,8 +495,16 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
 
 <div class="wrap">
   <div class="top-admin">
+    <a class="admin-btn outline" href="#boklasare" id="top-reader-link">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      <span id="top-reader-label">Läs e-boken (Login)</span>
+    </a>
+    <a class="admin-btn accent" href="#kassa" id="top-cart-link">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      Kassa <span class="cart-badge" id="cart-count-badge">0</span>
+    </a>
     <a class="admin-btn" href="admin.html">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       Admin login
     </a>
   </div>
@@ -498,17 +573,33 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
           <div class="buy-card">
             <h4>Läs boken digitalt</h4>
             <span class="buy-tag">Låst till inloggning</span>
-            <p>Läs den kompletta boken direkt här på plattformen via en säker, personlig länk.</p>
-            <p class="price">200 kr</p>
-            <button type="button" class="buy-btn" data-buy="Läsbehörighet digitalt (200 kr)">Köp läsbehörighet</button>
+            <p>Läs den kompletta boken direkt här på webbplatsen med din e-post och personliga säkerhetskod.</p>
+            <p class="price" data-price-for="ebook-read">200 kr</p>
+            <div class="buy-actions">
+              <button type="button" class="buy-btn" data-cart-buy="ebook-read">Köp direkt i kassan</button>
+              <button type="button" class="buy-btn sec" data-cart-add="ebook-read">+ Lägg i varukorg</button>
+            </div>
           </div>
           <div class="buy-card premium">
             <span class="buy-premium">Premium</span>
-            <h4>Ladda ner boken</h4>
-            <span class="buy-tag">Engångsnedladdning</span>
-            <p>Få tillgång till en säker nedladdningslänk. Ladda ner hela boken i högupplöst PDF-format att spara för alltid.</p>
-            <p class="price">250 kr</p>
-            <button type="button" class="buy-btn" data-buy="Nedladdning PDF (250 kr)">Köp och ladda ner direkt</button>
+            <h4>Ladda ner boken (PDF)</h4>
+            <span class="buy-tag">Nedladdning + Läs online</span>
+            <p>Ladda ner hela boken i högupplöst PDF-format att spara för alltid samt fri läsbehörighet online.</p>
+            <p class="price" data-price-for="ebook-pdf">250 kr</p>
+            <div class="buy-actions">
+              <button type="button" class="buy-btn" data-cart-buy="ebook-pdf">Köp &amp; ladda ner direkt</button>
+              <button type="button" class="buy-btn sec" data-cart-add="ebook-pdf">+ Lägg i varukorg</button>
+            </div>
+          </div>
+          <div class="buy-card">
+            <h4>Fysisk bok (Pocket)</h4>
+            <span class="buy-tag">Skickas med post (+ 49 kr frakt)</span>
+            <p>Beställ den tryckta boken (ca 240 sidor) levererad direkt hem till din postadress.</p>
+            <p class="price" data-price-for="book-physical">299 kr</p>
+            <div class="buy-actions">
+              <button type="button" class="buy-btn" data-cart-buy="book-physical">Beställ fysisk bok</button>
+              <button type="button" class="buy-btn sec" data-cart-add="book-physical">+ Lägg i varukorg</button>
+            </div>
           </div>
         </div>
 
@@ -519,9 +610,19 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
         </div>
 
         <div class="login-box">
-          <div><strong>Redan köpt läsbehörighet?</strong><p>Logga in med din e-post och ditt lösenord/säkerhetskod för att läsa online direkt.</p></div>
-          <button type="button" class="copybtn" id="login-btn" aria-expanded="false" aria-controls="login-note">Logga in</button>
-          <p class="login-note" id="login-note" hidden>Inloggningen öppnar snart. Har du redan köpt läsbehörighet, mejla billy@klattertradet.com så skickar vi din personliga länk.</p>
+          <div style="flex:1 1 280px">
+            <strong>Redan köpt e-boken / läsbehörighet?</strong>
+            <p>Logga in med din e-postadress och din personliga säkerhetskod (t.ex. <code>EBOK-XXXX-XXXX</code>) för att läsa boken direkt på webbplatsen.</p>
+          </div>
+          <button type="button" class="copybtn" id="login-btn" aria-expanded="false" aria-controls="login-note">Logga in &amp; läs boken</button>
+          <div class="login-note" id="login-note" hidden>
+            <form class="login-form" id="inline-ebook-login-form">
+              <input type="email" id="inline-login-email" placeholder="Din e-postadress" required autocomplete="email">
+              <input type="text" id="inline-login-code" placeholder="Säkerhetskod (EBOK-XXXX-XXXX)" required autocomplete="off">
+              <button type="submit" class="buy-btn" style="padding:0 22px">Öppna boken</button>
+            </form>
+            <p id="inline-login-err" style="color:#B42318;font-weight:600;margin-top:8px" hidden></p>
+          </div>
         </div>
       </div>
     </div>
@@ -707,7 +808,7 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
             </div>
           </details>
 
-          <div class="svc-cta"><strong>Anmäl dig till Behandlingsassistent</strong><span>Mejla med ämnet ”Anmälan Behandlingsassistent” och skriv ditt namn och dina kontaktuppgifter.</span><div class="copyrow"><span class="sel" id="utbmail1">billy@klattertradet.com</span><button type="button" id="copyutb1" class="copybtn">Kopiera adressen</button></div></div>
+          <div class="svc-cta"><strong>Anmäl dig till Behandlingsassistent</strong><span>Boka direkt via kassan eller mejla med ämnet ”Anmälan Behandlingsassistent”.</span><div class="copyrow"><button type="button" class="buy-btn" style="padding:0 20px;min-height:44px" data-cart-buy="course-behandlingsassistent">Lägg utbildning i kassan</button><span class="sel" id="utbmail1">billy@klattertradet.com</span><button type="button" id="copyutb1" class="copybtn">Kopiera adressen</button></div></div>
         </article>
 
         <!-- Utbildning 2 -->
@@ -768,7 +869,7 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
             </div>
           </details>
 
-          <div class="svc-cta"><strong>Anmäl dig till Gestalt- &amp; Traumaterapeut</strong><span>Mejla med ämnet ”Anmälan Gestalt- &amp; Traumaterapeut” och skriv ditt namn och din bakgrund.</span><div class="copyrow"><span class="sel" id="utbmail2">billy@klattertradet.com</span><button type="button" id="copyutb2" class="copybtn">Kopiera adressen</button></div></div>
+          <div class="svc-cta"><strong>Anmäl dig till Gestalt- &amp; Traumaterapeut</strong><span>Boka direkt via kassan eller mejla med ämnet ”Anmälan Gestalt- &amp; Traumaterapeut”.</span><div class="copyrow"><button type="button" class="buy-btn" style="padding:0 20px;min-height:44px" data-cart-buy="course-gestalt">Lägg utbildning i kassan</button><span class="sel" id="utbmail2">billy@klattertradet.com</span><button type="button" id="copyutb2" class="copybtn">Kopiera adressen</button></div></div>
         </article>
 
         <!-- Utbildning 3 -->
@@ -843,7 +944,7 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
             </div>
           </details>
 
-          <div class="svc-cta"><strong>Anmäl dig till Introkurs – Dialog &amp; familjeombud</strong><span>Mejla med ämnet ”Anmälan Introkurs MiT / Familjeombud” och skriv ditt namn och din bakgrund.</span><div class="copyrow"><span class="sel" id="utbmail3">billy@klattertradet.com</span><button type="button" id="copyutb3" class="copybtn">Kopiera adressen</button></div></div>
+          <div class="svc-cta"><strong>Anmäl dig till Introkurs – Dialog &amp; familjeombud</strong><span>Boka direkt via kassan eller mejla med ämnet ”Anmälan Introkurs MiT / Familjeombud”.</span><div class="copyrow"><button type="button" class="buy-btn" style="padding:0 20px;min-height:44px" data-cart-buy="course-mit-intro">Lägg kurs i kassan</button><span class="sel" id="utbmail3">billy@klattertradet.com</span><button type="button" id="copyutb3" class="copybtn">Kopiera adressen</button></div></div>
         </article>
 
         <!-- Utbildning 4 (Specialistutbildning) -->
@@ -1001,6 +1102,168 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
       <p>Frågor? Mejla Billy Ljungberg direkt på:</p>
       <div class="copyrow"><span class="sel" id="cpmail">billy@klattertradet.com</span><button type="button" id="copycp" class="copybtn">Kopiera adressen</button></div>
       <p class="cp-more">Läs också vår <a href="#integritet">integritetspolicy</a>.</p>
+    </div>
+  </section>
+
+  <!-- KASSA & VARUKORG -->
+  <section class="book" id="kassa" hidden aria-labelledby="kassarubrik">
+    <button class="back" type="button" data-back><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Tillbaka</button>
+    <div>
+      <span class="course-no">Säker beställning · Stripe Checkout (Kort &amp; Swish)</span>
+      <h2 id="kassarubrik" tabindex="-1">Kassa &amp; Varukorg</h2>
+      <p class="byline" style="margin-top:4px">Köp e-boken (med omedelbar personlig inloggningskod), beställ den tryckta boken eller boka plats på våra utbildningar.</p>
+    </div>
+
+    <div id="order-confirmation" class="order-done" hidden></div>
+
+    <div class="kassa-grid" id="kassa-main-grid">
+      <div class="kassa-card">
+        <h3>Din varukorg</h3>
+        <div id="cart-items-container" class="cart-list"></div>
+
+        <div class="quick-add">
+          <strong style="font-size:15px">Lägg till produkter i kassan:</strong>
+          <div class="quick-add-grid" id="quick-add-catalog"></div>
+        </div>
+      </div>
+
+      <div class="kassa-card">
+        <h3>Kunduppgifter &amp; Betalning</h3>
+        <form id="checkout-form" class="kassa-form" novalidate>
+          <div class="kassa-field">
+            <label for="chk-name">För- och efternamn *</label>
+            <input type="text" id="chk-name" required placeholder="Anna Andersson" autocomplete="name">
+          </div>
+          <div class="kassa-field">
+            <label for="chk-email">E-postadress * <span style="font-weight:400;color:var(--muted)">(används för inloggning till e-boken &amp; kvitto)</span></label>
+            <input type="email" id="chk-email" required placeholder="namn@exempel.se" autocomplete="email">
+          </div>
+          <div class="kassa-field">
+            <label for="chk-phone">Mobilnummer (för ev. Swish / SMS-avisering)</label>
+            <input type="tel" id="chk-phone" placeholder="070-123 45 67" autocomplete="tel">
+          </div>
+
+          <div id="shipping-fields" hidden style="display:flex;flex-direction:column;gap:12px;padding:14px;border-radius:12px;background:var(--bg);border:1px solid var(--line)">
+            <strong style="font-size:14.5px">Leveransadress (för fysisk bok)</strong>
+            <div class="kassa-field">
+              <label for="chk-street">Gatuadress *</label>
+              <input type="text" id="chk-street" placeholder="Storgatan 12" autocomplete="street-address">
+            </div>
+            <div class="kassa-row">
+              <div class="kassa-field">
+                <label for="chk-zip">Postnummer *</label>
+                <input type="text" id="chk-zip" placeholder="123 45" autocomplete="postal-code">
+              </div>
+              <div class="kassa-field">
+                <label for="chk-city">Postort *</label>
+                <input type="text" id="chk-city" placeholder="Gävle" autocomplete="address-level2">
+              </div>
+            </div>
+          </div>
+
+          <div class="kassa-field">
+            <label>Välj betalsätt (Stripe Checkout)</label>
+            <div class="pay-methods" role="radiogroup" aria-label="Betalsätt">
+              <div class="pay-opt active" data-pay-method="stripe_card" tabindex="0">
+                <strong>Kortbetalning</strong>
+                <span>Visa, Mastercard, Apple Pay</span>
+              </div>
+              <div class="pay-opt" data-pay-method="stripe_swish" tabindex="0">
+                <strong>Swish</strong>
+                <span>Direktbetalning via Swish</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary-rows">
+            <div class="summary-row"><span>Delsumma</span><span id="sum-subtotal">0 kr</span></div>
+            <div class="summary-row" id="sum-shipping-row" hidden><span>Frakt (Fysisk bok)</span><span id="sum-shipping">49 kr</span></div>
+            <div class="summary-row total"><span>Att betala</span><span id="sum-total">0 kr</span></div>
+          </div>
+
+          <p id="chk-err" style="color:#B42318;font-weight:600;margin:0;font-size:14.5px" hidden></p>
+
+          <button type="submit" class="buy-btn" id="chk-submit-btn" style="width:100%;min-height:52px;font-size:16.5px">
+            Slutför köp &amp; betala
+          </button>
+          <p style="font-size:12.5px;color:var(--muted);text-align:center;margin:0">
+            Vid köp av e-boken genereras din personliga säkerhetskod direkt på skärmen så att du kan logga in och läsa boken omedelbart.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- E-BOKSLÄSARE & LOGIN -->
+  <section class="book" id="boklasare" hidden aria-labelledby="lasarerubrik">
+    <button class="back" type="button" data-back><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>Tillbaka</button>
+    <div>
+      <span class="course-no">Digital läsplattform · Horizonten</span>
+      <h2 id="lasarerubrik" tabindex="-1">E-boksläsare: Myndighetsinducerat trauma</h2>
+    </div>
+
+    <!-- Inloggningsruta för de som köpt e-boken -->
+    <div id="reader-login-card" class="kassa-card" style="max-width:560px">
+      <h3>Logga in för att läsa e-boken</h3>
+      <p style="margin:0;color:var(--muted)">Ange den e-postadress du använde vid köpet samt din personliga säkerhetskod (t.ex. <code>EBOK-XXXX-XXXX</code>).</p>
+      <form id="reader-login-form" class="kassa-form">
+        <div class="kassa-field">
+          <label for="r-login-email">E-postadress</label>
+          <input type="email" id="r-login-email" required placeholder="din@epost.se" autocomplete="email">
+        </div>
+        <div class="kassa-field">
+          <label for="r-login-code">Personlig säkerhetskod / Licensnyckel</label>
+          <input type="text" id="r-login-code" required placeholder="EBOK-XXXX-XXXX" autocomplete="off" style="font-family:ui-monospace,monospace;text-transform:uppercase">
+        </div>
+        <p id="r-login-err" style="color:#B42318;font-weight:600;margin:0" hidden></p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button type="submit" class="buy-btn" id="r-login-submit" style="padding:0 26px">Logga in &amp; öppna boken</button>
+          <a href="#kassa" class="copybtn" style="text-decoration:none;display:inline-flex;align-items:center" data-cart-buy="ebook-read">Saknar du kod? Köp e-boken (200 kr)</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Själva bokläsaren (visas efter inloggning) -->
+    <div id="reader-app" class="reader-shell" data-rtheme="light" hidden>
+      <div class="reader-top">
+        <div>
+          <strong id="r-book-title" style="font-size:16px">Myndighetsinducerat trauma, från subjekt till objekt</strong>
+          <div style="font-size:13px;color:var(--muted)" id="r-user-badge">Inloggad läsare</div>
+        </div>
+        <div class="reader-controls">
+          <button type="button" class="r-btn" id="r-mode-toggle" hidden>Visa original-PDF</button>
+          <button type="button" class="r-btn accent" id="r-pdf-download" hidden>Ladda ner PDF</button>
+          <button type="button" class="r-btn" id="r-font-dec" title="Minska textstorlek">A−</button>
+          <button type="button" class="r-btn" id="r-font-inc" title="Öka textstorlek">A+</button>
+          <button type="button" class="r-btn" id="r-theme-light">Ljust</button>
+          <button type="button" class="r-btn" id="r-theme-sepia">Sepia</button>
+          <button type="button" class="r-btn" id="r-theme-dark">Natt</button>
+          <button type="button" class="r-btn" id="r-logout-btn">Logga ut</button>
+        </div>
+      </div>
+
+      <!-- PDF-visare (om en PDF är uppladdad och användaren växlar till PDF-vy) -->
+      <div id="r-pdf-view" hidden style="padding:16px;background:var(--bg)">
+        <iframe id="r-pdf-frame" title="E-bok PDF" style="width:100%;height:780px;border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
+      </div>
+
+      <!-- Kapitelbaserad läsvy -->
+      <div class="reader-layout" id="r-chapter-view">
+        <aside class="reader-toc" aria-label="Kapitel">
+          <strong style="font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding:4px 8px">Innehåll</strong>
+          <div id="r-toc-list" style="display:flex;flex-direction:column;gap:4px"></div>
+        </aside>
+        <article class="reader-page" id="r-page-article">
+          <span class="course-no" id="r-chap-step">Kapitel</span>
+          <h3 id="r-chap-title"></h3>
+          <div class="reader-body" id="r-chap-body"></div>
+          <div class="reader-nav-foot">
+            <button type="button" class="r-btn" id="r-prev-chap">← Föregående kapitel</button>
+            <span id="r-chap-progress" style="font-size:13.5px;color:var(--muted)"></span>
+            <button type="button" class="r-btn primary" id="r-next-chap">Nästa kapitel →</button>
+          </div>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -1414,7 +1677,7 @@ render();
 })();
 
 (function(){
-  const sub = {boken:"bokrubrik", tjanster:"tjansterrubrik", cookies:"cookierubrik"};
+  const sub = {boken:"bokrubrik", tjanster:"tjansterrubrik", cookies:"cookierubrik", kassa:"kassarubrik", boklasare:"lasarerubrik"};
   const home = document.getElementById("hem"), hero = document.getElementById("start"), choices = document.getElementById("choices"),
         foot = document.getElementById("sitefoot"), enk = document.getElementById("kraftsamling"), pol = document.getElementById("integritet");
   document.getElementById("bokrubrik").setAttribute("tabindex","-1");
@@ -1433,12 +1696,13 @@ render();
     pol.hidden = view !== "integritet";
     window.scrollTo(0,0);
     const focus = view in sub ? sub[view] : view === "integritet" ? "integritetrubrik" : null;
-    if (focus) document.getElementById(focus).focus({preventScroll:true});
+    if (focus && document.getElementById(focus)) document.getElementById(focus).focus({preventScroll:true});
   }
   window.goHome = () => { location.hash = ""; };
   // Tillbaka: till vyn man kom ifrån (policyn öppnad från enkäten går tillbaka till enkäten, med svaren kvar)
   document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => {
     if (current === "integritet" && previous === "kraftsamling") location.hash = "kraftsamling";
+    else if ((current === "kassa" || current === "boklasare") && previous) location.hash = previous;
     else location.hash = "";
   }));
   addEventListener("hashchange", route);
@@ -1522,6 +1786,521 @@ b.addEventListener("click",()=>{const o=l.hidden;l.hidden=!o;b.setAttribute("ari
 
 (function(){const b=document.getElementById("gp-book"),t=document.getElementById("terapi-cta");
 b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"center"});t.focus({preventScroll:true});});})();
+
+/* === KASSA, VARUKORG & E-BOKSLÄSARE === */
+(function(){
+  const CFG = window.KRAFTSAMLING_CONFIG || {};
+  const SB_URL = (CFG.SUPABASE_URL || "").replace(/\/$/, "");
+  const SB_KEY = CFG.SUPABASE_ANON_KEY || "";
+  const CART_KEY = "horizonten-cart-v1";
+  const SESSION_KEY = "horizonten-ebook-session-v1";
+
+  const DEFAULT_PRODUCTS = [
+    {id:"ebook-read", title:"E-bok: Läs boken digitalt", subtitle:"Låst till personlig inloggning direkt på webbplatsen", category:"ebook", price_sek:200, shipping_sek:0, requires_shipping:false, grants_ebook:true, allows_pdf_download:false},
+    {id:"ebook-pdf", title:"E-bok: Ladda ner PDF + Läs online", subtitle:"Högupplöst PDF för nedladdning samt direkt läsbehörighet online", category:"ebook", price_sek:250, shipping_sek:0, requires_shipping:false, grants_ebook:true, allows_pdf_download:true},
+    {id:"book-physical", title:"Fysisk bok (Pocket) – Myndighetsinducerat trauma", subtitle:"Tryckt bok (ca 240 sidor) levererad hem till dig (+ 49 kr frakt)", category:"physical", price_sek:299, shipping_sek:49, requires_shipping:true, grants_ebook:false, allows_pdf_download:false},
+    {id:"course-behandlingsassistent", title:"Utbildning: Behandlingsassistent (12-stegsinriktning)", subtitle:"1-årig processinriktad grundutbildning (8 träffar á 2,5 dagar)", category:"course", price_sek:24900, shipping_sek:0, requires_shipping:false, grants_ebook:false, allows_pdf_download:false},
+    {id:"course-gestalt", title:"Utbildning: Gestalt- & Traumaterapeut (Basår)", subtitle:"2-årig processutbildning – avgift per läsår", category:"course", price_sek:32000, shipping_sek:0, requires_shipping:false, grants_ebook:false, allows_pdf_download:false},
+    {id:"course-mit-intro", title:"Utbildning: Myndighetsinducerat Trauma (Introkurs)", subtitle:"Introkurs till dialog- & familjeombud (3 dagar online + 3 dagar i Gävle)", category:"course", price_sek:4900, shipping_sek:0, requires_shipping:false, grants_ebook:false, allows_pdf_download:false}
+  ];
+
+  let PRODUCTS = [...DEFAULT_PRODUCTS];
+  let cart = [];
+  let payMethod = "stripe_card";
+  try { cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]") || []; } catch(e){ cart = []; }
+
+  const fmtKr = n => Number(n || 0).toLocaleString("sv-SE") + " kr";
+  const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);
+
+  async function loadProducts(){
+    if (!SB_URL || !SB_KEY) return;
+    try {
+      const r = await fetch(SB_URL + "/rest/v1/shop_products?select=*&active=eq.true&order=sort_order.asc", {
+        headers: { apikey: SB_KEY, Authorization: "Bearer " + SB_KEY }
+      });
+      if (r.ok) {
+        const rows = await r.json();
+        if (Array.isArray(rows) && rows.length > 0) {
+          PRODUCTS = rows;
+          PRODUCTS.forEach(p => {
+            document.querySelectorAll(`[data-price-for="${p.id}"]`).forEach(el => { el.textContent = fmtKr(p.price_sek); });
+          });
+          renderCart();
+        }
+      }
+    } catch(e){}
+  }
+
+  function saveCart(){
+    try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch(e){}
+    renderCart();
+  }
+
+  function addToCart(prodId, goCheckout){
+    const p = PRODUCTS.find(x => x.id === prodId);
+    if (!p) return;
+    const existing = cart.find(x => x.id === prodId);
+    if (existing) {
+      if (p.category === "ebook") existing.qty = 1;
+      else existing.qty = Math.min(20, existing.qty + 1);
+    } else {
+      cart.push({ id: p.id, qty: 1 });
+    }
+    document.getElementById("order-confirmation").hidden = true;
+    document.getElementById("kassa-main-grid").hidden = false;
+    saveCart();
+    if (goCheckout) {
+      location.hash = "kassa";
+    } else {
+      showToast(p.title + " lades i varukorgen");
+    }
+  }
+
+  let toastTimer = null;
+  function showToast(msg){
+    let t = document.getElementById("cart-toast");
+    if (!t) {
+      t = document.createElement("div");
+      t.id = "cart-toast";
+      t.className = "toast-cart";
+      document.body.appendChild(t);
+    }
+    t.innerHTML = `<span>${esc(msg)}</span><a href="#kassa" style="color:#FFC69A;font-weight:700;text-decoration:none">Till kassan →</a>`;
+    t.hidden = false;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.hidden = true; }, 3500);
+  }
+
+  function renderCart(){
+    const totalCount = cart.reduce((s, x) => s + (x.qty || 1), 0);
+    const badge = document.getElementById("cart-count-badge");
+    if (badge) badge.textContent = String(totalCount);
+
+    const listEl = document.getElementById("cart-items-container");
+    const catEl = document.getElementById("quick-add-catalog");
+    if (!listEl || !catEl) return;
+
+    let subtotal = 0;
+    let shipping = 0;
+    let needsShipping = false;
+
+    if (cart.length === 0) {
+      listEl.innerHTML = `<div style="padding:20px;text-align:center;color:var(--muted);background:var(--bg);border-radius:14px;border:1px dashed var(--line)">Varukorgen är tom. Välj en produkt nedan för att lägga till i kassan.</div>`;
+    } else {
+      listEl.innerHTML = cart.map(item => {
+        const p = PRODUCTS.find(x => x.id === item.id) || DEFAULT_PRODUCTS.find(x => x.id === item.id);
+        if (!p) return "";
+        const lineTotal = p.price_sek * item.qty;
+        subtotal += lineTotal;
+        if (p.requires_shipping) {
+          needsShipping = true;
+          shipping = Math.max(shipping, p.shipping_sek || 49);
+        }
+        return `<div class="cart-item">
+          <div class="cart-item-info">
+            <strong>${esc(p.title)}</strong>
+            <span>${esc(p.subtitle || "")} · ${fmtKr(p.price_sek)}/st</span>
+          </div>
+          <div class="cart-qty">
+            <button type="button" class="qty-btn" data-qty-dec="${esc(p.id)}" aria-label="Minska antal">−</button>
+            <strong style="min-width:22px;text-align:center">${item.qty}</strong>
+            <button type="button" class="qty-btn" data-qty-inc="${esc(p.id)}" aria-label="Öka antal">+</button>
+            <strong style="min-width:78px;text-align:right">${fmtKr(lineTotal)}</strong>
+            <button type="button" class="qty-remove" data-qty-del="${esc(p.id)}">Ta bort</button>
+          </div>
+        </div>`;
+      }).join("");
+    }
+
+    catEl.innerHTML = PRODUCTS.map(p => {
+      const inCart = cart.some(x => x.id === p.id);
+      return `<div class="quick-item">
+        <div>
+          <strong style="display:block">${esc(p.title)}</strong>
+          <span style="color:var(--muted);font-size:13px">${fmtKr(p.price_sek)}</span>
+        </div>
+        <button type="button" data-quick-add="${esc(p.id)}">${inCart ? "+ Lägg till" : "Välj"}</button>
+      </div>`;
+    }).join("");
+
+    const shipFields = document.getElementById("shipping-fields");
+    const shipRow = document.getElementById("sum-shipping-row");
+    if (shipFields) shipFields.hidden = !needsShipping;
+    if (shipRow) shipRow.hidden = !needsShipping;
+
+    document.getElementById("sum-subtotal").textContent = fmtKr(subtotal);
+    document.getElementById("sum-shipping").textContent = fmtKr(shipping);
+    document.getElementById("sum-total").textContent = fmtKr(subtotal + shipping);
+
+    listEl.querySelectorAll("[data-qty-dec]").forEach(b => b.onclick = () => {
+      const it = cart.find(x => x.id === b.dataset.qtyDec);
+      if (it) {
+        it.qty--;
+        if (it.qty <= 0) cart = cart.filter(x => x.id !== b.dataset.qtyDec);
+        saveCart();
+      }
+    });
+    listEl.querySelectorAll("[data-qty-inc]").forEach(b => b.onclick = () => {
+      const it = cart.find(x => x.id === b.dataset.qtyInc);
+      if (it) { it.qty = Math.min(20, it.qty + 1); saveCart(); }
+    });
+    listEl.querySelectorAll("[data-qty-del]").forEach(b => b.onclick = () => {
+      cart = cart.filter(x => x.id !== b.dataset.qtyDel);
+      saveCart();
+    });
+    catEl.querySelectorAll("[data-quick-add]").forEach(b => b.onclick = () => addToCart(b.dataset.quickAdd, false));
+  }
+
+  document.querySelectorAll("[data-cart-buy]").forEach(b => b.addEventListener("click", e => {
+    e.preventDefault();
+    addToCart(b.dataset.cartBuy, true);
+  }));
+  document.querySelectorAll("[data-cart-add]").forEach(b => b.addEventListener("click", e => {
+    e.preventDefault();
+    addToCart(b.dataset.cartAdd, false);
+  }));
+
+  document.querySelectorAll(".pay-opt").forEach(opt => {
+    opt.addEventListener("click", () => {
+      payMethod = opt.dataset.payMethod;
+      document.querySelectorAll(".pay-opt").forEach(x => x.classList.toggle("active", x === opt));
+    });
+  });
+
+  const chkForm = document.getElementById("checkout-form");
+  if (chkForm) {
+    chkForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const errEl = document.getElementById("chk-err");
+      const btn = document.getElementById("chk-submit-btn");
+      errEl.hidden = true;
+
+      if (cart.length === 0) {
+        errEl.textContent = "Varukorgen är tom. Lägg till minst en produkt först.";
+        errEl.hidden = false;
+        return;
+      }
+
+      const name = document.getElementById("chk-name").value.trim();
+      const email = document.getElementById("chk-email").value.trim().toLowerCase();
+      const phone = document.getElementById("chk-phone").value.trim();
+      const needsShip = !document.getElementById("shipping-fields").hidden;
+      const street = document.getElementById("chk-street").value.trim();
+      const zip = document.getElementById("chk-zip").value.trim();
+      const city = document.getElementById("chk-city").value.trim();
+
+      if (!name) { errEl.textContent = "Vänligen ange ditt för- och efternamn."; errEl.hidden = false; return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { errEl.textContent = "Vänligen ange en giltig e-postadress."; errEl.hidden = false; return; }
+      if (needsShip && (!street || !zip || !city)) { errEl.textContent = "Vänligen fyll i hela leveransadressen för fysisk bok."; errEl.hidden = false; return; }
+
+      btn.disabled = true;
+      btn.textContent = "Behandlar beställning…";
+
+      try {
+        const orderPayload = {
+          customer_name: name,
+          customer_email: email,
+          customer_phone: phone,
+          payment_method: payMethod,
+          payment_status: "paid",
+          shipping_address: needsShip ? { street, postal_code: zip, city } : null,
+          items: cart
+        };
+
+        const r = await fetch(SB_URL + "/rest/v1/rpc/create_shop_order", {
+          method: "POST",
+          headers: {
+            apikey: SB_KEY,
+            Authorization: "Bearer " + SB_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ payload: orderPayload })
+        });
+        const orderRes = await r.json().catch(() => null);
+        if (!r.ok || !orderRes || !orderRes.order_number) {
+          throw new Error((orderRes && orderRes.message) || "Kunde inte skapa ordern. Kontrollera uppgifterna.");
+        }
+
+        // Kontrollera om skarp Stripe Checkout är aktiv via Edge Function
+        try {
+          const richItems = cart.map(it => {
+            const p = PRODUCTS.find(x => x.id === it.id) || DEFAULT_PRODUCTS[0];
+            return { title: p.title, price_sek: p.price_sek, qty: it.qty };
+          });
+          const sfRes = await fetch(SB_URL + "/functions/v1/stripe-checkout", {
+            method: "POST",
+            headers: {
+              apikey: SB_KEY,
+              Authorization: "Bearer " + SB_KEY,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              customer_email: email,
+              items: richItems,
+              shipping_sek: orderRes.shipping_sek || 0,
+              success_url: location.origin + location.pathname + "#boklasare",
+              cancel_url: location.origin + location.pathname + "#kassa"
+            })
+          });
+          const sfData = await sfRes.json().catch(() => null);
+          if (sfData && sfData.mode === "stripe" && sfData.url) {
+            cart = [];
+            saveCart();
+            location.href = sfData.url;
+            return;
+          }
+        } catch(sfErr) {}
+
+        // Visa orderbekräftelse och personlig licensnyckel direkt
+        cart = [];
+        saveCart();
+        const conf = document.getElementById("order-confirmation");
+        document.getElementById("kassa-main-grid").hidden = true;
+        conf.hidden = false;
+
+        let licHtml = "";
+        if (orderRes.license_code) {
+          licHtml = `<div class="license-badge">
+            <span class="course-no">Din personliga inloggning till E-boken</span>
+            <h4 style="margin:0;font-family:var(--display);font-size:21px">E-boken är nu upplåst för dig!</h4>
+            <p style="margin:0">Spara din personliga säkerhetskod nedan. Du loggar in med din e-postadress (<strong>${esc(orderRes.email)}</strong>) och koden:</p>
+            <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:4px">
+              <span class="license-code-big" id="issued-lic-code">${esc(orderRes.license_code)}</span>
+              <button type="button" class="buy-btn" id="open-reader-now-btn" style="padding:0 22px">Öppna bokläsaren &amp; läs nu →</button>
+            </div>
+          </div>`;
+        }
+
+        conf.innerHTML = `
+          <div>
+            <span class="course-no">Tack för ditt köp!</span>
+            <h3 style="margin:4px 0 0;font-family:var(--display);font-size:28px">Orderbekräftelse · ${esc(orderRes.order_number)}</h3>
+            <p style="margin:6px 0 0;color:var(--muted)">Betald summa: <strong>${fmtKr(orderRes.total_sek)}</strong> · Bekräftelse registrerad på <strong>${esc(orderRes.email)}</strong>.</p>
+          </div>
+          ${licHtml}
+          <div>
+            <button type="button" class="copybtn" id="new-order-btn">Gör en ny beställning</button>
+          </div>
+        `;
+
+        const openNowBtn = document.getElementById("open-reader-now-btn");
+        if (openNowBtn) {
+          openNowBtn.onclick = async () => {
+            await loginToEbook(orderRes.email, orderRes.license_code);
+            location.hash = "boklasare";
+          };
+        }
+        const newOrderBtn = document.getElementById("new-order-btn");
+        if (newOrderBtn) {
+          newOrderBtn.onclick = () => {
+            conf.hidden = true;
+            document.getElementById("kassa-main-grid").hidden = false;
+          };
+        }
+      } catch(err) {
+        errEl.textContent = err.message || "Ett fel uppstod vid beställningen.";
+        errEl.hidden = false;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Slutför köp & betala";
+      }
+    });
+  }
+
+  /* === E-BOKSINLOGGNING & BOKLÄSARE === */
+  let ebookData = null;
+  let currentChapIdx = 0;
+  let readerFontSize = 18;
+  let showingPdfView = false;
+
+  async function loginToEbook(email, code){
+    const r = await fetch(SB_URL + "/rest/v1/rpc/verify_ebook_access", {
+      method: "POST",
+      headers: {
+        apikey: SB_KEY,
+        Authorization: "Bearer " + SB_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ p_email: email.trim(), p_code: code.trim() })
+    });
+    const data = await r.json().catch(() => null);
+    if (!r.ok || !data || !data.license_code) {
+      throw new Error((data && data.message) || "Ogiltig e-postadress eller säkerhetskod. Kontrollera dina uppgifter.");
+    }
+    ebookData = data;
+    currentChapIdx = 0;
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({ email: data.email, code: data.license_code })); } catch(e){}
+    renderReader();
+    return data;
+  }
+
+  function renderReader(){
+    const loginCard = document.getElementById("reader-login-card");
+    const app = document.getElementById("reader-app");
+    const topLabel = document.getElementById("top-reader-label");
+
+    if (!ebookData) {
+      if (loginCard) loginCard.hidden = false;
+      if (app) app.hidden = true;
+      if (topLabel) topLabel.textContent = "Läs e-boken (Login)";
+      return;
+    }
+
+    if (loginCard) loginCard.hidden = true;
+    if (app) app.hidden = false;
+    if (topLabel) topLabel.textContent = "Öppna e-boken (Inloggad)";
+
+    document.getElementById("r-book-title").textContent = ebookData.title || "Myndighetsinducerat trauma";
+    document.getElementById("r-user-badge").textContent = `Inloggad som ${ebookData.email} · Kod: ${ebookData.license_code} (${ebookData.tier === "pdf" ? "Nedladdning + Läs online" : "Läsbehörighet online"})`;
+
+    const pdfDlBtn = document.getElementById("r-pdf-download");
+    const modeToggleBtn = document.getElementById("r-mode-toggle");
+
+    if (pdfDlBtn) {
+      pdfDlBtn.hidden = ebookData.tier !== "pdf";
+    }
+    if (modeToggleBtn) {
+      modeToggleBtn.hidden = !ebookData.pdf_data_url;
+      modeToggleBtn.textContent = showingPdfView ? "Visa kapitelvy" : "Visa original-PDF";
+    }
+
+    const pdfView = document.getElementById("r-pdf-view");
+    const chapView = document.getElementById("r-chapter-view");
+    if (showingPdfView && ebookData.pdf_data_url) {
+      pdfView.hidden = false;
+      chapView.hidden = true;
+      document.getElementById("r-pdf-frame").src = ebookData.pdf_data_url;
+    } else {
+      pdfView.hidden = true;
+      chapView.hidden = false;
+    }
+
+    const chaps = Array.isArray(ebookData.chapters) && ebookData.chapters.length > 0
+      ? ebookData.chapters
+      : [{ id: "ch1", title: "Inledning", content: "Boken laddas…" }];
+
+    if (currentChapIdx >= chaps.length) currentChapIdx = 0;
+    const cur = chaps[currentChapIdx];
+
+    const tocEl = document.getElementById("r-toc-list");
+    tocEl.innerHTML = chaps.map((c, idx) =>
+      `<button type="button" class="toc-btn ${idx === currentChapIdx ? "active" : ""}" data-chap-idx="${idx}">${esc(c.title)}</button>`
+    ).join("");
+    tocEl.querySelectorAll("[data-chap-idx]").forEach(b => b.onclick = () => {
+      currentChapIdx = Number(b.dataset.chapIdx);
+      renderReader();
+      document.getElementById("r-page-article").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    document.getElementById("r-chap-step").textContent = `Del ${currentChapIdx + 1} av ${chaps.length}`;
+    document.getElementById("r-chap-title").textContent = cur.title || "";
+    const bodyEl = document.getElementById("r-chap-body");
+    bodyEl.style.fontSize = readerFontSize + "px";
+    bodyEl.textContent = cur.content || "";
+    document.getElementById("r-chap-progress").textContent = `${currentChapIdx + 1} / ${chaps.length}`;
+
+    document.getElementById("r-prev-chap").disabled = currentChapIdx === 0;
+    document.getElementById("r-next-chap").disabled = currentChapIdx >= chaps.length - 1;
+  }
+
+  document.getElementById("r-prev-chap")?.addEventListener("click", () => {
+    if (currentChapIdx > 0) { currentChapIdx--; renderReader(); window.scrollTo(0, 0); }
+  });
+  document.getElementById("r-next-chap")?.addEventListener("click", () => {
+    const chaps = (ebookData && ebookData.chapters) || [];
+    if (currentChapIdx < chaps.length - 1) { currentChapIdx++; renderReader(); window.scrollTo(0, 0); }
+  });
+  document.getElementById("r-font-dec")?.addEventListener("click", () => {
+    readerFontSize = Math.max(14, readerFontSize - 2);
+    renderReader();
+  });
+  document.getElementById("r-font-inc")?.addEventListener("click", () => {
+    readerFontSize = Math.min(26, readerFontSize + 2);
+    renderReader();
+  });
+  ["light","sepia","dark"].forEach(th => {
+    document.getElementById("r-theme-" + th)?.addEventListener("click", () => {
+      document.getElementById("reader-app").setAttribute("data-rtheme", th);
+    });
+  });
+  document.getElementById("r-mode-toggle")?.addEventListener("click", () => {
+    showingPdfView = !showingPdfView;
+    renderReader();
+  });
+  document.getElementById("r-pdf-download")?.addEventListener("click", () => {
+    if (!ebookData || ebookData.tier !== "pdf") return;
+    if (ebookData.pdf_data_url) {
+      const a = document.createElement("a");
+      a.href = ebookData.pdf_data_url;
+      a.download = ebookData.pdf_filename || "Myndighetsinducerat-trauma.pdf";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } else {
+      window.print();
+    }
+  });
+  document.getElementById("r-logout-btn")?.addEventListener("click", () => {
+    ebookData = null;
+    showingPdfView = false;
+    try { sessionStorage.removeItem(SESSION_KEY); } catch(e){}
+    renderReader();
+  });
+
+  const rLoginForm = document.getElementById("reader-login-form");
+  if (rLoginForm) {
+    rLoginForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const errEl = document.getElementById("r-login-err");
+      const btn = document.getElementById("r-login-submit");
+      errEl.hidden = true;
+      btn.disabled = true;
+      btn.textContent = "Verifierar…";
+      try {
+        await loginToEbook(
+          document.getElementById("r-login-email").value,
+          document.getElementById("r-login-code").value
+        );
+      } catch(err) {
+        errEl.textContent = err.message;
+        errEl.hidden = false;
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Logga in & öppna boken";
+      }
+    });
+  }
+
+  const inlineLoginForm = document.getElementById("inline-ebook-login-form");
+  if (inlineLoginForm) {
+    inlineLoginForm.addEventListener("submit", async e => {
+      e.preventDefault();
+      const errEl = document.getElementById("inline-login-err");
+      errEl.hidden = true;
+      try {
+        await loginToEbook(
+          document.getElementById("inline-login-email").value,
+          document.getElementById("inline-login-code").value
+        );
+        location.hash = "boklasare";
+      } catch(err) {
+        errEl.textContent = err.message;
+        errEl.hidden = false;
+      }
+    });
+  }
+
+  // Återställ aktiv e-bokssession om användaren redan loggat in under sessionen
+  try {
+    const saved = JSON.parse(sessionStorage.getItem(SESSION_KEY) || "null");
+    if (saved && saved.email && saved.code) {
+      loginToEbook(saved.email, saved.code).catch(() => {});
+    }
+  } catch(e){}
+
+  renderCart();
+  loadProducts();
+})();
 </script>
 
 </body>

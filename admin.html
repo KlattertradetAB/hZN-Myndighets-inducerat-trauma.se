@@ -234,6 +234,7 @@ td{font-variant-numeric:tabular-nums}
         <button role="tab" aria-selected="true" data-tab="stats">Statistik per fråga</button>
         <button role="tab" aria-selected="false" data-tab="all">Alla svar</button>
         <button role="tab" aria-selected="false" data-tab="contacts">Kontakter</button>
+        <button role="tab" aria-selected="false" data-tab="shop">Kassa, Ordrar &amp; E-bok</button>
         <button role="tab" aria-selected="false" data-tab="account">Konto</button>
       </div>
       <div class="filter" id="filter-wrap">
@@ -250,6 +251,7 @@ td{font-variant-numeric:tabular-nums}
     <section id="tab-stats" role="tabpanel"></section>
     <section id="tab-all" role="tabpanel" hidden></section>
     <section id="tab-contacts" role="tabpanel" hidden></section>
+    <section id="tab-shop" role="tabpanel" hidden></section>
     <section id="tab-account" role="tabpanel" hidden>
       <div class="card">
         <h3>Byt lösenord</h3>
@@ -278,7 +280,7 @@ const CFG = window.HZ_SUPABASE;
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const SKEY = "hz-admin-session";
-let session = null, responses = [], contacts = [], filter = "all", timer = null, lastCount = null;
+let session = null, responses = [], contacts = [], shopOrders = [], ebookLicenses = [], shopProducts = [], ebookContent = null, filter = "all", timer = null, lastCount = null;
 
 const JNV = ["Ja","Nej","Vet ej"], HEALTH = ["Ja","Nej","Vill inte svara"];
 const F3 = [
@@ -399,12 +401,17 @@ async function start(){
 
 async function load(manual, poll){
   try{
-    const [r,c] = await Promise.all([
+    const [r,c,ord,lic,prod,eb] = await Promise.all([
       rest("survey_responses?select=id,submitted_on,health_consent,f1,answers&order=id.desc"),
-      rest("survey_contacts?select=id,purpose,name,email,phone,submitted_on&order=id.desc")
+      rest("survey_contacts?select=id,purpose,name,email,phone,submitted_on&order=id.desc"),
+      rest("shop_orders?select=*&order=created_at.desc").catch(()=>[]),
+      rest("ebook_licenses?select=*&order=created_at.desc").catch(()=>[]),
+      rest("shop_products?select=*&order=sort_order.asc").catch(()=>[]),
+      rest("ebook_content?select=id,title,subtitle,authors,chapters,pdf_filename,updated_at&id=eq.1").catch(()=>[])
     ]);
     if(poll && lastCount!==null && r.length>lastCount) toast((r.length-lastCount===1?"1 nytt svar":(r.length-lastCount)+" nya svar")+" har kommit in");
     lastCount=r.length; responses=r; contacts=c;
+    shopOrders=ord||[]; ebookLicenses=lic||[]; shopProducts=prod||[]; ebookContent=(eb&&eb[0])||null;
     $("updated").textContent="Uppdaterad "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
     render();
     if(manual) toast("Uppdaterat");
@@ -427,9 +434,9 @@ function render(){
   $("tiles").innerHTML = `
     <div class="tile"><span>Antal svar</span><b>${all.length}</b><em>${week} senaste 7 dagarna</em></div>
     <div class="tile"><span>Ja på fråga 1</span><b>${pct(ja,all.length)} %</b><em>${ja} av ${all.length}</em></div>
-    <div class="tile"><span>Senaste svar</span><b style="font-size:22px">${latest}</b><em>${all.filter(r=>r.health_consent).length} med hälsosamtycke</em></div>
+    <div class="tile"><span>Ordrar &amp; Licenser</span><b>${shopOrders.length} / ${ebookLicenses.length}</b><em>${shopOrders.length} ordrar · ${ebookLicenses.filter(l=>l.active).length} aktiva e-bokslicenser</em></div>
     <div class="tile"><span>Kontakter</span><b>${contacts.length}</b><em>${contacts.filter(c=>c.purpose==="uppfoljning").length} uppföljning · ${contacts.filter(c=>c.purpose==="resultat").length} resultat</em></div>`;
-  renderStats(R); renderAll(R); renderContacts(); renderBigCharts(R);
+  renderStats(R); renderAll(R); renderContacts(); renderShop(); renderBigCharts(R);
 }
 function donutSvg(segments, total, centerTop, centerSub){
   const r = 60, c = 2 * Math.PI * r;
@@ -725,13 +732,254 @@ function renderContacts(){
     table(contacts.filter(c=>c.purpose==="resultat"),"Vill få resultaten","Personer som vill ha resultaten när kartläggningen är klar.");
 }
 
-/* Radering med bekräftelse i två steg */
+function renderShop(){
+  const eb = ebookContent || {};
+  const chCount = Array.isArray(eb.chapters) ? eb.chapters.length : 0;
+  const hasPdf = Boolean(eb.pdf_data_url);
+  const fmtKr = n => Number(n||0).toLocaleString("sv-SE")+" kr";
+
+  const orderRows = shopOrders.length ? `<div class="tbl"><table><thead><tr><th>Ordernr</th><th>Datum</th><th>Kund</th><th>Produkter</th><th>Summa</th><th>Betalsätt / Status</th><th>E-bokskod</th><th>Leveransadress</th></tr></thead><tbody>${
+    shopOrders.map(o=>{
+      const items = Array.isArray(o.items) ? o.items.map(i=>`${esc(i.name)} (${i.qty||1} st)`).join(", ") : "–";
+      const addr = o.shipping_street ? `${esc(o.shipping_street)}, ${esc(o.shipping_zip||"")} ${esc(o.shipping_city||"")}` : "–";
+      return `<tr>
+        <td><strong>${esc(o.order_number)}</strong></td>
+        <td>${fmtDate(o.created_at)}</td>
+        <td>${esc(o.customer_name)}<br><small style="color:var(--muted)">${esc(o.customer_email)}${o.customer_phone?" · "+esc(o.customer_phone):""}</small></td>
+        <td>${items}</td>
+        <td><strong>${fmtKr(o.total_sek)}</strong></td>
+        <td>${esc(o.payment_method||"card")} · <span class="pill">${esc(o.payment_status||"paid")}</span></td>
+        <td>${o.license_code ? `<code style="font-weight:700;color:var(--accent)">${esc(o.license_code)}</code>` : "–"}</td>
+        <td>${addr}</td>
+      </tr>`;
+    }).join("")
+  }</tbody></table></div>` : `<p class="note">Inga ordrar ännu.</p>`;
+
+  const licRows = ebookLicenses.length ? `<div class="tbl"><table><thead><tr><th>Skapad</th><th>E-postadress</th><th>Namn</th><th>Säkerhetskod (Login)</th><th>Nivå</th><th>Inloggningar</th><th>Status</th><th>Åtgärd</th></tr></thead><tbody>${
+    ebookLicenses.map(l=>`<tr>
+      <td>${fmtDate(l.created_at)}</td>
+      <td><strong>${esc(l.customer_email)}</strong></td>
+      <td>${esc(l.customer_name||"–")}</td>
+      <td><code style="font-weight:700;color:var(--accent);font-size:.95rem">${esc(l.access_code)}</code></td>
+      <td>${l.tier==="pdf"?"PDF + Online":"Läsa online"}</td>
+      <td>${l.login_count||0} st${l.last_login_at?`<br><small style="color:var(--muted)">Senast: ${fmtDate(l.last_login_at)}</small>`:""}</td>
+      <td>${l.active?`<span class="pill" style="color:var(--ok)">Aktiv</span>`:`<span class="pill" style="color:var(--danger)">Spärrad</span>`}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn small" type="button" data-toggle-lic="${l.id}" data-active="${l.active?"1":"0"}">${l.active?"Spärra":"Aktivera"}</button>
+        <button class="btn small danger" type="button" data-del-lic="${l.id}">Radera</button>
+      </td>
+    </tr>`).join("")
+  }</tbody></table></div>` : `<p class="note">Inga licenser ännu.</p>`;
+
+  const prodRows = shopProducts.length ? `<div class="tbl"><table><thead><tr><th>Produkt</th><th>Kategori</th><th>Pris (SEK)</th><th>Frakt (SEK)</th><th>Aktiv i kassan</th><th>Spara</th></tr></thead><tbody>${
+    shopProducts.map(p=>`<tr>
+      <td><strong>${esc(p.name)}</strong><br><small style="color:var(--muted)">${esc(p.id)}</small></td>
+      <td>${esc(p.category)}</td>
+      <td><input type="number" id="prod-price-${esc(p.id)}" value="${p.price_sek}" style="width:110px;padding:6px 8px"></td>
+      <td><input type="number" id="prod-ship-${esc(p.id)}" value="${p.shipping_sek||0}" style="width:90px;padding:6px 8px"></td>
+      <td><input type="checkbox" id="prod-act-${esc(p.id)}" ${p.active?"checked":""}></td>
+      <td><button class="btn small primary" type="button" data-save-prod="${esc(p.id)}">Spara</button></td>
+    </tr>`).join("")
+  }</tbody></table></div>` : `<p class="note">Inga produkter hittades.</p>`;
+
+  $("tab-shop").innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;margin-bottom:24px">
+      <div class="qcard" style="margin:0">
+        <h2 class="section-title" style="margin-top:0">1. Ladda upp e-bokens fil (PDF eller Text)</h2>
+        <p style="color:var(--muted);font-size:.92rem;margin:6px 0 14px">
+          Här kan du ladda upp bokfilen från din dator (<strong>.pdf</strong>, <strong>.txt</strong> eller <strong>.md</strong>).
+          Om du laddar upp en <strong>PDF</strong> kan inloggade läsare både bläddra i original-PDF:en direkt i bokläsaren på hemsidan och (om de köpt PDF-nivån för 250 kr) ladda ner den.
+          Om du laddar upp en <strong>.txt/.md</strong>-fil delas texten automatiskt upp i kapitel i läsaren.
+        </p>
+        <div class="note" style="margin-bottom:14px">
+          <strong>Nuvarande status i bokläsaren:</strong><br>
+          • Strukturerade kapitel i webb-läsaren: <strong>${chCount} kapitel</strong><br>
+          • Uppladdad original-PDF: <strong>${hasPdf ? `Ja (${esc(eb.pdf_filename||"bok.pdf")})` : "Ingen PDF uppladdad ännu (endast kapiteltext aktiv)"}</strong>
+        </div>
+        <form id="ebook-upload-form">
+          <div class="field">
+            <label for="ebook-file-input">Välj bokfil från datorn (.pdf, .txt, .md)</label>
+            <input type="file" id="ebook-file-input" accept=".pdf,.txt,.md,application/pdf,text/plain,text/markdown" required style="background:#fff">
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+            <button type="submit" class="btn primary">Ladda upp & spara till e-bokläsaren</button>
+            ${hasPdf ? `<button type="button" class="btn danger small" id="ebook-clear-pdf">Ta bort uppladdad PDF</button>` : ""}
+          </div>
+          <div id="ebook-upload-msg" class="msg" hidden></div>
+        </form>
+      </div>
+
+      <div class="qcard" style="margin:0">
+        <h2 class="section-title" style="margin-top:0">2. Skapa ny e-bokslicens (Login åt läsare)</h2>
+        <p style="color:var(--muted);font-size:.92rem;margin:6px 0 14px">
+          När någon köper e-boken i kassan skapas en säkerhetskod automatiskt. Här kan du även manuellt skapa en personlig login-kod åt en kund eller kursdeltagare.
+        </p>
+        <form id="create-lic-form">
+          <div class="field">
+            <label for="lic-email">Kundens e-postadress *</label>
+            <input type="email" id="lic-email" required placeholder="namn@exempel.se">
+          </div>
+          <div class="field">
+            <label for="lic-name">Kundens namn (valfritt)</label>
+            <input type="text" id="lic-name" placeholder="Förnamn Efternamn">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="field">
+              <label for="lic-tier">Behörighetsnivå</label>
+              <select id="lic-tier" style="width:100%">
+                <option value="pdf">PDF + Läsa online (250 kr)</option>
+                <option value="read">Endast läsa online (200 kr)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="lic-code">Säkerhetskod (lämna tomt = slumpa)</label>
+              <input type="text" id="lic-code" placeholder="EBOK-XXXX-XXXX">
+            </div>
+          </div>
+          <button type="submit" class="btn primary">Skapa e-bokslogin</button>
+          <div id="create-lic-msg" class="msg" hidden></div>
+        </form>
+      </div>
+    </div>
+
+    <h2 class="section-title">Aktiva E-bokslicenser & Inloggningar (${ebookLicenses.length})</h2>
+    <p class="empty" style="margin:4px 0 10px">Kunden loggar in under ”Läs e-boken” på hemsidan med sin e-postadress och säkerhetskoden nedan.</p>
+    ${licRows}
+
+    <h2 class="section-title" style="margin-top:28px">Beställningar från Kassan (${shopOrders.length})</h2>
+    <p class="empty" style="margin:4px 0 10px">Alla köp som gjorts via kassan på webbplatsen.</p>
+    ${orderRows}
+
+    <h2 class="section-title" style="margin-top:28px">Produkter & Priser i Kassan</h2>
+    <p class="empty" style="margin:4px 0 10px">Ändra pris eller frakt och klicka på Spara så uppdateras kassan direkt.</p>
+    ${prodRows}
+  `;
+
+  const upForm = $("ebook-upload-form");
+  if(upForm) upForm.addEventListener("submit", async e=>{
+    e.preventDefault();
+    const f = $("ebook-file-input").files[0];
+    const m = $("ebook-upload-msg");
+    if(!f) return;
+    m.hidden = false; m.className = "msg"; m.textContent = "Läser in och sparar filen till Supabase...";
+    try{
+      if(f.name.toLowerCase().endsWith(".pdf") || f.type === "application/pdf"){
+        if(f.size > 15 * 1024 * 1024) throw new Error("PDF-filen är över 15 MB. Komprimera gärna PDF:en först.");
+        const dataUrl = await new Promise((res,rej)=>{
+          const r = new FileReader();
+          r.onload = ()=>res(r.result);
+          r.onerror = ()=>rej(new Error("Kunde inte läsa PDF-filen."));
+          r.readAsDataURL(f);
+        });
+        await rest("ebook_content?id=eq.1",{
+          method:"PATCH",
+          headers:{"Prefer":"return=minimal"},
+          body:JSON.stringify({pdf_data_url: dataUrl, pdf_filename: f.name, updated_at: new Date().toISOString()})
+        });
+        toast("PDF-boken är uppladdad och sparad!");
+        await load(false);
+      } else {
+        const text = await f.text();
+        const rawParts = text.split(/\n(?=#{1,2}\s+|Kapitel\s+\d+|KAPITEL\s+\d+)/);
+        const chapters = (rawParts.length > 1 ? rawParts : [text]).map((part, idx)=>{
+          const lines = part.trim().split("\n");
+          const firstLine = (lines[0]||"").replace(/^#{1,3}\s*/,"").trim();
+          const bodyLines = lines.slice(1).join("\n").trim() || lines[0];
+          const html = bodyLines.split(/\n\s*\n/).map(p=>`<p>${esc(p.trim()).replace(/\n/g,"<br>")}</p>`).join("\n");
+          return { id: "ch-up-"+(idx+1), number: "DEL "+(idx+1), title: firstLine || ("Kapitel "+(idx+1)), html };
+        });
+        await rest("ebook_content?id=eq.1",{
+          method:"PATCH",
+          headers:{"Prefer":"return=minimal"},
+          body:JSON.stringify({chapters, updated_at: new Date().toISOString()})
+        });
+        toast("Boktexten ("+chapters.length+" kapitel) är uppladdad!");
+        await load(false);
+      }
+    }catch(err){
+      m.className = "msg err"; m.textContent = err.message;
+    }
+  });
+
+  const clearPdfBtn = $("ebook-clear-pdf");
+  if(clearPdfBtn) clearPdfBtn.addEventListener("click", async ()=>{
+    try{
+      await rest("ebook_content?id=eq.1",{
+        method:"PATCH",
+        headers:{"Prefer":"return=minimal"},
+        body:JSON.stringify({pdf_data_url: null, pdf_filename: null, updated_at: new Date().toISOString()})
+      });
+      toast("Uppladdad PDF borttagen");
+      await load(false);
+    }catch(err){ toast(err.message); }
+  });
+
+  const licForm = $("create-lic-form");
+  if(licForm) licForm.addEventListener("submit", async e=>{
+    e.preventDefault();
+    const email = $("lic-email").value.trim().toLowerCase();
+    const name = $("lic-name").value.trim();
+    const tier = $("lic-tier").value;
+    let code = $("lic-code").value.trim().toUpperCase();
+    if(!code){
+      const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+      const seg = () => Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join("");
+      code = `EBOK-${seg()}-${seg()}`;
+    }
+    try{
+      await rest("ebook_licenses",{
+        method:"POST",
+        headers:{"Prefer":"return=minimal"},
+        body:JSON.stringify({customer_email:email, customer_name:name||null, access_code:code, tier, active:true})
+      });
+      toast("Licens skapad: "+code);
+      await load(false);
+    }catch(err){
+      const m = $("create-lic-msg");
+      if(m){ m.hidden=false; m.className="msg err"; m.textContent=err.message; }
+    }
+  });
+}
+
+/* Radering & shop-åtgärder med bekräftelse */
 document.addEventListener("click", async e=>{
-  const b = e.target.closest("[data-del],[data-delc]"); if(!b) return;
+  const toggleBtn = e.target.closest("[data-toggle-lic]");
+  if(toggleBtn){
+    try{
+      const nextActive = toggleBtn.dataset.active !== "1";
+      await rest("ebook_licenses?id=eq."+encodeURIComponent(toggleBtn.dataset.toggleLic),{
+        method:"PATCH",
+        headers:{"Prefer":"return=minimal"},
+        body:JSON.stringify({active: nextActive})
+      });
+      toast(nextActive ? "Licens aktiverad" : "Licens spärrad");
+      await load(false);
+    }catch(x){ toast(x.message); }
+    return;
+  }
+  const saveProdBtn = e.target.closest("[data-save-prod]");
+  if(saveProdBtn){
+    const pid = saveProdBtn.dataset.saveProd;
+    const price = Number($("prod-price-"+pid)?.value || 0);
+    const ship = Number($("prod-ship-"+pid)?.value || 0);
+    const act = Boolean($("prod-act-"+pid)?.checked);
+    try{
+      await rest("shop_products?id=eq."+encodeURIComponent(pid),{
+        method:"PATCH",
+        headers:{"Prefer":"return=minimal"},
+        body:JSON.stringify({price_sek:price, shipping_sek:ship, active:act})
+      });
+      toast("Produkt sparad!");
+      await load(false);
+    }catch(x){ toast(x.message); }
+    return;
+  }
+  const b = e.target.closest("[data-del],[data-delc],[data-del-lic]"); if(!b) return;
   if(b.dataset.armed!=="1"){ b.dataset.armed="1"; b.textContent="Klicka igen för att radera"; setTimeout(()=>{ if(b.isConnected){ b.dataset.armed=""; b.textContent=b.dataset.del?"Radera svaret":"Radera"; } },5000); return; }
   try{
     if(b.dataset.del) await rest("survey_responses?id=eq."+encodeURIComponent(b.dataset.del),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
-    else await rest("survey_contacts?id=eq."+encodeURIComponent(b.dataset.delc),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
+    else if(b.dataset.delc) await rest("survey_contacts?id=eq."+encodeURIComponent(b.dataset.delc),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
+    else if(b.dataset.delLic) await rest("ebook_licenses?id=eq."+encodeURIComponent(b.dataset.delLic),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
     toast("Raderat"); await load(false);
   }catch(x){ toast(x.message); }
 });
@@ -739,8 +987,8 @@ document.addEventListener("click", async e=>{
 /* Flikar och filter */
 document.querySelectorAll("[data-tab]").forEach(t=>t.addEventListener("click",()=>{
   document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
-  ["stats","all","contacts","account"].forEach(k=>$("tab-"+k).hidden = k!==t.dataset.tab);
-  $("filter-wrap").hidden = t.dataset.tab==="contacts"||t.dataset.tab==="account";
+  ["stats","all","contacts","shop","account"].forEach(k=>$("tab-"+k).hidden = k!==t.dataset.tab);
+  $("filter-wrap").hidden = t.dataset.tab==="contacts"||t.dataset.tab==="shop"||t.dataset.tab==="account";
 }));
 $("filter").addEventListener("change",e=>{ filter=e.target.value; render(); });
 
