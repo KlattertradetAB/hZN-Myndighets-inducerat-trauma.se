@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Kraftsamling admin</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,600&display=swap">
+<style>
+/* Arbetsyta: sammanfattning överst, statistik per fråga, varje enskilt svar */
+:root{
+  --bg:#F6F4F0; --surface:#FFFFFF; --ink:#13202E; --muted:#56606B; --line:#DCD8D1;
+  --navy:#05223B; --navy-ink:#FFFFFF; --accent:#B5520C; --accent-soft:#FBEBDD; --bar:#1E4B73; --bar-soft:#E3EBF2;
+  --ok:#1F6B3A; --err:#B3261E;
+  --display:Fraunces,Georgia,"Times New Roman",serif; --body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root{--bg:#0D1620;--surface:#16212D;--ink:#EEF1F4;--muted:#A9B3BD;--line:#2A3745;--navy:#1E3A57;--accent:#F08A3C;--accent-soft:#2E241B;--bar:#7FB2DD;--bar-soft:#22303F;--ok:#7BD39A;--err:#FFB4AB;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body)}
+[hidden]{display:none!important}
+button,input{font:inherit}
+button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mark{width:40px;height:40px;flex-shrink:0}
+h1,h2,h3{text-wrap:balance}
+
+/* Inloggning */
+.login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.login-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:32px 28px;display:flex;flex-direction:column;gap:16px}
+.login-card .brand{display:flex;align-items:center;gap:12px}
+.login-card h1{margin:0;font-family:var(--display);font-weight:600;font-size:26px;line-height:1.15}
+.login-card p{margin:0;color:var(--muted);font-size:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-weight:500;font-size:14px}
+.field input{min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:0 14px}
+.btn{min-height:46px;padding:0 20px;border-radius:12px;border:0;background:var(--navy);color:var(--navy-ink);font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.small{min-height:38px;padding:0 14px;font-size:14px;border-radius:10px}
+.btn.danger{background:transparent;color:var(--err);border:1px solid var(--line)}
+.msg{font-size:14px;margin:0}
+.msg.err{color:var(--err)} .msg.ok{color:var(--ok)}
+
+/* Topp */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--navy);color:var(--navy-ink)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--navy);z-index:10}
+.top .wrap{display:flex;align-items:center;gap:14px;padding-block:12px;flex-wrap:wrap}
+.top .title{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.top strong{font-family:var(--display);font-size:19px}
+.top small{color:#B8C6D3;font-size:12.5px}
+.top .right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.top .btn.small{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.live{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:#B8C6D3}
+.live i{width:8px;height:8px;border-radius:4px;background:#7BD39A}
+
+main{padding-block:24px 64px;display:flex;flex-direction:column;gap:20px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.tile b{font-size:30px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.tile span{font-size:12.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+.tile em{font-style:normal;font-size:13px;color:var(--muted)}
+
+.bar-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;flex-wrap:wrap}
+.tabs button{min-height:40px;padding:0 16px;border-radius:10px;border:0;background:transparent;color:var(--ink);font-weight:500;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--navy);color:var(--navy-ink)}
+.filter{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.filter select{min-height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:0 10px;font:inherit}
+
+/* Statistik */
+.section-title{margin:12px 0 0;font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.qgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.qgrid{grid-template-columns:1fr}}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.q.wide{grid-column:1/-1}
+.q h3{margin:0;font-size:16px;font-weight:600;line-height:1.35}
+.q .n{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bars{display:flex;flex-direction:column;gap:9px}
+.b{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;font-size:14px}
+.b .lbl{min-width:0}
+.b .val{font-variant-numeric:tabular-nums;color:var(--muted);text-align:right;white-space:nowrap}
+.b .track{grid-column:1/-1;height:10px;background:var(--bar-soft);border-radius:5px;overflow:hidden}
+.b .fill{display:block;height:100%;background:var(--bar);border-radius:5px}
+.stat-line{display:flex;gap:18px;flex-wrap:wrap;font-size:14px}
+.stat-line b{font-size:22px;font-variant-numeric:tabular-nums;display:block}
+.texts{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow:auto}
+.texts blockquote{margin:0;padding:10px 12px;background:var(--bg);border-radius:10px;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.texts blockquote small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+.empty{color:var(--muted);font-size:14px;margin:0}
+.scale{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;align-items:end;height:120px}
+.scale div{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.scale i{display:block;width:100%;background:var(--bar);border-radius:4px 4px 0 0;min-height:2px}
+.scale-x{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;text-align:center;font-size:12px;color:var(--muted)}
+
+/* Stora diagram längst ner */
+.big-charts{margin-top:28px;padding-top:28px;border-top:2px solid var(--line);display:flex;flex-direction:column;gap:20px}
+.big-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
+.big-head h2{margin:0;font-family:var(--display);font-size:26px;font-weight:600;line-height:1.2}
+.big-head p{margin:4px 0 0;color:var(--muted);font-size:14.5px}
+.big-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.big-card{grid-column:span 12;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px 26px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.big-card.half{grid-column:span 6}
+.big-card.third{grid-column:span 4}
+@media (max-width:960px){.big-card.half,.big-card.third{grid-column:span 12}}
+.big-card-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px}
+.big-card-head h3{margin:0;font-family:var(--display);font-size:20px;font-weight:600;line-height:1.25}
+.big-card-head .sub{font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* Donut-diagram */
+.donut-wrap{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.donut-svg{width:170px;height:170px;flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:10px;flex:1;min-width:160px}
+.donut-item{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14.5px}
+.donut-item .sw{width:12px;height:12px;border-radius:4px;flex-shrink:0;display:inline-block;margin-right:8px}
+.donut-item .lbl{display:flex;align-items:center;min-width:0}
+.donut-item .val{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* Stora liggande staplar */
+.lg-bars{display:flex;flex-direction:column;gap:14px}
+.lg-bar-group-title{margin:8px 0 2px;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.lg-bar{display:grid;grid-template-columns:minmax(200px,2fr) minmax(0,3fr) auto;align-items:center;gap:10px 16px;font-size:14.5px}
+@media (max-width:720px){.lg-bar{grid-template-columns:1fr auto}.lg-bar .lg-track{grid-column:1/-1}}
+.lg-bar .lg-lbl{font-weight:500;line-height:1.35}
+.lg-bar .lg-track{height:22px;background:var(--bar-soft);border-radius:8px;overflow:hidden;position:relative}
+.lg-bar .lg-fill{display:block;height:100%;background:var(--bar);border-radius:8px;transition:width .3s ease}
+.lg-bar .lg-fill.accent{background:var(--accent)}
+.lg-bar .lg-fill.ok{background:var(--ok)}
+.lg-bar .lg-val{font-variant-numeric:tabular-nums;font-weight:600;min-width:86px;text-align:right;white-space:nowrap}
+
+/* 100% staplade jämförelsediagram */
+.stack-legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13.5px;color:var(--muted)}
+.stack-legend span{display:inline-flex;align-items:center;gap:7px;font-weight:500;color:var(--ink)}
+.stack-legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+.stack-list{display:flex;flex-direction:column;gap:14px}
+.stack-row{display:grid;grid-template-columns:minmax(220px,1.6fr) minmax(0,2.4fr) auto;align-items:center;gap:8px 16px}
+@media (max-width:780px){.stack-row{grid-template-columns:1fr auto}.stack-row .stack-bar{grid-column:1/-1}}
+.stack-row .stack-q{font-size:14.5px;font-weight:500;line-height:1.35}
+.stack-row .stack-n{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.stack-bar{height:26px;background:var(--bar-soft);border-radius:8px;overflow:hidden;display:flex}
+.stack-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#fff;overflow:hidden;white-space:nowrap;transition:width .3s ease}
+
+/* Stort vertikalt kolumndiagram (skala 1-10 & ålder) */
+.col-chart{display:grid;grid-template-columns:repeat(var(--cols,10),minmax(0,1fr));gap:10px;align-items:end;height:230px;padding:24px 8px 0;border-bottom:2px solid var(--line)}
+.col-item{display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:6px}
+.col-item .col-num{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.col-item .col-pct{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.col-item .col-bar{width:100%;max-width:58px;background:var(--bar);border-radius:8px 8px 0 0;min-height:4px;transition:height .3s ease}
+.col-item .col-bar.accent{background:var(--accent)}
+.col-labels{display:grid;grid-template-columns:repeat(var(--cols,10),minmax(0,1fr));gap:10px;padding:8px 8px 0;text-align:center;font-size:13px;font-weight:500;color:var(--ink)}
+.demo-pill{display:inline-flex;align-items:center;gap:6px;background:var(--accent-soft);color:var(--accent);font-size:13px;font-weight:600;padding:5px 12px;border-radius:999px}
+
+/* Alla svar */
+.resp{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.resp>summary{list-style:none;cursor:pointer;padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.resp>summary::-webkit-details-marker{display:none}
+.resp .id{font-weight:600;font-variant-numeric:tabular-nums}
+.pill{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--bar-soft);color:var(--ink)}
+.pill.ja{background:var(--accent-soft);color:var(--accent)}
+.resp .meta{color:var(--muted);font-size:13.5px}
+.resp .chev{margin-left:auto;width:20px;height:20px;color:var(--muted);transition:transform .2s}
+.resp[open] .chev{transform:rotate(180deg)}
+.resp dl{margin:0;padding:0 16px 8px;display:flex;flex-direction:column}
+.resp dl>div{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:12px;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+@media (max-width:640px){.resp dl>div{grid-template-columns:1fr;gap:2px}}
+.resp dt{color:var(--muted)}
+.resp dd{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.resp .actions{padding:8px 16px 16px;display:flex;gap:8px;justify-content:flex-end}
+.list{display:flex;flex-direction:column;gap:8px}
+
+/* Kontakter */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tr:last-child td{border-bottom:0}
+td{font-variant-numeric:tabular-nums}
+
+.note{background:var(--accent-soft);border-radius:14px;padding:14px 16px;font-size:14px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-weight:500;z-index:20}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;max-width:520px}
+.card h3{margin:0;font-size:17px}
+@media (prefers-reduced-motion:reduce){.resp .chev{transition:none}}
+</style>
+</head>
+<body>
+
+<!-- Inloggning -->
+<section class="login" id="login-view" hidden>
+  <form class="login-card" id="login-form" novalidate>
+    <div class="brand"><svg class="mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Horizonten">
+<circle cx="50" cy="50" r="48.58" fill="#FFFFFF"/>
+<path fill="#05223B" fill-rule="evenodd" d="M47.63 17.52 L47.38 17.62 L45.17 17.82 L42.7 18.33 L42.4 18.48 L42.09 18.48 L38.17 19.74 L35.75 20.8 L33.74 21.9 L30.82 23.82 L29.2 25.08 L27.84 26.28 L26.23 28.0 L23.87 30.92 L23.21 31.92 L21.6 34.69 L20.85 36.25 L20.09 38.12 L18.93 41.64 L18.28 44.76 L17.93 48.54 L17.93 51.16 L18.28 54.53 L18.93 57.65 L20.24 61.83 L21.55 64.9 L22.91 67.27 L24.27 69.28 L26.69 72.21 L28.6 74.07 L31.07 76.08 L33.99 78.0 L36.3 79.2 L39.88 80.66 L42.65 81.52 L46.17 82.18 L47.03 82.18 L47.89 82.33 L52.22 82.33 L55.89 81.82 L58.01 81.32 L60.62 80.51 L63.75 79.2 L66.41 77.79 L69.49 75.73 L71.9 73.72 L73.87 71.65 L75.98 68.98 L78.0 65.76 L79.15 63.49 L80.06 61.28 L81.27 57.5 L81.92 54.28 L82.18 50.7 L82.07 47.08 L81.77 44.56 L81.27 42.09 L79.76 37.51 L78.75 35.3 L76.99 32.12 L75.78 30.36 L73.11 27.24 L70.85 25.13 L68.13 23.06 L65.26 21.35 L61.93 19.79 L58.16 18.48 L57.85 18.48 L56.7 18.13 L56.29 18.13 L55.89 17.98 L54.18 17.77 L53.63 17.62 L52.77 17.62 L51.61 17.47Z M49.24 52.72 L50.25 52.77 L50.86 53.07 L51.61 53.98 L51.81 54.93 L51.81 74.72 L51.61 75.63 L51.41 75.98 L50.76 76.59 L50.0 76.84 L49.3 76.84 L48.64 76.59 L47.94 75.93 L47.58 75.18 L47.58 54.28 L47.73 53.83 L48.19 53.22 L48.74 52.87Z M74.22 47.48 L74.62 47.48 L75.18 47.63 L75.88 48.04 L76.33 48.59 L76.69 49.6 L76.59 50.4 L76.18 51.16 L75.68 51.66 L74.72 52.06 L73.97 52.01 L73.41 51.81 L72.76 51.31 L72.41 50.81 L72.21 50.3 L72.21 49.35 L72.56 48.49 L73.21 47.83Z M54.93 29.1 L55.34 29.0 L57.4 28.95 L67.32 29.05 L70.39 29.0 L70.8 29.31 L71.25 29.91 L73.62 33.84 L73.56 34.14 L71.6 37.66 L62.69 54.88 L58.11 63.39 L56.65 66.41 L56.75 66.52 L58.81 66.62 L72.51 66.57 L73.01 66.67 L73.06 66.92 L72.36 68.28 L71.6 69.39 L71.1 69.84 L55.99 69.89 L55.69 69.69 L55.49 69.28 L54.68 66.77 L53.73 64.25 L53.52 63.49 L53.52 63.09 L56.5 57.4 L57.8 55.09 L58.66 53.32 L58.81 53.17 L60.98 48.89 L62.08 46.98 L64.3 42.65 L65.71 40.18 L67.07 37.31 L68.38 35.15 L68.98 33.89 L69.03 33.33 L68.93 33.03 L68.68 32.78 L67.88 32.48 L67.32 32.38 L55.94 32.33 L55.49 31.87 L54.63 29.91 L54.58 29.46Z M39.58 24.47 L40.23 24.52 L40.84 24.82 L41.34 25.38 L41.54 25.93 L41.54 74.97 L41.34 75.53 L41.04 75.83 L40.74 75.93 L40.38 75.93 L39.68 75.68 L38.67 75.08 L37.71 74.07 L37.56 73.41 L37.56 53.17 L37.51 52.17 L37.31 51.71 L36.81 51.51 L32.98 51.51 L32.53 51.61 L32.23 51.81 L32.02 52.27 L31.97 71.5 L31.87 71.65 L31.57 71.7 L30.92 71.3 L29.41 69.99 L28.1 68.58 L27.84 67.98 L27.84 52.06 L27.69 51.81 L27.34 51.61 L25.73 51.51 L25.23 51.31 L24.52 50.65 L24.22 49.8 L24.27 49.09 L24.52 48.64 L24.97 48.19 L25.33 47.99 L26.79 47.83 L27.19 47.63 L27.54 47.23 L27.79 46.73 L27.9 45.77 L27.9 31.42 L28.45 30.61 L29.71 29.46 L30.92 28.6 L31.52 28.6 L31.72 28.7 L31.92 28.95 L32.02 29.31 L31.97 41.84 L32.02 46.88 L32.12 47.33 L32.43 47.73 L32.98 47.94 L37.36 47.94 L37.46 47.83 L37.56 47.13 L37.46 34.89 L37.51 26.33 L37.71 25.48 L38.27 24.87 L39.12 24.52Z M49.45 23.16 L50.45 23.36 L51.01 23.72 L51.61 24.42 L51.81 25.18 L51.81 45.07 L51.76 45.52 L51.31 46.32 L50.7 46.83 L49.95 47.13 L49.09 47.13 L48.59 46.88 L47.99 46.32 L47.58 45.47 L47.53 44.26 L47.58 24.87 L47.78 24.27 L48.39 23.56 L48.84 23.31Z M46.58 6.75 L45.92 6.9 L45.17 6.9 L43.2 7.25 L42.7 7.25 L42.35 7.4 L41.94 7.4 L41.59 7.55 L40.33 7.75 L37.71 8.56 L37.46 8.56 L33.74 9.92 L30.56 11.38 L27.04 13.39 L23.62 15.81 L21.6 17.52 L20.29 18.78 L17.57 21.7 L16.26 23.31 L14.5 25.78 L12.34 29.36 L10.52 33.13 L9.16 36.81 L8.56 38.87 L7.85 41.94 L7.35 45.47 L7.35 46.27 L7.2 47.28 L7.2 52.06 L7.35 53.02 L7.35 53.98 L7.5 54.53 L7.55 55.64 L7.65 55.84 L7.7 56.65 L7.85 57.1 L8.01 58.21 L9.01 62.19 L10.37 66.06 L10.78 66.87 L10.98 67.52 L12.44 70.54 L13.19 71.95 L14.3 73.72 L16.77 77.14 L19.49 80.16 L22.61 83.13 L25.03 85.05 L26.59 86.15 L29.86 88.12 L32.12 89.27 L34.34 90.23 L37.51 91.39 L41.34 92.4 L44.21 92.9 L48.59 93.25 L51.31 93.25 L52.77 93.1 L53.78 93.1 L55.74 92.9 L57.91 92.55 L61.28 91.74 L62.08 91.44 L62.34 91.44 L65.41 90.38 L67.67 89.43 L69.49 88.47 L69.74 88.42 L72.71 86.71 L74.27 85.65 L76.94 83.64 L79.25 81.62 L80.77 80.11 L81.82 78.9 L84.59 75.48 L86.71 72.31 L88.02 69.94 L89.02 67.82 L90.53 64.0 L91.84 59.52 L92.5 56.09 L92.7 53.58 L92.85 52.72 L92.85 47.13 L92.5 43.81 L91.69 39.63 L90.38 35.35 L88.57 31.07 L86.56 27.34 L83.99 23.56 L81.42 20.49 L78.35 17.47 L76.64 16.01 L74.97 14.75 L71.1 12.19 L67.52 10.37 L65.11 9.37 L62.84 8.56 L62.59 8.56 L61.78 8.26 L61.33 8.21 L58.96 7.55 L58.66 7.55 L58.31 7.4 L54.98 6.9 L54.08 6.9 L53.47 6.75 L51.56 6.75 L50.6 6.65Z M50.05 88.12 L50.5 88.27 L51.01 88.72 L51.16 88.97 L51.21 89.73 L51.11 90.08 L50.6 90.63 L50.2 90.84 L49.75 90.89 L49.19 90.68 L48.74 90.23 L48.54 89.78 L48.54 89.12 L48.79 88.62 L49.19 88.27 L49.7 88.12Z M10.37 48.29 L11.33 48.29 L11.63 48.44 L11.98 48.79 L12.19 49.19 L12.24 49.8 L12.08 50.35 L11.58 50.86 L11.13 51.06 L10.73 51.06 L10.12 50.81 L9.87 50.6 L9.57 50.15 L9.57 49.14 L9.77 48.79Z M89.07 48.19 L89.58 48.29 L89.93 48.49 L90.28 48.84 L90.48 49.24 L90.48 49.95 L90.38 50.25 L89.83 50.86 L89.48 51.01 L88.72 51.01 L88.42 50.86 L87.92 50.3 L87.81 50.0 L87.87 49.19 L88.12 48.69 L88.57 48.34Z M46.17 14.45 L47.83 14.4 L48.39 14.3 L51.36 14.3 L51.91 14.4 L53.73 14.45 L55.99 14.75 L57.35 15.11 L58.41 15.26 L58.76 15.41 L59.06 15.41 L62.08 16.41 L65.36 17.77 L68.38 19.44 L71.45 21.5 L74.52 24.07 L76.54 26.13 L77.49 27.24 L79.25 29.61 L80.97 32.33 L81.67 33.59 L82.63 35.65 L83.94 39.02 L84.69 41.64 L85.3 44.96 L85.5 46.83 L85.6 50.76 L85.3 54.53 L84.69 57.91 L83.48 61.78 L82.12 65.01 L80.61 67.88 L79.36 69.89 L78.45 71.15 L76.44 73.67 L73.67 76.49 L70.69 78.9 L68.33 80.46 L64.95 82.23 L60.78 83.89 L58.41 84.54 L58.06 84.54 L56.85 84.89 L56.39 84.89 L55.09 85.2 L53.93 85.25 L53.12 85.4 L48.94 85.5 L46.88 85.4 L46.12 85.25 L45.12 85.2 L41.59 84.54 L41.29 84.39 L41.04 84.39 L38.82 83.74 L35.1 82.23 L31.92 80.56 L28.95 78.6 L26.33 76.44 L24.32 74.42 L22.56 72.46 L21.0 70.39 L19.03 67.27 L18.03 65.31 L16.57 61.78 L15.86 59.62 L15.21 56.95 L14.85 54.98 L14.85 54.33 L14.7 53.73 L14.7 52.87 L14.55 52.06 L14.55 47.38 L14.9 44.21 L15.16 43.1 L15.21 42.45 L15.71 40.33 L16.87 36.96 L18.53 33.23 L19.94 30.82 L22.1 27.79 L23.77 25.78 L26.28 23.31 L27.84 22.05 L29.76 20.69 L33.28 18.48 L35.35 17.42 L36.91 16.77 L40.84 15.41 L43.96 14.75 L44.46 14.75 L44.91 14.6 L45.57 14.6Z M49.3 9.47 L50.35 9.47 L50.96 9.92 L51.16 10.32 L51.16 11.18 L50.86 11.63 L50.3 12.03 L49.4 12.03 L48.99 11.78 L48.59 11.23 L48.59 10.17 L48.69 9.97Z M47.38 0.0 L46.07 0.15 L45.17 0.15 L44.46 0.3 L42.8 0.45 L39.83 1.01 L37.36 1.61 L35.15 2.27 L32.88 3.07 L32.53 3.27 L32.33 3.27 L28.55 4.93 L26.59 5.94 L24.07 7.4 L21.8 8.91 L19.69 10.47 L16.41 13.24 L13.14 16.62 L11.53 18.53 L9.57 21.15 L8.21 23.16 L6.04 26.94 L4.68 29.81 L2.87 34.49 L1.91 37.81 L1.41 40.43 L1.26 40.84 L0.76 43.91 L0.4 48.39 L0.45 52.42 L0.6 54.63 L0.91 56.45 L0.91 56.95 L1.41 59.62 L2.22 62.99 L3.73 67.57 L5.59 71.85 L7.1 74.72 L9.37 78.35 L11.13 80.77 L13.6 83.69 L17.12 87.21 L18.78 88.67 L20.64 90.13 L24.47 92.7 L27.19 94.26 L29.41 95.37 L33.33 97.03 L37.46 98.34 L40.89 99.14 L43.15 99.55 L45.67 99.85 L48.04 100.0 L52.52 100.0 L54.63 99.85 L58.36 99.35 L62.79 98.34 L67.07 96.98 L71.55 95.07 L75.33 93.0 L79.66 90.03 L81.42 88.62 L83.64 86.66 L86.46 83.79 L88.87 80.97 L89.88 79.66 L92.15 76.23 L93.3 74.22 L94.51 71.85 L95.67 69.28 L96.88 66.16 L97.63 63.85 L97.63 63.6 L97.78 63.29 L98.29 61.33 L99.09 57.0 L99.45 54.18 L99.45 53.17 L99.6 51.96 L99.6 47.68 L99.14 42.8 L98.44 38.82 L97.28 34.69 L96.17 31.67 L94.81 28.5 L93.35 25.63 L91.49 22.56 L89.83 20.19 L86.91 16.57 L83.23 12.89 L81.27 11.23 L78.9 9.42 L76.23 7.6 L74.72 6.7 L71.15 4.78 L68.13 3.42 L64.05 1.96 L63.6 1.91 L61.53 1.31 L58.36 0.65 L57.55 0.6 L56.95 0.45 L55.09 0.3 L54.48 0.15 L53.42 0.15 L51.96 0.0Z M47.53 4.03 L52.72 4.03 L53.83 4.18 L54.83 4.18 L56.75 4.53 L57.3 4.53 L57.75 4.68 L58.36 4.73 L58.51 4.83 L59.11 4.88 L60.07 5.19 L60.47 5.19 L64.95 6.55 L66.77 7.2 L68.78 8.11 L72.76 10.17 L74.17 11.03 L76.89 12.89 L79.86 15.31 L82.83 18.13 L84.84 20.34 L86.25 22.1 L88.57 25.48 L90.38 28.7 L91.89 31.82 L92.55 33.48 L93.91 37.76 L94.56 40.33 L94.76 41.79 L94.91 42.2 L95.27 44.46 L95.42 46.27 L95.52 51.16 L95.27 55.24 L94.91 57.55 L94.76 57.96 L94.36 60.22 L93.25 64.2 L91.74 68.28 L90.58 70.8 L89.27 73.21 L86.81 76.99 L84.24 80.21 L81.47 83.18 L79.31 85.15 L77.34 86.76 L74.62 88.72 L70.54 91.14 L66.87 92.8 L62.13 94.46 L57.4 95.47 L55.79 95.62 L55.34 95.77 L54.43 95.77 L52.87 95.97 L48.64 96.02 L44.96 95.77 L43.45 95.47 L42.6 95.42 L41.59 95.17 L40.89 95.12 L39.93 94.81 L38.92 94.66 L36.1 93.81 L35.3 93.45 L35.1 93.45 L33.74 92.85 L32.53 92.45 L29.76 91.14 L26.74 89.43 L25.03 88.32 L22.51 86.46 L19.99 84.34 L16.36 80.66 L13.75 77.49 L11.58 74.32 L9.57 70.69 L7.96 67.22 L6.95 64.5 L6.14 61.88 L5.94 60.83 L5.79 60.47 L5.79 60.17 L5.64 59.82 L5.59 59.26 L5.44 58.91 L5.29 57.7 L5.14 57.3 L4.63 53.07 L4.63 46.48 L4.98 43.15 L5.44 40.58 L5.59 40.28 L5.99 38.37 L6.8 35.6 L8.11 32.07 L10.32 27.54 L11.48 25.53 L12.84 23.51 L15.46 20.09 L16.72 18.68 L18.98 16.41 L21.95 13.85 L23.62 12.59 L26.13 10.88 L29.2 9.11 L32.98 7.35 L35.7 6.34 L38.27 5.54 L40.03 5.14 L40.94 4.83 L42.25 4.68 L42.65 4.53 L44.76 4.33 L45.42 4.18Z"/>
+</svg><div><h1>Kraftsamling</h1><p>Admin – enkätsvar</p></div></div>
+    <p>Logga in för att se svaren från kartläggningen. Bara behöriga administratörer har åtkomst.</p>
+    <div class="field"><label for="li-email">E-post</label><input id="li-email" type="email" autocomplete="username" required></div>
+    <div class="field"><label for="li-pass">Lösenord</label><input id="li-pass" type="password" autocomplete="current-password" required></div>
+    <button class="btn" type="submit" id="li-btn">Logga in</button>
+    <a class="btn ghost" href="index.html" style="display:inline-flex;align-items:center;justify-content:center;text-decoration:none">Tillbaka till webbplatsen</a>
+    <p class="msg err" id="li-err" role="alert" hidden></p>
+  </form>
+</section>
+
+<!-- Ej konfigurerad -->
+<section class="login" id="setup-view" hidden>
+  <div class="login-card"><h1>Inte kopplad</h1><p>Admin-sidan saknar databasinställningar (HZ_SUPABASE i config.js).</p></div>
+</section>
+
+<!-- Dashboard -->
+<div id="app" hidden>
+  <header class="top">
+    <div class="wrap">
+      <svg class="mark" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Horizonten">
+<circle cx="50" cy="50" r="48.58" fill="#FFFFFF"/>
+<path fill="#05223B" fill-rule="evenodd" d="M47.63 17.52 L47.38 17.62 L45.17 17.82 L42.7 18.33 L42.4 18.48 L42.09 18.48 L38.17 19.74 L35.75 20.8 L33.74 21.9 L30.82 23.82 L29.2 25.08 L27.84 26.28 L26.23 28.0 L23.87 30.92 L23.21 31.92 L21.6 34.69 L20.85 36.25 L20.09 38.12 L18.93 41.64 L18.28 44.76 L17.93 48.54 L17.93 51.16 L18.28 54.53 L18.93 57.65 L20.24 61.83 L21.55 64.9 L22.91 67.27 L24.27 69.28 L26.69 72.21 L28.6 74.07 L31.07 76.08 L33.99 78.0 L36.3 79.2 L39.88 80.66 L42.65 81.52 L46.17 82.18 L47.03 82.18 L47.89 82.33 L52.22 82.33 L55.89 81.82 L58.01 81.32 L60.62 80.51 L63.75 79.2 L66.41 77.79 L69.49 75.73 L71.9 73.72 L73.87 71.65 L75.98 68.98 L78.0 65.76 L79.15 63.49 L80.06 61.28 L81.27 57.5 L81.92 54.28 L82.18 50.7 L82.07 47.08 L81.77 44.56 L81.27 42.09 L79.76 37.51 L78.75 35.3 L76.99 32.12 L75.78 30.36 L73.11 27.24 L70.85 25.13 L68.13 23.06 L65.26 21.35 L61.93 19.79 L58.16 18.48 L57.85 18.48 L56.7 18.13 L56.29 18.13 L55.89 17.98 L54.18 17.77 L53.63 17.62 L52.77 17.62 L51.61 17.47Z M49.24 52.72 L50.25 52.77 L50.86 53.07 L51.61 53.98 L51.81 54.93 L51.81 74.72 L51.61 75.63 L51.41 75.98 L50.76 76.59 L50.0 76.84 L49.3 76.84 L48.64 76.59 L47.94 75.93 L47.58 75.18 L47.58 54.28 L47.73 53.83 L48.19 53.22 L48.74 52.87Z M74.22 47.48 L74.62 47.48 L75.18 47.63 L75.88 48.04 L76.33 48.59 L76.69 49.6 L76.59 50.4 L76.18 51.16 L75.68 51.66 L74.72 52.06 L73.97 52.01 L73.41 51.81 L72.76 51.31 L72.41 50.81 L72.21 50.3 L72.21 49.35 L72.56 48.49 L73.21 47.83Z M54.93 29.1 L55.34 29.0 L57.4 28.95 L67.32 29.05 L70.39 29.0 L70.8 29.31 L71.25 29.91 L73.62 33.84 L73.56 34.14 L71.6 37.66 L62.69 54.88 L58.11 63.39 L56.65 66.41 L56.75 66.52 L58.81 66.62 L72.51 66.57 L73.01 66.67 L73.06 66.92 L72.36 68.28 L71.6 69.39 L71.1 69.84 L55.99 69.89 L55.69 69.69 L55.49 69.28 L54.68 66.77 L53.73 64.25 L53.52 63.49 L53.52 63.09 L56.5 57.4 L57.8 55.09 L58.66 53.32 L58.81 53.17 L60.98 48.89 L62.08 46.98 L64.3 42.65 L65.71 40.18 L67.07 37.31 L68.38 35.15 L68.98 33.89 L69.03 33.33 L68.93 33.03 L68.68 32.78 L67.88 32.48 L67.32 32.38 L55.94 32.33 L55.49 31.87 L54.63 29.91 L54.58 29.46Z M39.58 24.47 L40.23 24.52 L40.84 24.82 L41.34 25.38 L41.54 25.93 L41.54 74.97 L41.34 75.53 L41.04 75.83 L40.74 75.93 L40.38 75.93 L39.68 75.68 L38.67 75.08 L37.71 74.07 L37.56 73.41 L37.56 53.17 L37.51 52.17 L37.31 51.71 L36.81 51.51 L32.98 51.51 L32.53 51.61 L32.23 51.81 L32.02 52.27 L31.97 71.5 L31.87 71.65 L31.57 71.7 L30.92 71.3 L29.41 69.99 L28.1 68.58 L27.84 67.98 L27.84 52.06 L27.69 51.81 L27.34 51.61 L25.73 51.51 L25.23 51.31 L24.52 50.65 L24.22 49.8 L24.27 49.09 L24.52 48.64 L24.97 48.19 L25.33 47.99 L26.79 47.83 L27.19 47.63 L27.54 47.23 L27.79 46.73 L27.9 45.77 L27.9 31.42 L28.45 30.61 L29.71 29.46 L30.92 28.6 L31.52 28.6 L31.72 28.7 L31.92 28.95 L32.02 29.31 L31.97 41.84 L32.02 46.88 L32.12 47.33 L32.43 47.73 L32.98 47.94 L37.36 47.94 L37.46 47.83 L37.56 47.13 L37.46 34.89 L37.51 26.33 L37.71 25.48 L38.27 24.87 L39.12 24.52Z M49.45 23.16 L50.45 23.36 L51.01 23.72 L51.61 24.42 L51.81 25.18 L51.81 45.07 L51.76 45.52 L51.31 46.32 L50.7 46.83 L49.95 47.13 L49.09 47.13 L48.59 46.88 L47.99 46.32 L47.58 45.47 L47.53 44.26 L47.58 24.87 L47.78 24.27 L48.39 23.56 L48.84 23.31Z M46.58 6.75 L45.92 6.9 L45.17 6.9 L43.2 7.25 L42.7 7.25 L42.35 7.4 L41.94 7.4 L41.59 7.55 L40.33 7.75 L37.71 8.56 L37.46 8.56 L33.74 9.92 L30.56 11.38 L27.04 13.39 L23.62 15.81 L21.6 17.52 L20.29 18.78 L17.57 21.7 L16.26 23.31 L14.5 25.78 L12.34 29.36 L10.52 33.13 L9.16 36.81 L8.56 38.87 L7.85 41.94 L7.35 45.47 L7.35 46.27 L7.2 47.28 L7.2 52.06 L7.35 53.02 L7.35 53.98 L7.5 54.53 L7.55 55.64 L7.65 55.84 L7.7 56.65 L7.85 57.1 L8.01 58.21 L9.01 62.19 L10.37 66.06 L10.78 66.87 L10.98 67.52 L12.44 70.54 L13.19 71.95 L14.3 73.72 L16.77 77.14 L19.49 80.16 L22.61 83.13 L25.03 85.05 L26.59 86.15 L29.86 88.12 L32.12 89.27 L34.34 90.23 L37.51 91.39 L41.34 92.4 L44.21 92.9 L48.59 93.25 L51.31 93.25 L52.77 93.1 L53.78 93.1 L55.74 92.9 L57.91 92.55 L61.28 91.74 L62.08 91.44 L62.34 91.44 L65.41 90.38 L67.67 89.43 L69.49 88.47 L69.74 88.42 L72.71 86.71 L74.27 85.65 L76.94 83.64 L79.25 81.62 L80.77 80.11 L81.82 78.9 L84.59 75.48 L86.71 72.31 L88.02 69.94 L89.02 67.82 L90.53 64.0 L91.84 59.52 L92.5 56.09 L92.7 53.58 L92.85 52.72 L92.85 47.13 L92.5 43.81 L91.69 39.63 L90.38 35.35 L88.57 31.07 L86.56 27.34 L83.99 23.56 L81.42 20.49 L78.35 17.47 L76.64 16.01 L74.97 14.75 L71.1 12.19 L67.52 10.37 L65.11 9.37 L62.84 8.56 L62.59 8.56 L61.78 8.26 L61.33 8.21 L58.96 7.55 L58.66 7.55 L58.31 7.4 L54.98 6.9 L54.08 6.9 L53.47 6.75 L51.56 6.75 L50.6 6.65Z M50.05 88.12 L50.5 88.27 L51.01 88.72 L51.16 88.97 L51.21 89.73 L51.11 90.08 L50.6 90.63 L50.2 90.84 L49.75 90.89 L49.19 90.68 L48.74 90.23 L48.54 89.78 L48.54 89.12 L48.79 88.62 L49.19 88.27 L49.7 88.12Z M10.37 48.29 L11.33 48.29 L11.63 48.44 L11.98 48.79 L12.19 49.19 L12.24 49.8 L12.08 50.35 L11.58 50.86 L11.13 51.06 L10.73 51.06 L10.12 50.81 L9.87 50.6 L9.57 50.15 L9.57 49.14 L9.77 48.79Z M89.07 48.19 L89.58 48.29 L89.93 48.49 L90.28 48.84 L90.48 49.24 L90.48 49.95 L90.38 50.25 L89.83 50.86 L89.48 51.01 L88.72 51.01 L88.42 50.86 L87.92 50.3 L87.81 50.0 L87.87 49.19 L88.12 48.69 L88.57 48.34Z M46.17 14.45 L47.83 14.4 L48.39 14.3 L51.36 14.3 L51.91 14.4 L53.73 14.45 L55.99 14.75 L57.35 15.11 L58.41 15.26 L58.76 15.41 L59.06 15.41 L62.08 16.41 L65.36 17.77 L68.38 19.44 L71.45 21.5 L74.52 24.07 L76.54 26.13 L77.49 27.24 L79.25 29.61 L80.97 32.33 L81.67 33.59 L82.63 35.65 L83.94 39.02 L84.69 41.64 L85.3 44.96 L85.5 46.83 L85.6 50.76 L85.3 54.53 L84.69 57.91 L83.48 61.78 L82.12 65.01 L80.61 67.88 L79.36 69.89 L78.45 71.15 L76.44 73.67 L73.67 76.49 L70.69 78.9 L68.33 80.46 L64.95 82.23 L60.78 83.89 L58.41 84.54 L58.06 84.54 L56.85 84.89 L56.39 84.89 L55.09 85.2 L53.93 85.25 L53.12 85.4 L48.94 85.5 L46.88 85.4 L46.12 85.25 L45.12 85.2 L41.59 84.54 L41.29 84.39 L41.04 84.39 L38.82 83.74 L35.1 82.23 L31.92 80.56 L28.95 78.6 L26.33 76.44 L24.32 74.42 L22.56 72.46 L21.0 70.39 L19.03 67.27 L18.03 65.31 L16.57 61.78 L15.86 59.62 L15.21 56.95 L14.85 54.98 L14.85 54.33 L14.7 53.73 L14.7 52.87 L14.55 52.06 L14.55 47.38 L14.9 44.21 L15.16 43.1 L15.21 42.45 L15.71 40.33 L16.87 36.96 L18.53 33.23 L19.94 30.82 L22.1 27.79 L23.77 25.78 L26.28 23.31 L27.84 22.05 L29.76 20.69 L33.28 18.48 L35.35 17.42 L36.91 16.77 L40.84 15.41 L43.96 14.75 L44.46 14.75 L44.91 14.6 L45.57 14.6Z M49.3 9.47 L50.35 9.47 L50.96 9.92 L51.16 10.32 L51.16 11.18 L50.86 11.63 L50.3 12.03 L49.4 12.03 L48.99 11.78 L48.59 11.23 L48.59 10.17 L48.69 9.97Z M47.38 0.0 L46.07 0.15 L45.17 0.15 L44.46 0.3 L42.8 0.45 L39.83 1.01 L37.36 1.61 L35.15 2.27 L32.88 3.07 L32.53 3.27 L32.33 3.27 L28.55 4.93 L26.59 5.94 L24.07 7.4 L21.8 8.91 L19.69 10.47 L16.41 13.24 L13.14 16.62 L11.53 18.53 L9.57 21.15 L8.21 23.16 L6.04 26.94 L4.68 29.81 L2.87 34.49 L1.91 37.81 L1.41 40.43 L1.26 40.84 L0.76 43.91 L0.4 48.39 L0.45 52.42 L0.6 54.63 L0.91 56.45 L0.91 56.95 L1.41 59.62 L2.22 62.99 L3.73 67.57 L5.59 71.85 L7.1 74.72 L9.37 78.35 L11.13 80.77 L13.6 83.69 L17.12 87.21 L18.78 88.67 L20.64 90.13 L24.47 92.7 L27.19 94.26 L29.41 95.37 L33.33 97.03 L37.46 98.34 L40.89 99.14 L43.15 99.55 L45.67 99.85 L48.04 100.0 L52.52 100.0 L54.63 99.85 L58.36 99.35 L62.79 98.34 L67.07 96.98 L71.55 95.07 L75.33 93.0 L79.66 90.03 L81.42 88.62 L83.64 86.66 L86.46 83.79 L88.87 80.97 L89.88 79.66 L92.15 76.23 L93.3 74.22 L94.51 71.85 L95.67 69.28 L96.88 66.16 L97.63 63.85 L97.63 63.6 L97.78 63.29 L98.29 61.33 L99.09 57.0 L99.45 54.18 L99.45 53.17 L99.6 51.96 L99.6 47.68 L99.14 42.8 L98.44 38.82 L97.28 34.69 L96.17 31.67 L94.81 28.5 L93.35 25.63 L91.49 22.56 L89.83 20.19 L86.91 16.57 L83.23 12.89 L81.27 11.23 L78.9 9.42 L76.23 7.6 L74.72 6.7 L71.15 4.78 L68.13 3.42 L64.05 1.96 L63.6 1.91 L61.53 1.31 L58.36 0.65 L57.55 0.6 L56.95 0.45 L55.09 0.3 L54.48 0.15 L53.42 0.15 L51.96 0.0Z M47.53 4.03 L52.72 4.03 L53.83 4.18 L54.83 4.18 L56.75 4.53 L57.3 4.53 L57.75 4.68 L58.36 4.73 L58.51 4.83 L59.11 4.88 L60.07 5.19 L60.47 5.19 L64.95 6.55 L66.77 7.2 L68.78 8.11 L72.76 10.17 L74.17 11.03 L76.89 12.89 L79.86 15.31 L82.83 18.13 L84.84 20.34 L86.25 22.1 L88.57 25.48 L90.38 28.7 L91.89 31.82 L92.55 33.48 L93.91 37.76 L94.56 40.33 L94.76 41.79 L94.91 42.2 L95.27 44.46 L95.42 46.27 L95.52 51.16 L95.27 55.24 L94.91 57.55 L94.76 57.96 L94.36 60.22 L93.25 64.2 L91.74 68.28 L90.58 70.8 L89.27 73.21 L86.81 76.99 L84.24 80.21 L81.47 83.18 L79.31 85.15 L77.34 86.76 L74.62 88.72 L70.54 91.14 L66.87 92.8 L62.13 94.46 L57.4 95.47 L55.79 95.62 L55.34 95.77 L54.43 95.77 L52.87 95.97 L48.64 96.02 L44.96 95.77 L43.45 95.47 L42.6 95.42 L41.59 95.17 L40.89 95.12 L39.93 94.81 L38.92 94.66 L36.1 93.81 L35.3 93.45 L35.1 93.45 L33.74 92.85 L32.53 92.45 L29.76 91.14 L26.74 89.43 L25.03 88.32 L22.51 86.46 L19.99 84.34 L16.36 80.66 L13.75 77.49 L11.58 74.32 L9.57 70.69 L7.96 67.22 L6.95 64.5 L6.14 61.88 L5.94 60.83 L5.79 60.47 L5.79 60.17 L5.64 59.82 L5.59 59.26 L5.44 58.91 L5.29 57.7 L5.14 57.3 L4.63 53.07 L4.63 46.48 L4.98 43.15 L5.44 40.58 L5.59 40.28 L5.99 38.37 L6.8 35.6 L8.11 32.07 L10.32 27.54 L11.48 25.53 L12.84 23.51 L15.46 20.09 L16.72 18.68 L18.98 16.41 L21.95 13.85 L23.62 12.59 L26.13 10.88 L29.2 9.11 L32.98 7.35 L35.7 6.34 L38.27 5.54 L40.03 5.14 L40.94 4.83 L42.25 4.68 L42.65 4.53 L44.76 4.33 L45.42 4.18Z"/>
+</svg>
+      <div class="title"><strong>Kraftsamling – admin</strong><small id="who"></small></div>
+      <div class="right">
+        <span class="live" title="Sidan hämtar nya svar automatiskt var 30:e sekund"><i aria-hidden="true"></i><span id="updated">Uppdaterad</span></span>
+        <a class="btn small" href="index.html" style="display:inline-flex;align-items:center;text-decoration:none">Till webbplatsen</a>
+        <button class="btn small" id="refresh" type="button">Uppdatera</button>
+        <button class="btn small" id="logout" type="button">Logga ut</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="tiles" id="tiles"></div>
+
+    <div class="bar-row">
+      <div class="tabs" role="tablist" aria-label="Vy">
+        <button role="tab" aria-selected="true" data-tab="stats">Statistik per fråga</button>
+        <button role="tab" aria-selected="false" data-tab="all">Alla svar</button>
+        <button role="tab" aria-selected="false" data-tab="contacts">Kontakter</button>
+        <button role="tab" aria-selected="false" data-tab="account">Konto</button>
+      </div>
+      <div class="filter" id="filter-wrap">
+        <label for="filter">Visa</label>
+        <select id="filter">
+          <option value="all">Alla svar</option>
+          <option value="Ja">Svarat Ja på fråga 1</option>
+          <option value="Nej">Svarat Nej på fråga 1</option>
+        </select>
+        <button class="btn small ghost" id="csv" type="button">Exportera CSV</button>
+      </div>
+    </div>
+
+    <section id="tab-stats" role="tabpanel"></section>
+    <section id="tab-all" role="tabpanel" hidden></section>
+    <section id="tab-contacts" role="tabpanel" hidden></section>
+    <section id="tab-account" role="tabpanel" hidden>
+      <div class="card">
+        <h3>Byt lösenord</h3>
+        <form id="pw-form" class="list" novalidate>
+          <div class="field"><label for="pw1">Nytt lösenord (minst 10 tecken)</label><input id="pw1" type="password" autocomplete="new-password" minlength="10"></div>
+          <div class="field"><label for="pw2">Upprepa lösenordet</label><input id="pw2" type="password" autocomplete="new-password"></div>
+          <button class="btn" type="submit">Spara nytt lösenord</button>
+          <p class="msg" id="pw-msg" role="status" hidden></p>
+        </form>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <h3>Om uppgifterna</h3>
+        <p class="empty">Svaren innehåller känsliga uppgifter. Visa dem inte för obehöriga, lämna inte datorn inloggad och radera exporterade filer när de inte behövs. Kontaktuppgifter lagras separat och kan inte kopplas till ett enskilt svar.</p>
+      </div>
+    </section>
+
+    <section class="big-charts" id="big-charts" aria-label="Stora diagram över hur frågorna besvaras"></section>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script>
+(function(){
+const CFG = window.HZ_SUPABASE;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SKEY = "hz-admin-session";
+let session = null, responses = [], contacts = [], filter = "all", timer = null, lastCount = null;
+
+const JNV = ["Ja","Nej","Vet ej"], HEALTH = ["Ja","Nej","Vill inte svara"];
+const F3 = [
+  ["Maktlöshet och inflytande", ["Jag kände mig maktlös och helt utlämnad till systemet","Jag blev ”omyndigförklarad” och/eller inte lyssnad på","Mitt inflytande över mitt barns situation försvann"]],
+  ["Beslutsunderlag och rättssäkerhet", ["Det saknades objektiv grund eller tillräckliga bevis för ingripandet","Dokumentationen var vinklad eller innehöll direkta felaktigheter","Min bild och kunskap om mitt barn ignorerades"]],
+  ["Kommunikation och bemötande", ["Kommunikationen var bristfällig, otydlig eller motstridig","Bemötandet var respektlöst, dömande eller hotfullt","Jag fick inte tillräcklig information om processen eller mina rättigheter"]],
+  ["Långsiktiga konsekvenser", ["Min tillit till myndigheter och samhället har skadats","Processen har orsakat mig eller min familj psykisk ohälsa"]]
+];
+// Frågorna i enkätens ordning
+const Q = [
+  {sec:"Grundupplevelse"},
+  {k:"f1", t:"1. Upplever du att du eller din familj har blivit felaktigt eller illa behandlad av socialtjänsten?", type:"radio", o:["Ja","Nej"]},
+  {k:"f2", t:"2. Hur vill du delta?", type:"radio", o:["Helt anonymt","Jag kan tänka mig att bli kontaktad för följdfrågor"]},
+  {sec:"3. Form av felbehandling"},
+  {k:"f3", t:"3. På vilket eller vilka sätt upplevde du att du blev felbehandlad?", type:"f3", wide:true},
+  {k:"f3_annat", t:"3. Annat (fritext)", type:"text"},
+  {sec:"4. Redogörelse"},
+  {k:"f4a_kan_inte", t:"4A. Kan inte redogöra på grund av bristande utredning", type:"check"},
+  {k:"f4a", t:"4A. Vad utlöste socialtjänstens utredning?", type:"text"},
+  {k:"f4b", t:"4B. Vilken påverkan hade processen på dig och din familj?", type:"text", wide:true},
+  {sec:"5. Bakgrund"},
+  {k:"alder", t:"Din ålder vid ingripandet", type:"age"},
+  {k:"barn_alder", t:"Barnets/barnens ålder vid första ingripandet", type:"freq"},
+  {k:"antal_barn", t:"Antal barn i familjen", type:"freq", num:true},
+  {k:"kommun", t:"Kommun", type:"freq", norm:true},
+  {k:"ar", t:"Ungefär vilket år inleddes ärendet?", type:"freq", num:true},
+  {k:"civil", t:"Civilstånd vid ingripandet", type:"radio", o:["Ensamstående","Sambo/gift med den andra föräldern","Separerad från den andra föräldern","Annat"]},
+  {k:"kontakter", t:"Antal kontakter med socialtjänsten totalt", type:"radio", o:["1","2–5","6–10","Fler än 10"]},
+  {k:"tid", t:"Utredningstid från första kontakt till beslut", type:"radio", o:["Mindre än 3 månader","3–12 månader","1–2 år","Mer än 2 år"]},
+  {sec:"Processen"},
+  {k:"rattigheter", t:"Fick du information om dina rättigheter?", type:"radio", o:["Ja","Nej","Vet ej / osäker"]},
+  {k:"motstridiga", t:"Gav olika handläggare motstridiga besked?", type:"radio", o:JNV},
+  {k:"varnad", t:"Blev du varnad innan ingripandet skedde?", type:"radio", o:JNV},
+  {k:"beslut", t:"Fick du ett skriftligt beslut med motivering?", type:"radio", o:JNV},
+  {k:"overklaga", t:"Visste du att du kunde överklaga?", type:"radio", o:["Ja, och jag gjorde det","Ja, men jag gjorde det inte","Nej","Vet ej"]},
+  {k:"foralder", t:"Var det en förälder som anmälde den andra?", type:"radio", o:JNV},
+  {k:"upprepade", t:"Upplevde du att anmälningar upprepades?", type:"radio", o:JNV},
+  {k:"ombud", t:"Hade du råd med juridiskt ombud?", type:"radio", o:["Ja","Nej","Delvis / begränsat"]},
+  {k:"ekonomi", t:"Upplevde du att din ekonomi påverkade processen?", type:"radio", o:JNV},
+  {k:"historia", t:"Upplevde du att din historia vreds till din nackdel?", type:"radio", o:JNV},
+  {sec:"Idag"},
+  {k:"kontakt_barn", t:"Har du kontakt med ditt/dina barn idag?", type:"radio", o:["Ja, dagligen","Ja, varje vecka","Ja, någon gång i månaden","Sällan","Aldrig","Vet ej / barnet är myndigt"]},
+  {k:"barn_forandrat", t:"Upplever du att ditt barn har förändrats efter processen?", type:"radio", o:["Ja, i negativ riktning","Ja, i positiv riktning","Nej, inga synbara förändringar","Vet ej"]},
+  {sec:"Hälsa och mående (bara svar med samtycke till hälsouppgifter)"},
+  {k:"vard", t:"Sökt vård för psykisk ohälsa efter processen", type:"radio", o:HEALTH, health:true},
+  {k:"arbete", t:"Svårt att arbeta eller studera efter processen", type:"radio", o:HEALTH, health:true},
+  {k:"suicid", t:"Funderat på eller försökt ta sitt liv", type:"radio", o:HEALTH, health:true},
+  {sec:"Helheten"},
+  {k:"skala", t:"Hur rättssäkert upplevde du processen? (1 = inte alls, 10 = helt)", type:"scale", wide:true},
+  {k:"ord", t:"Upplevelsen i ett ord", type:"freq", norm:true},
+  {sec:"6. Övrigt"},
+  {k:"ovrigt", t:"Övriga kommentarer", type:"text"},
+  {k:"stod", t:"Vilket stöd hade du önskat fanns tillgängligt?", type:"text"},
+  {k:"dokumentation", t:"Har dokumentation att dela anonymt", type:"check"}
+];
+const LABEL = {};
+Q.forEach(q => { if(q.k && q.type!=="f3") LABEL[q.k]=q.t; });
+F3.forEach(([g,os],gi)=>os.forEach((o,oi)=>LABEL[`f3_${gi}_${oi}`]=`3. ${g}: ${o}`));
+const ORDER = [];
+Q.forEach(q => { if(!q.k) return; if(q.type==="f3"){ F3.forEach((g,gi)=>g[1].forEach((_,oi)=>ORDER.push(`f3_${gi}_${oi}`))); } else ORDER.push(q.k); });
+
+/* ---------- API ---------- */
+async function auth(path, body){
+  const r = await fetch(CFG.url+"/auth/v1/"+path,{method:"POST",headers:{"Content-Type":"application/json","apikey":CFG.key},body:JSON.stringify(body)});
+  const j = await r.json().catch(()=>({}));
+  if(!r.ok) throw Object.assign(new Error(j.error_description||j.msg||j.message||"Inloggningen misslyckades."),{status:r.status});
+  return j;
+}
+function saveSession(j){ session={access:j.access_token,refresh:j.refresh_token,exp:Date.now()+(j.expires_in||3600)*1000,email:(j.user&&j.user.email)||session?.email}; try{sessionStorage.setItem(SKEY,JSON.stringify(session))}catch(e){} }
+async function token(){
+  if(session && Date.now() > session.exp - 60000){ try{ saveSession(await auth("token?grant_type=refresh_token",{refresh_token:session.refresh})); }catch(e){ logout(true); throw e; } }
+  return session.access;
+}
+async function rest(path, opts={}){
+  const t = await token();
+  const r = await fetch(CFG.url+"/rest/v1/"+path,{...opts,headers:{"apikey":CFG.key,"Authorization":"Bearer "+t,"Content-Type":"application/json",...(opts.headers||{})}});
+  if(r.status===401){ logout(true); throw new Error("Sessionen har gått ut. Logga in igen."); }
+  if(!r.ok){ const j=await r.json().catch(()=>({})); throw new Error(j.message||("Fel "+r.status)); }
+  return r.status===204 ? null : r.json();
+}
+
+/* ---------- Vyer ---------- */
+function show(view){ $("login-view").hidden = view!=="login"; $("app").hidden = view!=="app"; $("setup-view").hidden = view!=="setup"; }
+function toast(t){ const el=$("toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,4000); }
+
+$("login-form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const err=$("li-err"), btn=$("li-btn"), email=$("li-email").value.trim(), pass=$("li-pass").value;
+  err.hidden=true;
+  if(!email || !pass){ err.textContent="Fyll i e-post och lösenord."; err.hidden=false; return; }
+  btn.disabled=true; btn.textContent="Loggar in…";
+  try{
+    saveSession(await auth("token?grant_type=password",{email,password:pass}));
+    $("li-pass").value="";
+    await start();
+  }catch(x){
+    err.textContent = x.status===400 ? "Fel e-post eller lösenord." : x.message; err.hidden=false;
+  }finally{ btn.disabled=false; btn.textContent="Logga in"; }
+});
+
+function logout(expired){
+  const t = session && session.access;
+  if(t && !expired) fetch(CFG.url+"/auth/v1/logout",{method:"POST",headers:{"apikey":CFG.key,"Authorization":"Bearer "+t}}).catch(()=>{});
+  session=null; responses=[]; contacts=[]; clearInterval(timer); try{sessionStorage.removeItem(SKEY)}catch(e){}
+  show("login"); if(expired) { $("li-err").textContent="Du har loggats ut. Logga in igen."; $("li-err").hidden=false; }
+}
+$("logout").addEventListener("click",()=>logout(false));
+$("refresh").addEventListener("click",()=>load(true));
+
+async function start(){
+  const ok = await rest("rpc/is_survey_admin",{method:"POST",body:"{}"});
+  if(ok!==true){ logout(false); $("li-err").textContent="Kontot har inte behörighet till enkätsvaren."; $("li-err").hidden=false; return; }
+  $("who").textContent = "Inloggad som "+(session.email||"");
+  show("app");
+  await load(false);
+  clearInterval(timer); timer=setInterval(()=>load(false,true),30000);
+}
+
+async function load(manual, poll){
+  try{
+    const [r,c] = await Promise.all([
+      rest("survey_responses?select=id,submitted_on,health_consent,f1,answers&order=id.desc"),
+      rest("survey_contacts?select=id,purpose,name,email,phone,submitted_on&order=id.desc")
+    ]);
+    if(poll && lastCount!==null && r.length>lastCount) toast((r.length-lastCount===1?"1 nytt svar":(r.length-lastCount)+" nya svar")+" har kommit in");
+    lastCount=r.length; responses=r; contacts=c;
+    $("updated").textContent="Uppdaterad "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
+    render();
+    if(manual) toast("Uppdaterat");
+  }catch(e){ if(session) toast(e.message); }
+}
+
+/* ---------- Rendering ---------- */
+const filtered = () => filter==="all" ? responses : responses.filter(r=>r.f1===filter);
+const val = (r,k) => r.answers ? r.answers[k] : undefined;
+const pct = (n,d) => d ? Math.round(n/d*100) : 0;
+const fmtDate = d => d ? new Date(d+"T12:00:00").toLocaleDateString("sv-SE",{day:"numeric",month:"short",year:"numeric"}) : "";
+function bars(rows, denom){
+  return `<div class="bars">${rows.map(([l,n])=>`<div class="b"><span class="lbl">${esc(l)}</span><span class="val">${n} · ${pct(n,denom)} %</span><span class="track"><span class="fill" style="width:${pct(n,denom)}%"></span></span></div>`).join("")}</div>`;
+}
+function render(){
+  const all = responses, R = filtered();
+  const ja = all.filter(r=>r.f1==="Ja").length;
+  const latest = all[0] ? fmtDate(all[0].submitted_on) : "–";
+  const week = all.filter(r=> (Date.now()-new Date(r.submitted_on+"T12:00:00"))/864e5 <= 7).length;
+  $("tiles").innerHTML = `
+    <div class="tile"><span>Antal svar</span><b>${all.length}</b><em>${week} senaste 7 dagarna</em></div>
+    <div class="tile"><span>Ja på fråga 1</span><b>${pct(ja,all.length)} %</b><em>${ja} av ${all.length}</em></div>
+    <div class="tile"><span>Senaste svar</span><b style="font-size:22px">${latest}</b><em>${all.filter(r=>r.health_consent).length} med hälsosamtycke</em></div>
+    <div class="tile"><span>Kontakter</span><b>${contacts.length}</b><em>${contacts.filter(c=>c.purpose==="uppfoljning").length} uppföljning · ${contacts.filter(c=>c.purpose==="resultat").length} resultat</em></div>`;
+  renderStats(R); renderAll(R); renderContacts(); renderBigCharts(R);
+}
+function donutSvg(segments, total, centerTop, centerSub){
+  const r = 60, c = 2 * Math.PI * r;
+  let offset = 0;
+  const circles = total ? segments.map(([lbl, count, color]) => {
+    const frac = count / total, len = frac * c, dash = `${len} ${c - len}`, rot = offset * 360 - 90;
+    offset += frac;
+    return count > 0 ? `<circle cx="85" cy="85" r="${r}" fill="none" stroke="${color}" stroke-width="24" stroke-dasharray="${dash}" transform="rotate(${rot} 85 85)"/>` : "";
+  }).join("") : `<circle cx="85" cy="85" r="${r}" fill="none" stroke="var(--bar-soft)" stroke-width="24"/>`;
+  return `<div class="donut-wrap">
+    <svg class="donut-svg" viewBox="0 0 170 170" role="img" aria-label="${esc(centerTop)}">
+      <circle cx="85" cy="85" r="${r}" fill="none" stroke="var(--bar-soft)" stroke-width="24"/>
+      ${circles}
+      <text x="85" y="82" text-anchor="middle" fill="currentColor" font-size="24" font-weight="600">${esc(centerTop)}</text>
+      <text x="85" y="102" text-anchor="middle" fill="var(--muted)" font-size="12">${esc(centerSub)}</text>
+    </svg>
+    <div class="donut-legend">
+      ${segments.map(([lbl, count, color]) => `<div class="donut-item"><span class="lbl"><i class="sw" style="background:${color}"></i>${esc(lbl)}</span><span class="val">${count} (${pct(count, total)} %)</span></div>`).join("")}
+    </div>
+  </div>`;
+}
+function lgBars(rows, denom, cls=""){
+  return `<div class="lg-bars">${rows.map(([l,n])=>`<div class="lg-bar"><span class="lg-lbl">${esc(l)}</span><div class="lg-track"><span class="lg-fill ${cls}" style="width:${pct(n,denom)}%"></span></div><span class="lg-val">${n} · ${pct(n,denom)} %</span></div>`).join("")}</div>`;
+}
+function renderBigCharts(R){
+  const el = $("big-charts");
+  if(!el) return;
+  const n = R.length, hc = R.filter(r=>r.health_consent);
+  const f1Ja = R.filter(r=>r.f1==="Ja").length, f1Nej = R.filter(r=>r.f1==="Nej").length;
+  const f2Vals = R.map(r=>val(r,"f2")).filter(Boolean);
+  const f2Anon = f2Vals.filter(v=>v==="Helt anonymt").length, f2Contact = f2Vals.filter(v=>v==="Jag kan tänka mig att bli kontaktad för följdfrågor").length;
+  const hcJa = hc.length, hcNej = Math.max(0, n - hcJa);
+
+  // 3. Form av felbehandling
+  const f3Any = R.filter(r=>Object.keys(r.answers||{}).some(k=>/^f3_\d_\d$/.test(k))).length;
+  const f3Html = F3.map(([g,os],gi)=>`<div class="lg-bar-group-title">${esc(g)}</div>` + lgBars(os.map((o,oi)=>[o, R.filter(r=>val(r,`f3_${gi}_${oi}`)).length]), f3Any||1, gi===3?"accent":"")).join("");
+
+  // Processfrågor som 100 % staplade jämförelsediagram
+  const procKeys = [
+    ["rattigheter","Fick du information om dina rättigheter?",["Ja"],["Vet ej / osäker"],["Nej"]],
+    ["motstridiga","Gav olika handläggare motstridiga besked?",["Ja"],["Vet ej"],["Nej"]],
+    ["varnad","Blev du varnad innan ingripandet skedde?",["Ja"],["Vet ej"],["Nej"]],
+    ["beslut","Fick du ett skriftligt beslut med motivering?",["Ja"],["Vet ej"],["Nej"]],
+    ["overklaga","Visste du att du kunde överklaga?",["Ja, och jag gjorde det","Ja, men jag gjorde det inte"],["Vet ej"],["Nej"]],
+    ["foralder","Var det en förälder som anmälde den andra?",["Ja"],["Vet ej"],["Nej"]],
+    ["upprepade","Upplevde du att anmälningar upprepades?",["Ja"],["Vet ej"],["Nej"]],
+    ["ombud","Hade du råd med juridiskt ombud?",["Ja"],["Delvis / begränsat"],["Nej"]],
+    ["ekonomi","Upplevde du att din ekonomi påverkade processen?",["Ja"],["Vet ej"],["Nej"]],
+    ["historia","Upplevde du att din historia vreds till din nackdel?",["Ja"],["Vet ej"],["Nej"]]
+  ];
+  const procRows = procKeys.map(([k,label,jaSet,midSet,nejSet])=>{
+    const vals = R.map(r=>val(r,k)).filter(Boolean), tot = vals.length;
+    const cJa = vals.filter(v=>jaSet.includes(v)).length;
+    const cMid = vals.filter(v=>midSet.includes(v)).length;
+    const cNej = vals.filter(v=>nejSet.includes(v)).length;
+    const pJa = pct(cJa,tot), pMid = pct(cMid,tot), pNej = tot ? Math.max(0, 100 - pJa - pMid) : 0;
+    return `<div class="stack-row">
+      <div class="stack-q">${esc(label)}</div>
+      <div class="stack-bar" title="Ja: ${cJa} (${pJa} %), Delvis/Vet ej: ${cMid} (${pMid} %), Nej: ${cNej} (${pNej} %)">
+        ${cJa?`<div class="stack-seg" style="width:${pJa}%;background:var(--bar)">${pJa>=10?pJa+" %":""}</div>`:""}
+        ${cMid?`<div class="stack-seg" style="width:${pMid}%;background:#7A8B99">${pMid>=10?pMid+" %":""}</div>`:""}
+        ${cNej?`<div class="stack-seg" style="width:${pNej}%;background:var(--accent)">${pNej>=10?pNej+" %":""}</div>`:""}
+      </div>
+      <div class="stack-n">Ja ${pJa} % · Nej ${pNej} % (${tot} svar)</div>
+    </div>`;
+  }).join("");
+
+  // Skala 1-10 stort kolumndiagram
+  const sVals = R.map(r=>Number(val(r,"skala"))).filter(x=>x>=1&&x<=10);
+  const sCounts = [...Array(10)].map((_,i)=>sVals.filter(x=>x===i+1).length);
+  const sMax = Math.max(1, ...sCounts);
+  const sMean = sVals.length ? (sVals.reduce((a,b)=>a+b,0)/sVals.length).toFixed(1).replace(".",",") : "–";
+  const sLow = sVals.filter(x=>x<=3).length, sHigh = sVals.filter(x=>x>=8).length;
+
+  // Idag: kontakt med barn & barn förändrat
+  const kbOpts = ["Ja, dagligen","Ja, varje vecka","Ja, någon gång i månaden","Sällan","Aldrig","Vet ej / barnet är myndigt"];
+  const kbVals = R.map(r=>val(r,"kontakt_barn")).filter(Boolean);
+  const bfOpts = ["Ja, i negativ riktning","Ja, i positiv riktning","Nej, inga synbara förändringar","Vet ej"];
+  const bfVals = R.map(r=>val(r,"barn_forandrat")).filter(Boolean);
+
+  // Hälsa
+  const hQuestions = [
+    ["vard","Sökt vård för psykisk ohälsa efter processen"],
+    ["arbete","Svårt att arbeta eller studera efter processen"],
+    ["suicid","Funderat på eller försökt ta sitt liv"]
+  ];
+  const hRows = hQuestions.map(([k,label])=>{
+    const vals = hc.map(r=>val(r,k)).filter(Boolean), tot = vals.length;
+    const cJa = vals.filter(v=>v==="Ja").length, cNej = vals.filter(v=>v==="Nej").length, cEj = vals.filter(v=>v==="Vill inte svara").length;
+    const pJa = pct(cJa,tot), pNej = pct(cNej,tot), pEj = tot ? Math.max(0,100-pJa-pNej) : 0;
+    return `<div class="stack-row">
+      <div class="stack-q">${esc(label)}</div>
+      <div class="stack-bar">
+        ${cJa?`<div class="stack-seg" style="width:${pJa}%;background:var(--accent)">${pJa>=10?pJa+" %":""}</div>`:""}
+        ${cNej?`<div class="stack-seg" style="width:${pNej}%;background:var(--ok)">${pNej>=10?pNej+" %":""}</div>`:""}
+        ${cEj?`<div class="stack-seg" style="width:${pEj}%;background:#7A8B99">${pEj>=10?pEj+" %":""}</div>`:""}
+      </div>
+      <div class="stack-n">Ja ${cJa} (${pJa} %) · Nej ${cNej} (${pNej} %)</div>
+    </div>`;
+  }).join("");
+
+  // Ålder kolumndiagram
+  const ageVals = R.map(r=>parseInt(val(r,"alder"),10)).filter(x=>x>0&&x<120);
+  const ageBk = [["Under 25",x=>x<25],["25–34",x=>x>=25&&x<35],["35–44",x=>x>=35&&x<45],["45–54",x=>x>=45&&x<55],["55+",x=>x>=55]];
+  const ageCounts = ageBk.map(([l,fn])=>[l, ageVals.filter(fn).length]);
+  const ageMax = Math.max(1, ...ageCounts.map(x=>x[1]));
+
+  // Utredningstid & Antal kontakter
+  const tidOpts = ["Mindre än 3 månader","3–12 månader","1–2 år","Mer än 2 år"];
+  const tidVals = R.map(r=>val(r,"tid")).filter(Boolean);
+  const kontOpts = ["1","2–5","6–10","Fler än 10"];
+  const kontVals = R.map(r=>val(r,"kontakter")).filter(Boolean);
+
+  el.innerHTML = `
+    <div class="big-head">
+      <div>
+        <h2>Stora diagram – hur frågorna besvaras</h2>
+        <p>Visuell helhetsöversikt baserad på ${n} enkätsvar${filter!=="all" ? ` (urval: svarat ${filter} på fråga 1)` : ""}.</p>
+      </div>
+    </div>
+
+    <div class="big-grid">
+      <article class="big-card third">
+        <div class="big-card-head"><h3>1. Upplevd felbehandling</h3><span class="sub">${n} svar</span></div>
+        ${donutSvg([["Ja", f1Ja, "var(--accent)"], ["Nej", f1Nej, "var(--bar)"]], n, `${pct(f1Ja,n)} %`, "svarade Ja")}
+      </article>
+
+      <article class="big-card third">
+        <div class="big-card-head"><h3>2. Deltagandeform</h3><span class="sub">${f2Vals.length} svar</span></div>
+        ${donutSvg([["Kan kontaktas", f2Contact, "var(--ok)"], ["Helt anonymt", f2Anon, "var(--bar)"]], f2Vals.length, `${pct(f2Contact,f2Vals.length)} %`, "kan kontaktas")}
+      </article>
+
+      <article class="big-card third">
+        <div class="big-card-head"><h3>Samtycke hälsodata</h3><span class="sub">${n} svar</span></div>
+        ${donutSvg([["Samtycke (Ja)", hcJa, "var(--bar)"], ["Inget samtycke", hcNej, "#8C98A4"]], n, `${pct(hcJa,n)} %`, "gav samtycke")}
+      </article>
+
+      <article class="big-card">
+        <div class="big-card-head">
+          <h3>3. På vilket eller vilka sätt upplevde du att du blev felbehandlad?</h3>
+          <span class="sub">${f3Any} av ${n} har kryssat i minst ett alternativ (flera val möjliga)</span>
+        </div>
+        ${f3Html}
+      </article>
+
+      <article class="big-card">
+        <div class="big-card-head">
+          <h3>Processen – jämförelse av samtliga 10 processfrågor</h3>
+          <div class="stack-legend">
+            <span><i style="background:var(--bar)"></i>Ja</span>
+            <span><i style="background:#7A8B99"></i>Delvis / Vet ej</span>
+            <span><i style="background:var(--accent)"></i>Nej</span>
+          </div>
+        </div>
+        <div class="stack-list">${procRows}</div>
+      </article>
+
+      <article class="big-card">
+        <div class="big-card-head">
+          <h3>Hur rättssäkert upplevde du processen? (Skala 1–10)</h3>
+          <span class="sub">Medelvärde: <strong>${sMean}</strong> · Svarat 1–3 (låg): <strong>${sLow} st (${pct(sLow,sVals.length)} %)</strong> · Svarat 8–10 (hög): <strong>${sHigh} st (${pct(sHigh,sVals.length)} %)</strong></span>
+        </div>
+        <div class="col-chart" style="--cols:10">
+          ${sCounts.map((cnt,idx)=>`<div class="col-item">
+            <span class="col-num">${cnt}</span>
+            <span class="col-pct">${pct(cnt,sVals.length)} %</span>
+            <div class="col-bar ${idx<3?"accent":""}" style="height:${Math.max(4, Math.round(cnt/sMax*160))}px"></div>
+          </div>`).join("")}
+        </div>
+        <div class="col-labels" style="--cols:10">
+          ${sCounts.map((_,idx)=>`<span>${idx+1}${idx===0?" (Inte alls)":idx===9?" (Helt)":""}</span>`).join("")}
+        </div>
+      </article>
+
+      <article class="big-card half">
+        <div class="big-card-head"><h3>Kontakt med barnet/barnen idag</h3><span class="sub">${kbVals.length} svar</span></div>
+        ${lgBars(kbOpts.map(o=>[o, kbVals.filter(v=>v===o).length]), kbVals.length)}
+      </article>
+
+      <article class="big-card half">
+        <div class="big-card-head"><h3>Upplevd förändring hos barnet</h3><span class="sub">${bfVals.length} svar</span></div>
+        ${lgBars(bfOpts.map(o=>[o, bfVals.filter(v=>v===o).length]), bfVals.length, "accent")}
+      </article>
+
+      <article class="big-card half">
+        <div class="big-card-head">
+          <h3>Hälsa och mående efter processen</h3>
+          <div class="stack-legend">
+            <span><i style="background:var(--accent)"></i>Ja</span>
+            <span><i style="background:var(--ok)"></i>Nej</span>
+            <span><i style="background:#7A8B99"></i>Vill inte svara</span>
+          </div>
+        </div>
+        <div class="stack-list">${hRows}</div>
+      </article>
+
+      <article class="big-card half">
+        <div class="big-card-head"><h3>Åldersfördelning vid ingripandet</h3><span class="sub">${ageVals.length} svar</span></div>
+        <div class="col-chart" style="--cols:5;height:190px">
+          ${ageCounts.map(([lbl,cnt])=>`<div class="col-item">
+            <span class="col-num">${cnt}</span>
+            <span class="col-pct">${pct(cnt,ageVals.length)} %</span>
+            <div class="col-bar" style="height:${Math.max(4, Math.round(cnt/ageMax*125))}px"></div>
+          </div>`).join("")}
+        </div>
+        <div class="col-labels" style="--cols:5">
+          ${ageCounts.map(([lbl])=>`<span>${esc(lbl)}</span>`).join("")}
+        </div>
+      </article>
+
+      <article class="big-card half">
+        <div class="big-card-head"><h3>Utredningstid från kontakt till beslut</h3><span class="sub">${tidVals.length} svar</span></div>
+        ${lgBars(tidOpts.map(o=>[o, tidVals.filter(v=>v===o).length]), tidVals.length)}
+      </article>
+
+      <article class="big-card half">
+        <div class="big-card-head"><h3>Antal kontakter med socialtjänsten</h3><span class="sub">${kontVals.length} svar</span></div>
+        ${lgBars(kontOpts.map(o=>[o, kontVals.filter(v=>v===o).length]), kontVals.length)}
+      </article>
+    </div>
+  `;
+}
+function renderStats(R){
+  const n = R.length, hc = R.filter(r=>r.health_consent);
+  if(!n){ $("tab-stats").innerHTML=`<p class="note">Inga svar ${filter==="all"?"ännu":"med det här urvalet"}. Så fort någon skickar in enkäten syns svaren här – sidan hämtar nya svar automatiskt.</p>`; return; }
+  let html="", grid=[];
+  const flush=()=>{ if(grid.length){ html+=`<div class="qgrid">${grid.join("")}</div>`; grid=[]; } };
+  for(const q of Q){
+    if(q.sec){ flush(); html+=`<h2 class="section-title">${esc(q.sec)}</h2>`; continue; }
+    const base = q.health ? hc : R;
+    let body="", answered=0;
+    if(q.type==="radio"){
+      const vals = base.map(r=>val(r,q.k)).filter(v=>v!==undefined&&v!==null&&v!=="");
+      answered=vals.length;
+      const rows=q.o.map(o=>[o,vals.filter(v=>v===o).length]);
+      const extra=[...new Set(vals.filter(v=>!q.o.includes(v)))].map(o=>[o,vals.filter(v=>v===o).length]);
+      body = answered ? bars(rows.concat(extra), answered) : `<p class="empty">Inga svar på frågan.</p>`;
+    } else if(q.type==="f3"){
+      const any = R.filter(r=>Object.keys(r.answers||{}).some(k=>/^f3_\d_\d$/.test(k))).length; answered=any;
+      body = F3.map(([g,os],gi)=>`<h4 style="margin:6px 0 0;font-size:14px">${esc(g)}</h4>`+bars(os.map((o,oi)=>[o,R.filter(r=>val(r,`f3_${gi}_${oi}`)).length]), any||1)).join("");
+      body += `<p class="n">Andel räknas på de ${any} som kryssat i minst ett alternativ. Flera val per person.</p>`;
+    } else if(q.type==="check"){
+      answered = R.filter(r=>val(r,q.k)).length;
+      body = `<div class="stat-line"><div><b>${answered}</b>har kryssat i</div><div><b>${pct(answered,n)} %</b>av alla svar</div></div>`;
+    } else if(q.type==="text"){
+      const t = R.filter(r=>val(r,q.k)); answered=t.length;
+      body = answered ? `<div class="texts">${t.map(r=>`<blockquote>${esc(val(r,q.k))}<small>Svar #${r.id} · ${fmtDate(r.submitted_on)}</small></blockquote>`).join("")}</div>` : `<p class="empty">Inga svar.</p>`;
+    } else if(q.type==="age"){
+      const v = R.map(r=>parseInt(val(r,q.k),10)).filter(x=>x>0&&x<120); answered=v.length;
+      if(answered){
+        const s=[...v].sort((a,b)=>a-b), med=s.length%2?s[(s.length-1)/2]:(s[s.length/2-1]+s[s.length/2])/2, mean=(v.reduce((a,b)=>a+b,0)/v.length);
+        const bk=[["Under 25",x=>x<25],["25–34",x=>x>=25&&x<35],["35–44",x=>x>=35&&x<45],["45–54",x=>x>=45&&x<55],["55 och äldre",x=>x>=55]];
+        body = `<div class="stat-line"><div><b>${mean.toFixed(1).replace(".",",")}</b>medel</div><div><b>${String(med).replace(".",",")}</b>median</div><div><b>${s[0]}–${s[s.length-1]}</b>spann</div></div>`+bars(bk.map(([l,f])=>[l,v.filter(f).length]),answered);
+      } else body=`<p class="empty">Inga svar.</p>`;
+    } else if(q.type==="freq"){
+      const raw = R.map(r=>val(r,q.k)).filter(v=>v!==undefined&&v!==null&&String(v).trim()!=="");
+      answered=raw.length;
+      const norm = v => q.norm ? String(v).trim().toLowerCase().replace(/(^|[\s-])\S/g,m=>m.toUpperCase()).replace(/ Kommun$/,"") : String(v).trim();
+      const m = new Map(); raw.forEach(v=>{const k=norm(v); m.set(k,(m.get(k)||0)+1);});
+      let rows=[...m.entries()];
+      rows.sort(q.num ? (a,b)=>Number(a[0])-Number(b[0]) : (a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],"sv"));
+      body = answered ? bars(rows.slice(0,25),answered)+(rows.length>25?`<p class="n">Visar 25 av ${rows.length} olika svar.</p>`:"") : `<p class="empty">Inga svar.</p>`;
+    } else if(q.type==="scale"){
+      const v = R.map(r=>Number(val(r,q.k))).filter(x=>x>=1&&x<=10); answered=v.length;
+      if(answered){
+        const c=[...Array(10)].map((_,i)=>v.filter(x=>x===i+1).length), max=Math.max(1,...c), mean=v.reduce((a,b)=>a+b,0)/v.length;
+        body = `<div class="stat-line"><div><b>${mean.toFixed(1).replace(".",",")}</b>medelvärde</div><div><b>${v.filter(x=>x<=3).length}</b>svarat 1–3</div></div>
+          <div class="scale" aria-hidden="true">${c.map(x=>`<div>${x||""}<i style="height:${x/max*100}%"></i></div>`).join("")}</div>
+          <div class="scale-x">${c.map((_,i)=>`<span>${i+1}</span>`).join("")}</div>
+          <p class="n">Fördelning: ${c.map((x,i)=>`${i+1}: ${x}`).join(", ")}</p>`;
+      } else body=`<p class="empty">Inga svar.</p>`;
+    }
+    const denom = q.health ? hc.length : n;
+    grid.push(`<article class="q${q.wide?" wide":""}"><div><h3>${esc(q.t)}</h3><span class="n">${answered} av ${denom} har svarat${q.health?" (av dem med hälsosamtycke)":""}</span></div>${body}</article>`);
+  }
+  flush();
+  $("tab-stats").innerHTML = html;
+}
+function renderAll(R){
+  if(!R.length){ $("tab-all").innerHTML=`<p class="note">Inga svar ${filter==="all"?"ännu":"med det här urvalet"}.</p>`; return; }
+  $("tab-all").innerHTML = `<div class="list">${R.map(r=>{
+    const a=r.answers||{}, keys=ORDER.filter(k=>a[k]!==undefined);
+    return `<details class="resp"><summary><span class="id">Svar #${r.id}</span><span class="pill ${r.f1==="Ja"?"ja":""}">Fråga 1: ${esc(r.f1)}</span><span class="meta">${fmtDate(r.submitted_on)} · ${keys.length} besvarade fält${r.health_consent?" · hälsosamtycke":""}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
+      <dl>${keys.map(k=>`<div><dt>${esc(LABEL[k]||k)}</dt><dd>${esc(a[k]===true?"Ja":a[k])}</dd></div>`).join("")}</dl>
+      <div class="actions"><button class="btn small danger" type="button" data-del="${r.id}">Radera svaret</button></div></details>`;
+  }).join("")}</div>`;
+}
+function renderContacts(){
+  const row=c=>`<tr><td>${fmtDate(c.submitted_on)}</td><td>${esc(c.name||"–")}</td><td>${esc(c.email||"–")}</td><td>${esc(c.phone||"–")}</td><td><button class="btn small danger" type="button" data-delc="${c.id}">Radera</button></td></tr>`;
+  const table=(list,title,desc)=>`<h2 class="section-title">${title}</h2><p class="empty" style="margin:4px 0 10px">${desc}</p>`+(list.length?`<div class="tbl"><table><thead><tr><th>Datum</th><th>Namn</th><th>E-post</th><th>Telefon</th><th><span class="sr-only">Åtgärd</span></th></tr></thead><tbody>${list.map(row).join("")}</tbody></table></div>`:`<p class="note">Inga ännu.</p>`);
+  $("tab-contacts").innerHTML = `<p class="note">Kontaktuppgifterna lagras separat och kan inte kopplas till ett enskilt svar. Använd dem bara för det personen har gått med på.</p>`+
+    table(contacts.filter(c=>c.purpose==="uppfoljning"),"Kan kontaktas för följdfrågor eller intervju","Personer som valt att lämna kontaktuppgifter i fråga 2.")+
+    table(contacts.filter(c=>c.purpose==="resultat"),"Vill få resultaten","Personer som vill ha resultaten när kartläggningen är klar.");
+}
+
+/* Radering med bekräftelse i två steg */
+document.addEventListener("click", async e=>{
+  const b = e.target.closest("[data-del],[data-delc]"); if(!b) return;
+  if(b.dataset.armed!=="1"){ b.dataset.armed="1"; b.textContent="Klicka igen för att radera"; setTimeout(()=>{ if(b.isConnected){ b.dataset.armed=""; b.textContent=b.dataset.del?"Radera svaret":"Radera"; } },5000); return; }
+  try{
+    if(b.dataset.del) await rest("survey_responses?id=eq."+encodeURIComponent(b.dataset.del),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
+    else await rest("survey_contacts?id=eq."+encodeURIComponent(b.dataset.delc),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
+    toast("Raderat"); await load(false);
+  }catch(x){ toast(x.message); }
+});
+
+/* Flikar och filter */
+document.querySelectorAll("[data-tab]").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
+  ["stats","all","contacts","account"].forEach(k=>$("tab-"+k).hidden = k!==t.dataset.tab);
+  $("filter-wrap").hidden = t.dataset.tab==="contacts"||t.dataset.tab==="account";
+}));
+$("filter").addEventListener("change",e=>{ filter=e.target.value; render(); });
+
+/* CSV-export */
+$("csv").addEventListener("click",()=>{
+  const R=filtered(), cols=["id","submitted_on","health_consent",...ORDER];
+  const cell=v=>{ v = v===undefined||v===null ? "" : String(v===true?"Ja":v); return /[";\n\r]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; };
+  const head=["Svar","Datum","Hälsosamtycke",...ORDER.map(k=>LABEL[k]||k)].map(cell).join(";");
+  const lines=R.map(r=>cols.map(c=> c==="id"?r.id : c==="submitted_on"?r.submitted_on : c==="health_consent"?(r.health_consent?"Ja":"Nej") : cell((r.answers||{})[c])).join(";"));
+  const blob=new Blob(["﻿"+[head,...lines].join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="kraftsamling-svar-"+new Date().toISOString().slice(0,10)+".csv"; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+});
+
+/* Byt lösenord */
+$("pw-form").addEventListener("submit", async e=>{
+  e.preventDefault(); const m=$("pw-msg"), p1=$("pw1").value, p2=$("pw2").value; m.hidden=false; m.className="msg err";
+  if(p1.length<10){ m.textContent="Lösenordet måste vara minst 10 tecken."; return; }
+  if(p1!==p2){ m.textContent="Lösenorden matchar inte."; return; }
+  try{
+    const r=await fetch(CFG.url+"/auth/v1/user",{method:"PUT",headers:{"Content-Type":"application/json","apikey":CFG.key,"Authorization":"Bearer "+await token()},body:JSON.stringify({password:p1})});
+    const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.msg||j.message||"Lösenordet kunde inte bytas.");
+    m.className="msg ok"; m.textContent="Lösenordet är bytt."; $("pw1").value=$("pw2").value="";
+  }catch(x){ m.textContent=x.message; }
+});
+
+/* Start */
+if(!CFG || !CFG.url || !CFG.key){ show("setup"); return; }
+try{ session = JSON.parse(sessionStorage.getItem(SKEY)||"null"); }catch(e){ session=null; }
+if(session){ start().catch(()=>logout(true)); } else show("login");
+})();
+</script>
+</body>
+</html>
