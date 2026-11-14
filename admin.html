@@ -95,8 +95,34 @@ main{padding-block:24px 64px;display:flex;flex-direction:column;gap:20px}
 .scale i{display:block;width:100%;background:var(--bar);border-radius:4px 4px 0 0;min-height:2px}
 .scale-x{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;text-align:center;font-size:12px;color:var(--muted)}
 
-/* Stora diagram längst ner */
-.big-charts{margin-top:28px;padding-top:28px;border-top:2px solid var(--line);display:flex;flex-direction:column;gap:20px}
+/* Stora diagram */
+.big-charts{display:flex;flex-direction:column;gap:20px}
+.sub-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 16px;margin-bottom:14px}
+.sub-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip-btn{min-height:34px;padding:0 12px;border-radius:17px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:13px;font-weight:500;cursor:pointer}
+.chip-btn.active{background:var(--navy);color:var(--navy-ink);border-color:var(--navy);font-weight:600}
+.sub-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sub-input{min-height:36px;padding:0 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:14px;min-width:210px}
+.sec-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:14px}
+.sec-box>summary{list-style:none;cursor:pointer;padding:16px 20px;background:var(--surface);display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid transparent}
+.sec-box[open]>summary{border-bottom-color:var(--line);background:var(--bg)}
+.sec-box>summary::-webkit-details-marker{display:none}
+.sec-box-title{display:flex;align-items:center;gap:10px;font-family:var(--display);font-size:18px;font-weight:600;color:var(--ink)}
+.sec-box-body{padding:16px}
+.resp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:16px}
+@media (max-width:760px){.resp-grid{grid-template-columns:1fr}}
+.resp-sec{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.resp-sec.wide{grid-column:1/-1}
+.resp-sec h4{margin:0;font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700}
+.resp-kv{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:6px 12px;font-size:13.5px;padding:5px 0;border-bottom:1px solid var(--line)}
+.resp-kv:last-child{border-bottom:0}
+.resp-kv dt{color:var(--muted)}
+.resp-kv dd{margin:0;font-weight:500;text-align:right;overflow-wrap:anywhere}
+.resp-text-box{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.resp-text-box strong{display:block;font-size:12.5px;color:var(--muted);margin-bottom:4px}
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:12px}
+.tile[ data-goto-tab ]{cursor:pointer;transition:transform .15s ease,border-color .15s ease}
+.tile[ data-goto-tab ]:hover{transform:translateY(-2px);border-color:var(--navy)}
 .big-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px}
 .big-head h2{margin:0;font-family:var(--display);font-size:26px;font-weight:600;line-height:1.2}
 .big-head p{margin:4px 0 0;color:var(--muted);font-size:14.5px}
@@ -182,6 +208,17 @@ td{font-variant-numeric:tabular-nums}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-weight:500;z-index:20}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px;max-width:520px}
 .card h3{margin:0;font-size:17px}
+@media (max-width:600px){
+  .login-card{padding:24px 20px}
+  .field input,.filter select{font-size:16px}
+  .tiles{grid-template-columns:1fr 1fr;gap:8px}
+  .tile{padding:12px 14px}
+  .tile b{font-size:24px}
+  .tabs{width:100%}
+  .tabs button{flex:1 1 auto;padding:0 10px;font-size:13.5px}
+  .big-card{padding:18px 16px}
+  .top .right{width:100%;justify-content:flex-start}
+}
 @media (prefers-reduced-motion:reduce){.resp .chev{transition:none}}
 </style>
 </head>
@@ -231,16 +268,17 @@ td{font-variant-numeric:tabular-nums}
 
     <div class="bar-row">
       <div class="tabs" role="tablist" aria-label="Vy">
-        <button role="tab" aria-selected="true" data-tab="stats">Statistik per fråga</button>
-        <button role="tab" aria-selected="false" data-tab="all">Alla svar</button>
-        <button role="tab" aria-selected="false" data-tab="contacts">Kontakter</button>
-        <button role="tab" aria-selected="false" data-tab="shop">Kassa, Ordrar &amp; E-bok</button>
-        <button role="tab" aria-selected="false" data-tab="account">Konto</button>
+        <button role="tab" aria-selected="true" data-tab="charts">1. Diagram &amp; Översikt</button>
+        <button role="tab" aria-selected="false" data-tab="stats">2. Statistik per fråga</button>
+        <button role="tab" aria-selected="false" data-tab="all">3. Enskilda svar</button>
+        <button role="tab" aria-selected="false" data-tab="contacts">4. Kontakter</button>
+        <button role="tab" aria-selected="false" data-tab="shop">5. Butik, Ordrar &amp; E-bok</button>
+        <button role="tab" aria-selected="false" data-tab="account">6. Konto</button>
       </div>
       <div class="filter" id="filter-wrap">
-        <label for="filter">Visa</label>
+        <label for="filter">Urval:</label>
         <select id="filter">
-          <option value="all">Alla svar</option>
+          <option value="all">Alla enkätsvar</option>
           <option value="Ja">Svarat Ja på fråga 1</option>
           <option value="Nej">Svarat Nej på fråga 1</option>
         </select>
@@ -248,7 +286,8 @@ td{font-variant-numeric:tabular-nums}
       </div>
     </div>
 
-    <section id="tab-stats" role="tabpanel"></section>
+    <section id="tab-charts" class="big-charts" role="tabpanel" aria-label="Stora diagram över hur frågorna besvaras"></section>
+    <section id="tab-stats" role="tabpanel" hidden></section>
     <section id="tab-all" role="tabpanel" hidden></section>
     <section id="tab-contacts" role="tabpanel" hidden></section>
     <section id="tab-shop" role="tabpanel" hidden></section>
@@ -267,8 +306,6 @@ td{font-variant-numeric:tabular-nums}
         <p class="empty">Svaren innehåller känsliga uppgifter. Visa dem inte för obehöriga, lämna inte datorn inloggad och radera exporterade filer när de inte behövs. Kontaktuppgifter lagras separat och kan inte kopplas till ett enskilt svar.</p>
       </div>
     </section>
-
-    <section class="big-charts" id="big-charts" aria-label="Stora diagram över hur frågorna besvaras"></section>
   </main>
 </div>
 <div class="toast" id="toast" role="status" hidden></div>
@@ -426,16 +463,27 @@ const fmtDate = d => d ? new Date(d+"T12:00:00").toLocaleDateString("sv-SE",{day
 function bars(rows, denom){
   return `<div class="bars">${rows.map(([l,n])=>`<div class="b"><span class="lbl">${esc(l)}</span><span class="val">${n} · ${pct(n,denom)} %</span><span class="track"><span class="fill" style="width:${pct(n,denom)}%"></span></span></div>`).join("")}</div>`;
 }
+let statsCatFilter = "all", statsSearch = "", allSearch = "", allSort = "newest", contactFilter = "all", shopSubTab = "all";
+
+function switchTab(tabName){
+  document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.tab===tabName)));
+  ["charts","stats","all","contacts","shop","account"].forEach(k=>{
+    const el=$("tab-"+k);
+    if(el) el.hidden = k!==tabName;
+  });
+  $("filter-wrap").hidden = tabName==="contacts"||tabName==="shop"||tabName==="account";
+}
+
 function render(){
   const all = responses, R = filtered();
   const ja = all.filter(r=>r.f1==="Ja").length;
-  const latest = all[0] ? fmtDate(all[0].submitted_on) : "–";
   const week = all.filter(r=> (Date.now()-new Date(r.submitted_on+"T12:00:00"))/864e5 <= 7).length;
   $("tiles").innerHTML = `
-    <div class="tile"><span>Antal svar</span><b>${all.length}</b><em>${week} senaste 7 dagarna</em></div>
-    <div class="tile"><span>Ja på fråga 1</span><b>${pct(ja,all.length)} %</b><em>${ja} av ${all.length}</em></div>
-    <div class="tile"><span>Ordrar &amp; Licenser</span><b>${shopOrders.length} / ${ebookLicenses.length}</b><em>${shopOrders.length} ordrar · ${ebookLicenses.filter(l=>l.active).length} aktiva e-bokslicenser</em></div>
-    <div class="tile"><span>Kontakter</span><b>${contacts.length}</b><em>${contacts.filter(c=>c.purpose==="uppfoljning").length} uppföljning · ${contacts.filter(c=>c.purpose==="resultat").length} resultat</em></div>`;
+    <div class="tile" data-goto-tab="all" title="Klicka för att visa enskilda svar"><span>Antal enkätsvar</span><b>${all.length}</b><em>${week} senaste 7 dagarna →</em></div>
+    <div class="tile" data-goto-tab="charts" title="Klicka för att visa diagram"><span>Ja på fråga 1</span><b>${pct(ja,all.length)} %</b><em>${ja} av ${all.length} svar →</em></div>
+    <div class="tile" data-goto-tab="shop" title="Klicka för att visa butik &amp; e-bok"><span>Ordrar &amp; Licenser</span><b>${shopOrders.length} / ${ebookLicenses.length}</b><em>${shopOrders.length} ordrar · ${ebookLicenses.filter(l=>l.active).length} aktiva licenser →</em></div>
+    <div class="tile" data-goto-tab="contacts" title="Klicka för att visa kontakter"><span>Kontakter</span><b>${contacts.length}</b><em>${contacts.filter(c=>c.purpose==="uppfoljning").length} uppföljning · ${contacts.filter(c=>c.purpose==="resultat").length} resultat →</em></div>`;
+  $("tiles").querySelectorAll("[data-goto-tab]").forEach(t=>t.onclick=()=>switchTab(t.dataset.gotoTab));
   renderStats(R); renderAll(R); renderContacts(); renderShop(); renderBigCharts(R);
 }
 function donutSvg(segments, total, centerTop, centerSub){
@@ -462,7 +510,7 @@ function lgBars(rows, denom, cls=""){
   return `<div class="lg-bars">${rows.map(([l,n])=>`<div class="lg-bar"><span class="lg-lbl">${esc(l)}</span><div class="lg-track"><span class="lg-fill ${cls}" style="width:${pct(n,denom)}%"></span></div><span class="lg-val">${n} · ${pct(n,denom)} %</span></div>`).join("")}</div>`;
 }
 function renderBigCharts(R){
-  const el = $("big-charts");
+  const el = $("tab-charts");
   if(!el) return;
   const n = R.length, hc = R.filter(r=>r.health_consent);
   const f1Ja = R.filter(r=>r.f1==="Ja").length, f1Nej = R.filter(r=>r.f1==="Nej").length;
@@ -662,74 +710,254 @@ function renderBigCharts(R){
 function renderStats(R){
   const n = R.length, hc = R.filter(r=>r.health_consent);
   if(!n){ $("tab-stats").innerHTML=`<p class="note">Inga svar ${filter==="all"?"ännu":"med det här urvalet"}. Så fort någon skickar in enkäten syns svaren här – sidan hämtar nya svar automatiskt.</p>`; return; }
-  let html="", grid=[];
-  const flush=()=>{ if(grid.length){ html+=`<div class="qgrid">${grid.join("")}</div>`; grid=[]; } };
+
+  const sections = [];
+  let curSec = null;
   for(const q of Q){
-    if(q.sec){ flush(); html+=`<h2 class="section-title">${esc(q.sec)}</h2>`; continue; }
-    const base = q.health ? hc : R;
-    let body="", answered=0;
-    if(q.type==="radio"){
-      const vals = base.map(r=>val(r,q.k)).filter(v=>v!==undefined&&v!==null&&v!=="");
-      answered=vals.length;
-      const rows=q.o.map(o=>[o,vals.filter(v=>v===o).length]);
-      const extra=[...new Set(vals.filter(v=>!q.o.includes(v)))].map(o=>[o,vals.filter(v=>v===o).length]);
-      body = answered ? bars(rows.concat(extra), answered) : `<p class="empty">Inga svar på frågan.</p>`;
-    } else if(q.type==="f3"){
-      const any = R.filter(r=>Object.keys(r.answers||{}).some(k=>/^f3_\d_\d$/.test(k))).length; answered=any;
-      body = F3.map(([g,os],gi)=>`<h4 style="margin:6px 0 0;font-size:14px">${esc(g)}</h4>`+bars(os.map((o,oi)=>[o,R.filter(r=>val(r,`f3_${gi}_${oi}`)).length]), any||1)).join("");
-      body += `<p class="n">Andel räknas på de ${any} som kryssat i minst ett alternativ. Flera val per person.</p>`;
-    } else if(q.type==="check"){
-      answered = R.filter(r=>val(r,q.k)).length;
-      body = `<div class="stat-line"><div><b>${answered}</b>har kryssat i</div><div><b>${pct(answered,n)} %</b>av alla svar</div></div>`;
-    } else if(q.type==="text"){
-      const t = R.filter(r=>val(r,q.k)); answered=t.length;
-      body = answered ? `<div class="texts">${t.map(r=>`<blockquote>${esc(val(r,q.k))}<small>Svar #${r.id} · ${fmtDate(r.submitted_on)}</small></blockquote>`).join("")}</div>` : `<p class="empty">Inga svar.</p>`;
-    } else if(q.type==="age"){
-      const v = R.map(r=>parseInt(val(r,q.k),10)).filter(x=>x>0&&x<120); answered=v.length;
-      if(answered){
-        const s=[...v].sort((a,b)=>a-b), med=s.length%2?s[(s.length-1)/2]:(s[s.length/2-1]+s[s.length/2])/2, mean=(v.reduce((a,b)=>a+b,0)/v.length);
-        const bk=[["Under 25",x=>x<25],["25–34",x=>x>=25&&x<35],["35–44",x=>x>=35&&x<45],["45–54",x=>x>=45&&x<55],["55 och äldre",x=>x>=55]];
-        body = `<div class="stat-line"><div><b>${mean.toFixed(1).replace(".",",")}</b>medel</div><div><b>${String(med).replace(".",",")}</b>median</div><div><b>${s[0]}–${s[s.length-1]}</b>spann</div></div>`+bars(bk.map(([l,f])=>[l,v.filter(f).length]),answered);
-      } else body=`<p class="empty">Inga svar.</p>`;
-    } else if(q.type==="freq"){
-      const raw = R.map(r=>val(r,q.k)).filter(v=>v!==undefined&&v!==null&&String(v).trim()!=="");
-      answered=raw.length;
-      const norm = v => q.norm ? String(v).trim().toLowerCase().replace(/(^|[\s-])\S/g,m=>m.toUpperCase()).replace(/ Kommun$/,"") : String(v).trim();
-      const m = new Map(); raw.forEach(v=>{const k=norm(v); m.set(k,(m.get(k)||0)+1);});
-      let rows=[...m.entries()];
-      rows.sort(q.num ? (a,b)=>Number(a[0])-Number(b[0]) : (a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],"sv"));
-      body = answered ? bars(rows.slice(0,25),answered)+(rows.length>25?`<p class="n">Visar 25 av ${rows.length} olika svar.</p>`:"") : `<p class="empty">Inga svar.</p>`;
-    } else if(q.type==="scale"){
-      const v = R.map(r=>Number(val(r,q.k))).filter(x=>x>=1&&x<=10); answered=v.length;
-      if(answered){
-        const c=[...Array(10)].map((_,i)=>v.filter(x=>x===i+1).length), max=Math.max(1,...c), mean=v.reduce((a,b)=>a+b,0)/v.length;
-        body = `<div class="stat-line"><div><b>${mean.toFixed(1).replace(".",",")}</b>medelvärde</div><div><b>${v.filter(x=>x<=3).length}</b>svarat 1–3</div></div>
-          <div class="scale" aria-hidden="true">${c.map(x=>`<div>${x||""}<i style="height:${x/max*100}%"></i></div>`).join("")}</div>
-          <div class="scale-x">${c.map((_,i)=>`<span>${i+1}</span>`).join("")}</div>
-          <p class="n">Fördelning: ${c.map((x,i)=>`${i+1}: ${x}`).join(", ")}</p>`;
-      } else body=`<p class="empty">Inga svar.</p>`;
+    if(q.sec){
+      curSec = { title: q.sec, items: [] };
+      sections.push(curSec);
+      continue;
     }
-    const denom = q.health ? hc.length : n;
-    grid.push(`<article class="q${q.wide?" wide":""}"><div><h3>${esc(q.t)}</h3><span class="n">${answered} av ${denom} har svarat${q.health?" (av dem med hälsosamtycke)":""}</span></div>${body}</article>`);
+    if(curSec) curSec.items.push(q);
   }
-  flush();
-  $("tab-stats").innerHTML = html;
+
+  const secNames = sections.map(s => s.title);
+  const qSearch = statsSearch.trim().toLowerCase();
+
+  let boxesHtml = "";
+  for(const sec of sections){
+    if(statsCatFilter !== "all" && sec.title !== statsCatFilter) continue;
+    const cards = [];
+    for(const q of sec.items){
+      if(qSearch && !q.t.toLowerCase().includes(qSearch) && !sec.title.toLowerCase().includes(qSearch)) continue;
+      const base = q.health ? hc : R;
+      let body="", answered=0;
+      if(q.type==="radio"){
+        const vals = base.map(r=>val(r,q.k)).filter(v=>v!==undefined&&v!==null&&v!=="");
+        answered=vals.length;
+        const rows=q.o.map(o=>[o,vals.filter(v=>v===o).length]);
+        const extra=[...new Set(vals.filter(v=>!q.o.includes(v)))].map(o=>[o,vals.filter(v=>v===o).length]);
+        body = answered ? bars(rows.concat(extra), answered) : `<p class="empty">Inga svar på frågan.</p>`;
+      } else if(q.type==="f3"){
+        const any = R.filter(r=>Object.keys(r.answers||{}).some(k=>/^f3_\d_\d$/.test(k))).length; answered=any;
+        body = F3.map(([g,os],gi)=>`<h4 style="margin:6px 0 0;font-size:14px">${esc(g)}</h4>`+bars(os.map((o,oi)=>[o,R.filter(r=>val(r,`f3_${gi}_${oi}`)).length]), any||1)).join("");
+        body += `<p class="n">Andel räknas på de ${any} som kryssat i minst ett alternativ. Flera val per person.</p>`;
+      } else if(q.type==="check"){
+        answered = R.filter(r=>val(r,q.k)).length;
+        body = `<div class="stat-line"><div><b>${answered}</b>har kryssat i</div><div><b>${pct(answered,n)} %</b>av alla svar</div></div>`;
+      } else if(q.type==="text"){
+        const t = R.filter(r=>val(r,q.k)); answered=t.length;
+        body = answered ? `<div class="texts">${t.map(r=>`<blockquote>${esc(val(r,q.k))}<small>Svar #${r.id} · ${fmtDate(r.submitted_on)}</small></blockquote>`).join("")}</div>` : `<p class="empty">Inga svar.</p>`;
+      } else if(q.type==="age"){
+        const v = R.map(r=>parseInt(val(r,q.k),10)).filter(x=>x>0&&x<120); answered=v.length;
+        if(answered){
+          const s=[...v].sort((a,b)=>a-b), med=s.length%2?s[(s.length-1)/2]:(s[s.length/2-1]+s[s.length/2])/2, mean=(v.reduce((a,b)=>a+b,0)/v.length);
+          const bk=[["Under 25",x=>x<25],["25–34",x=>x>=25&&x<35],["35–44",x=>x>=35&&x<45],["45–54",x=>x>=45&&x<55],["55 och äldre",x=>x>=55]];
+          body = `<div class="stat-line"><div><b>${mean.toFixed(1).replace(".",",")}</b>medel</div><div><b>${String(med).replace(".",",")}</b>median</div><div><b>${s[0]}–${s[s.length-1]}</b>spann</div></div>`+bars(bk.map(([l,f])=>[l,v.filter(f).length]),answered);
+        } else body=`<p class="empty">Inga svar.</p>`;
+      } else if(q.type==="freq"){
+        const raw = R.map(r=>val(r,q.k)).filter(v=>v!==undefined&&v!==null&&String(v).trim()!=="");
+        answered=raw.length;
+        const norm = v => q.norm ? String(v).trim().toLowerCase().replace(/(^|[\s-])\S/g,m=>m.toUpperCase()).replace(/ Kommun$/,"") : String(v).trim();
+        const m = new Map(); raw.forEach(v=>{const k=norm(v); m.set(k,(m.get(k)||0)+1);});
+        let rows=[...m.entries()];
+        rows.sort(q.num ? (a,b)=>Number(a[0])-Number(b[0]) : (a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],"sv"));
+        body = answered ? bars(rows.slice(0,25),answered)+(rows.length>25?`<p class="n">Visar 25 av ${rows.length} olika svar.</p>`:"") : `<p class="empty">Inga svar.</p>`;
+      } else if(q.type==="scale"){
+        const v = R.map(r=>Number(val(r,q.k))).filter(x=>x>=1&&x<=10); answered=v.length;
+        if(answered){
+          const c=[...Array(10)].map((_,i)=>v.filter(x=>x===i+1).length), max=Math.max(1,...c), mean=v.reduce((a,b)=>a+b,0)/v.length;
+          body = `<div class="stat-line"><div><b>${mean.toFixed(1).replace(".",",")}</b>medelvärde</div><div><b>${v.filter(x=>x<=3).length}</b>svarat 1–3</div></div>
+            <div class="scale" aria-hidden="true">${c.map(x=>`<div>${x||""}<i style="height:${x/max*100}%"></i></div>`).join("")}</div>
+            <div class="scale-x">${c.map((_,i)=>`<span>${i+1}</span>`).join("")}</div>
+            <p class="n">Fördelning: ${c.map((x,i)=>`${i+1}: ${x}`).join(", ")}</p>`;
+        } else body=`<p class="empty">Inga svar.</p>`;
+      }
+      const denom = q.health ? hc.length : n;
+      cards.push(`<article class="q${q.wide?" wide":""}"><div><h3>${esc(q.t)}</h3><span class="n">${answered} av ${denom} har svarat${q.health?" (av dem med hälsosamtycke)":""}</span></div>${body}</article>`);
+    }
+    if(cards.length){
+      boxesHtml += `<details class="sec-box" open>
+        <summary>
+          <span class="sec-box-title">${esc(sec.title)} <span class="pill">${cards.length} ${cards.length===1?"fråga":"frågor"}</span></span>
+          <span style="font-size:13px;color:var(--muted)">Klicka för att fälla ihop/öppna ▾</span>
+        </summary>
+        <div class="sec-box-body"><div class="qgrid">${cards.join("")}</div></div>
+      </details>`;
+    }
+  }
+
+  $("tab-stats").innerHTML = `
+    <div class="sub-bar">
+      <div class="sub-chips">
+        <button type="button" class="chip-btn ${statsCatFilter==="all"?"active":""}" data-stat-cat="all">Alla kategorier (${sections.length})</button>
+        ${secNames.map(name => `<button type="button" class="chip-btn ${statsCatFilter===name?"active":""}" data-stat-cat="${esc(name)}">${esc(name.replace(/^\d+\.\s*/,"").split(" (")[0])}</button>`).join("")}
+      </div>
+      <div class="sub-controls">
+        <input type="search" class="sub-input" id="stats-search-inp" placeholder="Sök fråga..." value="${esc(statsSearch)}">
+        <button type="button" class="btn small ghost" id="stats-toggle-all">Fäll ihop alla</button>
+      </div>
+    </div>
+    ${boxesHtml || `<p class="note">Inga frågor matchar din filtrering.</p>`}
+  `;
+
+  $("tab-stats").querySelectorAll("[data-stat-cat]").forEach(b => b.onclick = () => {
+    statsCatFilter = b.dataset.statCat;
+    renderStats(filtered());
+  });
+  const sInp = $("stats-search-inp");
+  if(sInp) sInp.oninput = e => {
+    statsSearch = e.target.value;
+    const pos = sInp.selectionStart;
+    renderStats(filtered());
+    const nextInp = $("stats-search-inp");
+    if(nextInp){ nextInp.focus(); nextInp.setSelectionRange(pos,pos); }
+  };
+  const togBtn = $("stats-toggle-all");
+  if(togBtn) togBtn.onclick = () => {
+    const boxes = [...$("tab-stats").querySelectorAll("details.sec-box")];
+    const allOpen = boxes.every(d => d.open);
+    boxes.forEach(d => d.open = !allOpen);
+    togBtn.textContent = allOpen ? "Öppna alla" : "Fäll ihop alla";
+  };
 }
+
 function renderAll(R){
   if(!R.length){ $("tab-all").innerHTML=`<p class="note">Inga svar ${filter==="all"?"ännu":"med det här urvalet"}.</p>`; return; }
-  $("tab-all").innerHTML = `<div class="list">${R.map(r=>{
-    const a=r.answers||{}, keys=ORDER.filter(k=>a[k]!==undefined);
-    return `<details class="resp"><summary><span class="id">Svar #${r.id}</span><span class="pill ${r.f1==="Ja"?"ja":""}">Fråga 1: ${esc(r.f1)}</span><span class="meta">${fmtDate(r.submitted_on)} · ${keys.length} besvarade fält${r.health_consent?" · hälsosamtycke":""}</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
-      <dl>${keys.map(k=>`<div><dt>${esc(LABEL[k]||k)}</dt><dd>${esc(a[k]===true?"Ja":a[k])}</dd></div>`).join("")}</dl>
-      <div class="actions"><button class="btn small danger" type="button" data-del="${r.id}">Radera svaret</button></div></details>`;
-  }).join("")}</div>`;
+
+  const q = allSearch.trim().toLowerCase();
+  let list = R.filter(r => {
+    if(!q) return true;
+    if(String(r.id).includes(q) || ("#"+r.id).includes(q)) return true;
+    if((r.submitted_on||"").toLowerCase().includes(q)) return true;
+    const a = r.answers || {};
+    return Object.values(a).some(v => String(v||"").toLowerCase().includes(q));
+  });
+
+  list = [...list].sort((a,b) => {
+    if(allSort === "oldest") return a.id - b.id;
+    if(allSort === "scale_asc") return (Number(val(a,"skala"))||99) - (Number(val(b,"skala"))||99);
+    if(allSort === "scale_desc") return (Number(val(b,"skala"))||-1) - (Number(val(a,"skala"))||-1);
+    if(allSort === "most_answered") return Object.keys(b.answers||{}).length - Object.keys(a.answers||{}).length;
+    return b.id - a.id;
+  });
+
+  const bgKeys = ["f1","f2","alder","barn_alder","antal_barn","kommun","ar","civil","kontakter","tid"];
+  const procKeys = ["rattigheter","motstridiga","varnad","beslut","overklaga","foralder","upprepade","ombud","ekonomi","historia","kontakt_barn","barn_forandrat"];
+  const healthKeys = ["vard","arbete","suicid","skala","ord","dokumentation","f4a_kan_inte"];
+  const textKeys = ["f4a","f4b","f3_annat","ovrigt","stod"];
+
+  const kvBlock = (a, keys) => {
+    const items = keys.filter(k => a[k] !== undefined && a[k] !== null && a[k] !== "");
+    if(!items.length) return `<p class="empty">Inga besvarade fält i denna del.</p>`;
+    return `<dl style="margin:0;padding:0">${items.map(k=>`<div class="resp-kv"><dt>${esc(LABEL[k]||k)}</dt><dd>${esc(a[k]===true?"Ja":a[k])}</dd></div>`).join("")}</dl>`;
+  };
+
+  $("tab-all").innerHTML = `
+    <div class="sub-bar">
+      <div class="sub-controls" style="flex:1">
+        <input type="search" class="sub-input" id="all-search-inp" placeholder="Sök kommun, svar #, fritext, år..." value="${esc(allSearch)}" style="flex:1;max-width:340px">
+        <label for="all-sort-sel" style="font-size:13.5px;color:var(--muted)">Sortera:</label>
+        <select id="all-sort-sel" class="sub-input" style="min-width:190px">
+          <option value="newest" ${allSort==="newest"?"selected":""}>Nyast först</option>
+          <option value="oldest" ${allSort==="oldest"?"selected":""}>Äldst först</option>
+          <option value="scale_asc" ${allSort==="scale_asc"?"selected":""}>Lägst rättssäkerhet (1–10)</option>
+          <option value="scale_desc" ${allSort==="scale_desc"?"selected":""}>Högst rättssäkerhet (1–10)</option>
+          <option value="most_answered" ${allSort==="most_answered"?"selected":""}>Flest besvarade frågor</option>
+        </select>
+      </div>
+      <div class="sub-controls">
+        <span style="font-size:13px;color:var(--muted)">Visar <strong>${list.length}</strong> av ${R.length} svar</span>
+        <button type="button" class="btn small ghost" id="all-toggle-btn">Öppna alla</button>
+      </div>
+    </div>
+    <div class="list">${list.map(r=>{
+      const a=r.answers||{}, keys=ORDER.filter(k=>a[k]!==undefined);
+      const f3Checked = ORDER.filter(k=>/^f3_\d_\d$/.test(k) && a[k]);
+      const textsFilled = textKeys.filter(k=>a[k] && String(a[k]).trim()!=="");
+      const kommunBadge = a.kommun ? `<span class="pill">${esc(a.kommun)}</span>` : "";
+      const skalaBadge = a.skala ? `<span class="pill">Rättssäkerhet: ${esc(a.skala)}/10</span>` : "";
+      const arBadge = a.ar ? `<span class="pill">År: ${esc(a.ar)}</span>` : "";
+
+      return `<details class="resp">
+        <summary>
+          <span class="id">Svar #${r.id}</span>
+          <span class="pill ${r.f1==="Ja"?"ja":""}">Fråga 1: ${esc(r.f1)}</span>
+          ${kommunBadge}${arBadge}${skalaBadge}
+          <span class="meta">${fmtDate(r.submitted_on)} · ${keys.length} svar${r.health_consent?" · hälsosamtycke":""}${textsFilled.length?` · ${textsFilled.length} fritextsvar`:""}</span>
+          <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </summary>
+        <div class="resp-grid">
+          <div class="resp-sec">
+            <h4>1. Grund &amp; Bakgrund</h4>
+            ${kvBlock(a, bgKeys)}
+          </div>
+          <div class="resp-sec">
+            <h4>2. Processen &amp; Idag</h4>
+            ${kvBlock(a, procKeys)}
+          </div>
+          <div class="resp-sec">
+            <h4>3. Upplevd felbehandling (Fråga 3)</h4>
+            ${f3Checked.length ? `<ul style="margin:0;padding-left:18px;font-size:13.5px;display:flex;flex-direction:column;gap:4px">${f3Checked.map(k=>`<li>${esc((LABEL[k]||k).replace(/^3\.\s*/,""))}</li>`).join("")}</ul>` : `<p class="empty">Inga ikryssade alternativ.</p>`}
+          </div>
+          <div class="resp-sec">
+            <h4>4. Hälsa &amp; Helhet</h4>
+            ${kvBlock(a, healthKeys)}
+          </div>
+          ${textsFilled.length ? `<div class="resp-sec wide">
+            <h4>5. Fritextsvar &amp; Berättelse</h4>
+            ${textsFilled.map(k=>`<div class="resp-text-box"><strong>${esc(LABEL[k]||k)}</strong>${esc(a[k])}</div>`).join("")}
+          </div>` : ""}
+        </div>
+        <div class="actions"><button class="btn small danger" type="button" data-del="${r.id}">Radera svaret</button></div>
+      </details>`;
+    }).join("")}</div>
+  `;
+
+  const aInp = $("all-search-inp");
+  if(aInp) aInp.oninput = e => {
+    allSearch = e.target.value;
+    const pos = aInp.selectionStart;
+    renderAll(filtered());
+    const nextInp = $("all-search-inp");
+    if(nextInp){ nextInp.focus(); nextInp.setSelectionRange(pos,pos); }
+  };
+  const aSort = $("all-sort-sel");
+  if(aSort) aSort.onchange = e => {
+    allSort = e.target.value;
+    renderAll(filtered());
+  };
+  const aTog = $("all-toggle-btn");
+  if(aTog) aTog.onclick = () => {
+    const items = [...$("tab-all").querySelectorAll("details.resp")];
+    const allOpen = items.every(d => d.open);
+    items.forEach(d => d.open = !allOpen);
+    aTog.textContent = allOpen ? "Öppna alla" : "Stäng alla";
+  };
 }
+
 function renderContacts(){
-  const row=c=>`<tr><td>${fmtDate(c.submitted_on)}</td><td>${esc(c.name||"–")}</td><td>${esc(c.email||"–")}</td><td>${esc(c.phone||"–")}</td><td><button class="btn small danger" type="button" data-delc="${c.id}">Radera</button></td></tr>`;
-  const table=(list,title,desc)=>`<h2 class="section-title">${title}</h2><p class="empty" style="margin:4px 0 10px">${desc}</p>`+(list.length?`<div class="tbl"><table><thead><tr><th>Datum</th><th>Namn</th><th>E-post</th><th>Telefon</th><th><span class="sr-only">Åtgärd</span></th></tr></thead><tbody>${list.map(row).join("")}</tbody></table></div>`:`<p class="note">Inga ännu.</p>`);
-  $("tab-contacts").innerHTML = `<p class="note">Kontaktuppgifterna lagras separat och kan inte kopplas till ett enskilt svar. Använd dem bara för det personen har gått med på.</p>`+
-    table(contacts.filter(c=>c.purpose==="uppfoljning"),"Kan kontaktas för följdfrågor eller intervju","Personer som valt att lämna kontaktuppgifter i fråga 2.")+
-    table(contacts.filter(c=>c.purpose==="resultat"),"Vill få resultaten","Personer som vill ha resultaten när kartläggningen är klar.");
+  const row=c=>`<tr><td>${fmtDate(c.submitted_on)}</td><td>${esc(c.name||"–")}</td><td>${esc(c.email||"–")}</td><td>${esc(c.phone||"–")}</td><td><span class="pill">${c.purpose==="uppfoljning"?"Uppföljning / Intervju":"Vill ha resultat"}</span></td><td><button class="btn small danger" type="button" data-delc="${c.id}">Radera</button></td></tr>`;
+  const table=(list,title,desc)=>`<div class="sec-box" style="padding:18px"><h2 class="section-title" style="margin-top:0">${title} (${list.length})</h2><p class="empty" style="margin:4px 0 12px">${desc}</p>`+(list.length?`<div class="tbl"><table><thead><tr><th>Datum</th><th>Namn</th><th>E-post</th><th>Telefon</th><th>Typ</th><th><span class="sr-only">Åtgärd</span></th></tr></thead><tbody>${list.map(row).join("")}</tbody></table></div>`:`<p class="note">Inga ännu.</p>`)+`</div>`;
+  const oppf = contacts.filter(c=>c.purpose==="uppfoljning");
+  const res = contacts.filter(c=>c.purpose==="resultat");
+  $("tab-contacts").innerHTML = `
+    <div class="sub-bar">
+      <div class="sub-chips">
+        <button type="button" class="chip-btn ${contactFilter==="all"?"active":""}" data-c-flt="all">Alla kontakter (${contacts.length})</button>
+        <button type="button" class="chip-btn ${contactFilter==="uppfoljning"?"active":""}" data-c-flt="uppfoljning">Uppföljning / Intervju (${oppf.length})</button>
+        <button type="button" class="chip-btn ${contactFilter==="resultat"?"active":""}" data-c-flt="resultat">Vill få resultat (${res.length})</button>
+      </div>
+    </div>
+    <p class="note" style="margin-bottom:14px">Kontaktuppgifterna lagras separat och kan inte kopplas till ett enskilt svar. Använd dem bara för det personen har gått med på.</p>
+    ${(contactFilter==="all"||contactFilter==="uppfoljning") ? table(oppf,"Kan kontaktas för följdfrågor eller intervju","Personer som valt att lämna kontaktuppgifter i fråga 2.") : ""}
+    ${(contactFilter==="all"||contactFilter==="resultat") ? table(res,"Vill få resultaten","Personer som vill ha resultaten när kartläggningen är klar.") : ""}
+  `;
+  $("tab-contacts").querySelectorAll("[data-c-flt]").forEach(b=>b.onclick=()=>{
+    contactFilter = b.dataset.cFlt;
+    renderContacts();
+  });
 }
 
 function renderShop(){
@@ -740,8 +968,9 @@ function renderShop(){
 
   const orderRows = shopOrders.length ? `<div class="tbl"><table><thead><tr><th>Ordernr</th><th>Datum</th><th>Kund</th><th>Produkter</th><th>Summa</th><th>Betalsätt / Status</th><th>E-bokskod</th><th>Leveransadress</th></tr></thead><tbody>${
     shopOrders.map(o=>{
-      const items = Array.isArray(o.items) ? o.items.map(i=>`${esc(i.name)} (${i.qty||1} st)`).join(", ") : "–";
-      const addr = o.shipping_street ? `${esc(o.shipping_street)}, ${esc(o.shipping_zip||"")} ${esc(o.shipping_city||"")}` : "–";
+      const items = Array.isArray(o.items) ? o.items.map(i=>`${esc(i.title||i.name)} (${i.qty||1} st)`).join(", ") : "–";
+      const sa = o.shipping_address || {};
+      const addr = o.shipping_street ? `${esc(o.shipping_street)}, ${esc(o.shipping_zip||"")} ${esc(o.shipping_city||"")}` : (sa.street ? `${esc(sa.street)}, ${esc(sa.postal_code||"")} ${esc(sa.city||"")}` : "–");
       return `<tr>
         <td><strong>${esc(o.order_number)}</strong></td>
         <td>${fmtDate(o.created_at)}</td>
@@ -758,9 +987,9 @@ function renderShop(){
   const licRows = ebookLicenses.length ? `<div class="tbl"><table><thead><tr><th>Skapad</th><th>E-postadress</th><th>Namn</th><th>Säkerhetskod (Login)</th><th>Nivå</th><th>Inloggningar</th><th>Status</th><th>Åtgärd</th></tr></thead><tbody>${
     ebookLicenses.map(l=>`<tr>
       <td>${fmtDate(l.created_at)}</td>
-      <td><strong>${esc(l.customer_email)}</strong></td>
+      <td><strong>${esc(l.email||l.customer_email)}</strong></td>
       <td>${esc(l.customer_name||"–")}</td>
-      <td><code style="font-weight:700;color:var(--accent);font-size:.95rem">${esc(l.access_code)}</code></td>
+      <td><code style="font-weight:700;color:var(--accent);font-size:.95rem">${esc(l.license_code||l.access_code)}</code></td>
       <td>${l.tier==="pdf"?"PDF + Online":"Läsa online"}</td>
       <td>${l.login_count||0} st${l.last_login_at?`<br><small style="color:var(--muted)">Senast: ${fmtDate(l.last_login_at)}</small>`:""}</td>
       <td>${l.active?`<span class="pill" style="color:var(--ok)">Aktiv</span>`:`<span class="pill" style="color:var(--danger)">Spärrad</span>`}</td>
@@ -773,7 +1002,7 @@ function renderShop(){
 
   const prodRows = shopProducts.length ? `<div class="tbl"><table><thead><tr><th>Produkt</th><th>Kategori</th><th>Pris (SEK)</th><th>Frakt (SEK)</th><th>Aktiv i kassan</th><th>Spara</th></tr></thead><tbody>${
     shopProducts.map(p=>`<tr>
-      <td><strong>${esc(p.name)}</strong><br><small style="color:var(--muted)">${esc(p.id)}</small></td>
+      <td><strong>${esc(p.title||p.name)}</strong><br><small style="color:var(--muted)">${esc(p.id)}</small></td>
       <td>${esc(p.category)}</td>
       <td><input type="number" id="prod-price-${esc(p.id)}" value="${p.price_sek}" style="width:110px;padding:6px 8px"></td>
       <td><input type="number" id="prod-ship-${esc(p.id)}" value="${p.shipping_sek||0}" style="width:90px;padding:6px 8px"></td>
@@ -842,17 +1071,23 @@ function renderShop(){
       </div>
     </div>
 
-    <h2 class="section-title">Aktiva E-bokslicenser & Inloggningar (${ebookLicenses.length})</h2>
-    <p class="empty" style="margin:4px 0 10px">Kunden loggar in under ”Läs e-boken” på hemsidan med sin e-postadress och säkerhetskoden nedan.</p>
-    ${licRows}
+    <div class="qcard" style="margin-bottom:20px">
+      <h2 class="section-title" style="margin-top:0">Aktiva E-bokslicenser & Inloggningar (${ebookLicenses.length})</h2>
+      <p class="empty" style="margin:4px 0 12px">Kunden loggar in under ”Kundlogin” / ”Läs e-boken” på hemsidan med sin e-postadress och säkerhetskoden nedan.</p>
+      ${licRows}
+    </div>
 
-    <h2 class="section-title" style="margin-top:28px">Beställningar från Kassan (${shopOrders.length})</h2>
-    <p class="empty" style="margin:4px 0 10px">Alla köp som gjorts via kassan på webbplatsen.</p>
-    ${orderRows}
+    <div class="qcard" style="margin-bottom:20px">
+      <h2 class="section-title" style="margin-top:0">Beställningar från Kassan (${shopOrders.length})</h2>
+      <p class="empty" style="margin:4px 0 12px">Alla köp som gjorts via kassan på webbplatsen.</p>
+      ${orderRows}
+    </div>
 
-    <h2 class="section-title" style="margin-top:28px">Produkter & Priser i Kassan</h2>
-    <p class="empty" style="margin:4px 0 10px">Ändra pris eller frakt och klicka på Spara så uppdateras kassan direkt.</p>
-    ${prodRows}
+    <div class="qcard" style="margin-bottom:20px">
+      <h2 class="section-title" style="margin-top:0">Produkter & Priser i Kassan</h2>
+      <p class="empty" style="margin:4px 0 12px">Ändra pris eller frakt och klicka på Spara så uppdateras kassan direkt.</p>
+      ${prodRows}
+    </div>
   `;
 
   const upForm = $("ebook-upload-form");
@@ -930,7 +1165,7 @@ function renderShop(){
       await rest("ebook_licenses",{
         method:"POST",
         headers:{"Prefer":"return=minimal"},
-        body:JSON.stringify({customer_email:email, customer_name:name||null, access_code:code, tier, active:true})
+        body:JSON.stringify({email:email, customer_name:name||null, license_code:code, tier, active:true})
       });
       toast("Licens skapad: "+code);
       await load(false);
@@ -985,11 +1220,7 @@ document.addEventListener("click", async e=>{
 });
 
 /* Flikar och filter */
-document.querySelectorAll("[data-tab]").forEach(t=>t.addEventListener("click",()=>{
-  document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",String(x===t)));
-  ["stats","all","contacts","shop","account"].forEach(k=>$("tab-"+k).hidden = k!==t.dataset.tab);
-  $("filter-wrap").hidden = t.dataset.tab==="contacts"||t.dataset.tab==="shop"||t.dataset.tab==="account";
-}));
+document.querySelectorAll("[data-tab]").forEach(t=>t.addEventListener("click",()=>switchTab(t.dataset.tab)));
 $("filter").addEventListener("change",e=>{ filter=e.target.value; render(); });
 
 /* CSV-export */
