@@ -169,7 +169,7 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
 .svc>summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .svc>summary:hover h3{text-decoration:underline;text-underline-offset:4px}
 .svc-chev{width:24px;height:24px;margin-left:auto;flex-shrink:0;color:var(--muted);transition:transform .2s ease}
-.svc[open] .svc-chev{transform:rotate(180deg)}
+.svc[open]>summary .svc-chev{transform:rotate(180deg)}
 .svc-body{display:flex;flex-direction:column;gap:14px;padding:0 24px 24px}
 .svc-controls{display:flex;justify-content:flex-end}
 .svc-controls button{background:none;border:0;color:var(--accent);font:600 14.5px var(--body);min-height:44px;cursor:pointer}
@@ -249,7 +249,7 @@ body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--body)}
 .course-more>summary{list-style:none;cursor:pointer;min-height:48px;padding:0 16px;display:flex;align-items:center;font-weight:600;color:var(--accent)}
 .course-more>summary::-webkit-details-marker{display:none}
 .course-more>summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:12px}
-.course-more[open] .svc-chev{transform:rotate(180deg)}
+.course-more[open]>summary .svc-chev{transform:rotate(180deg)}
 .course-more-body{padding:4px 16px 18px;display:flex;flex-direction:column;gap:10px}
 .course-more-body h5{margin:10px 0 0;font-family:var(--display);font-weight:600;font-size:19px}
 .course-more-body p{margin:0}
