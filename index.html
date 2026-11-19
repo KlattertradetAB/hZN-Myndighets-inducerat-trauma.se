@@ -446,6 +446,10 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 /* Lätt frostat glasfilter på kort och paneler */
 .choice.secondary,.admin-btn.outline,.tile,.svc,.course,.kassa-card,.order,.buy-card,.cp-card,.cp-consent,.gp-card,.tx,.course-more,.ck-box,.meet,.reader-shell:not([data-rtheme="sepia"]):not([data-rtheme="dark"]){background:var(--glass);backdrop-filter:blur(12px) saturate(125%);-webkit-backdrop-filter:blur(12px) saturate(125%);border-color:var(--glass-border);box-shadow:var(--glass-shadow)}
 .choice.primary{box-shadow:0 14px 34px rgba(5,34,59,.18),inset 0 1px 0 rgba(255,255,255,.16)}
+.choice-head{display:flex;align-items:center;gap:14px}
+.choice-thumb{width:48px;height:62px;object-fit:contain;background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 14px rgba(0,0,0,.22);flex-shrink:0}
+#kraftsamling .intro-cover{max-width:270px;width:100%;margin:4px auto 18px;background:#fff;border-radius:18px;padding:12px;border:1px solid var(--line);box-shadow:0 12px 32px rgba(42,36,32,.10)}
+#kraftsamling .intro-cover img{display:block;width:100%;height:auto;border-radius:10px}
 @media (max-width:640px){
   .wrap{padding-block:20px 36px;gap:28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
   .top-admin{margin-bottom:-8px;gap:6px}
@@ -596,8 +600,13 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 
   <nav class="choices" id="choices" aria-label="Välj">
     <a class="choice primary" href="#kraftsamling">
-      <span class="tag">Enkät · 3–8 minuter</span>
-      <h2>Kraftsamling</h2>
+      <div class="choice-head">
+        <img class="choice-thumb" src="kraftsamling-ikon.png" alt="Kraftsamling för barnens bästa" width="48" height="62">
+        <div>
+          <span class="tag">Enkät · 3–8 minuter</span>
+          <h2>Kraftsamling</h2>
+        </div>
+      </div>
       <p>Kartläggning för myndighetsinducerat trauma. Dela din erfarenhet av ett ärende om omhändertagande av barn – anonymt om du vill.</p>
       <span class="go">Starta kartläggningen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
@@ -1550,7 +1559,7 @@ const JNV = ["Ja","Nej","Vet ej"];
 
 const steps = [
   {id:"intro", type:"info", kicker:"Kraftsamling för Barnens Bästa", title:"Kartläggning av upplevelser",
-   html:`<div class="prose"><p>Vi på Horizonten vill förstå och synliggöra vad familjer går igenom i samband med ett ärende om omhändertagande av barn – och beskriva det vi kallar myndighetsinducerat trauma.</p><p>Det tar 3–8 minuter. Bara samtycket och första frågan är obligatoriska.</p><p><a href="#integritet">Läs om integritet och sekretess</a></p></div>`, next:"Börja"},
+   html:`<div class="intro-cover"><img src="kraftsamling-omslag.png" alt="Kraftsamling för barnens bästa"></div><div class="prose"><p>Vi på Horizonten vill förstå och synliggöra vad familjer går igenom i samband med ett ärende om omhändertagande av barn – och beskriva det vi kallar myndighetsinducerat trauma.</p><p>Det tar 3–8 minuter. Bara samtycket och första frågan är obligatoriska.</p><p><a href="#integritet">Läs om integritet och sekretess</a></p></div>`, next:"Börja"},
   {id:"samtycke", type:"checks", required:"samtycke_behandling", kicker:"Integritet", title:"Så hanterar vi dina svar",
    html:`<div class="prose"><ul><li>Svaren sammanställs anonymt och kopplas inte till dig.</li><li>Vi delar aldrig uppgifter med myndigheter eller socialtjänst.</li><li>Du kan när som helst begära att dina svar raderas.</li><li>Personuppgiftsansvarig är Horizonten (GDPR).</li></ul><p><a href="#integritet">Läs hela integritets- och sekretesspolicyn</a></p></div>`,
    options:[["samtycke_behandling","Jag har läst informationen och samtycker till att Horizonten behandlar mina svar. (Obligatoriskt)"],
