@@ -448,8 +448,21 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 .choice.primary{box-shadow:0 14px 34px rgba(5,34,59,.18),inset 0 1px 0 rgba(255,255,255,.16)}
 .choice-head{display:flex;align-items:center;gap:14px}
 .choice-thumb{width:48px;height:62px;object-fit:contain;background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 14px rgba(0,0,0,.22);flex-shrink:0}
-#kraftsamling .intro-cover{max-width:270px;width:100%;margin:4px auto 18px;background:#fff;border-radius:18px;padding:12px;border:1px solid var(--line);box-shadow:0 12px 32px rgba(42,36,32,.10)}
-#kraftsamling .intro-cover img{display:block;width:100%;height:auto;border-radius:10px}
+#kraftsamling .app.is-intro{max-width:720px}
+#kraftsamling .intro-stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(200px,.85fr);gap:28px;align-items:center;margin:8px 0 20px}
+@media (max-width:600px){#kraftsamling .intro-stage{grid-template-columns:1fr;gap:18px}}
+#kraftsamling .intro-cover{position:relative;max-width:360px;width:100%;margin:0 auto;background:rgba(255,255,255,.58);backdrop-filter:blur(14px) saturate(135%);-webkit-backdrop-filter:blur(14px) saturate(135%);border-radius:22px;padding:14px;border:1.5px solid rgba(255,255,255,.85);box-shadow:0 22px 52px rgba(5,34,59,.20),0 8px 22px rgba(181,82,12,.14);transition:transform .42s cubic-bezier(.22,1,.36,1),box-shadow .42s ease,background .3s ease;cursor:pointer;overflow:hidden}
+#kraftsamling .intro-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 42%,rgba(255,255,255,.22) 100%);pointer-events:none;border-radius:22px;transition:opacity .4s ease}
+#kraftsamling .intro-cover:hover{transform:translateY(-6px) scale(1.03) rotate(-1.2deg);box-shadow:0 30px 64px rgba(5,34,59,.28),0 12px 28px rgba(181,82,12,.22);background:rgba(255,255,255,.72)}
+#kraftsamling .intro-cover img{display:block;width:100%;height:auto;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.08);transition:transform .42s cubic-bezier(.22,1,.36,1)}
+#kraftsamling .intro-cover:hover img{transform:scale(1.015)}
+#kraftsamling .intro-aside{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+#kraftsamling .intro-aside .primary{width:100%;padding:0 24px;box-shadow:0 10px 24px rgba(181,82,12,.25);transition:transform .2s ease,box-shadow .2s ease}
+#kraftsamling .intro-aside .primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(181,82,12,.32)}
+#kraftsamling .intro-arrow{display:inline-flex;align-items:center;gap:6px;color:var(--action);font-size:13.5px;font-weight:600;opacity:.92}
+#kraftsamling .intro-arrow svg{width:28px;height:28px;animation:hzArrowNudge 1.6s ease-in-out infinite}
+@keyframes hzArrowNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+@media (prefers-reduced-motion:reduce){#kraftsamling .intro-cover,#kraftsamling .intro-cover img,#kraftsamling .intro-arrow svg{transition:none!important;animation:none!important}#kraftsamling .intro-cover:hover{transform:none}}
 @media (max-width:640px){
   .wrap{padding-block:20px 36px;gap:28px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
   .top-admin{margin-bottom:-8px;gap:6px}
@@ -1559,7 +1572,7 @@ const JNV = ["Ja","Nej","Vet ej"];
 
 const steps = [
   {id:"intro", type:"info", kicker:"Kraftsamling för Barnens Bästa", title:"Kartläggning av upplevelser",
-   html:`<div class="intro-cover"><img src="kraftsamling-omslag.png" alt="Kraftsamling för barnens bästa"></div><div class="prose"><p>Vi på Horizonten vill förstå och synliggöra vad familjer går igenom i samband med ett ärende om omhändertagande av barn – och beskriva det vi kallar myndighetsinducerat trauma.</p><p>Det tar 3–8 minuter. Bara samtycket och första frågan är obligatoriska.</p><p><a href="#integritet">Läs om integritet och sekretess</a></p></div>`, next:"Börja"},
+   html:`<div class="intro-stage"><div class="intro-cover"><img src="kraftsamling-omslag.png" alt="Kraftsamling för barnens bästa"></div><div class="intro-aside"><button type="button" class="primary" id="intro-start-btn">Börja</button><span class="intro-arrow" aria-hidden="true"><span>Fortsätt</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div></div><div class="prose"><p>Vi på Horizonten vill förstå och synliggöra vad familjer går igenom i samband med ett ärende om omhändertagande av barn – och beskriva det vi kallar myndighetsinducerat trauma.</p><p>Det tar 3–8 minuter. Bara samtycket och första frågan är obligatoriska.</p><p><a href="#integritet">Läs om integritet och sekretess</a></p></div>`, next:"Börja"},
   {id:"samtycke", type:"checks", required:"samtycke_behandling", kicker:"Integritet", title:"Så hanterar vi dina svar",
    html:`<div class="prose"><ul><li>Svaren sammanställs anonymt och kopplas inte till dig.</li><li>Vi delar aldrig uppgifter med myndigheter eller socialtjänst.</li><li>Du kan när som helst begära att dina svar raderas.</li><li>Personuppgiftsansvarig är Horizonten (GDPR).</li></ul><p><a href="#integritet">Läs hela integritets- och sekretesspolicyn</a></p></div>`,
    options:[["samtycke_behandling","Jag har läst informationen och samtycker till att Horizonten behandlar mina svar. (Obligatoriskt)"],
@@ -1658,9 +1671,11 @@ function render(){
   }
   h+=`<p class="err" id="err" hidden></p>`;
   $("main").innerHTML=h;
+  $("kraftsamling-app").classList.toggle("is-intro", s.id==="intro");
+  if($("intro-start-btn")) $("intro-start-btn").onclick=next;
   $("next").textContent = sending ? "Skickar…" : s.type==="done" ? "Stäng" : (s.next || (i===vs.length-2?"Skicka in":"Nästa"));
   $("next").disabled = sending;
-  $("next").hidden = s.type==="done";
+  $("next").hidden = s.type==="done" || s.id==="intro";
   $("savednote").hidden = s.type==="done";
   if($("del")) $("del").onclick=removeMine;
   $("skip").hidden = !!s.required || s.type==="info" && !s.alt || s.type==="done";
