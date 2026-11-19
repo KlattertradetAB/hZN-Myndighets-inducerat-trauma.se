@@ -273,7 +273,8 @@ td{font-variant-numeric:tabular-nums}
         <button role="tab" aria-selected="false" data-tab="all">3. Enskilda svar</button>
         <button role="tab" aria-selected="false" data-tab="contacts">4. Kontakter</button>
         <button role="tab" aria-selected="false" data-tab="shop">5. Butik, Ordrar &amp; E-bok</button>
-        <button role="tab" aria-selected="false" data-tab="account">6. Konto</button>
+        <button role="tab" aria-selected="false" data-tab="blog">6. Blogg &amp; Artiklar</button>
+        <button role="tab" aria-selected="false" data-tab="account">7. Konto</button>
       </div>
       <div class="filter" id="filter-wrap">
         <label for="filter">Urval:</label>
@@ -291,6 +292,7 @@ td{font-variant-numeric:tabular-nums}
     <section id="tab-all" role="tabpanel" hidden></section>
     <section id="tab-contacts" role="tabpanel" hidden></section>
     <section id="tab-shop" role="tabpanel" hidden></section>
+    <section id="tab-blog" role="tabpanel" hidden></section>
     <section id="tab-account" role="tabpanel" hidden>
       <div class="card">
         <h3>Byt lösenord</h3>
@@ -317,7 +319,7 @@ const CFG = window.HZ_SUPABASE;
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const SKEY = "hz-admin-session";
-let session = null, responses = [], contacts = [], shopOrders = [], ebookLicenses = [], shopProducts = [], ebookContent = null, filter = "all", timer = null, lastCount = null;
+let session = null, responses = [], contacts = [], shopOrders = [], ebookLicenses = [], shopProducts = [], ebookContent = null, blogPosts = [], blogTableMissing = false, editingBlogId = null, filter = "all", timer = null, lastCount = null;
 
 const JNV = ["Ja","Nej","Vet ej"], HEALTH = ["Ja","Nej","Vill inte svara"];
 const F3 = [
@@ -438,17 +440,18 @@ async function start(){
 
 async function load(manual, poll){
   try{
-    const [r,c,ord,lic,prod,eb] = await Promise.all([
+    const [r,c,ord,lic,prod,eb,bp] = await Promise.all([
       rest("survey_responses?select=id,submitted_on,health_consent,f1,answers&order=id.desc"),
       rest("survey_contacts?select=id,purpose,name,email,phone,submitted_on&order=id.desc"),
       rest("shop_orders?select=*&order=created_at.desc").catch(()=>[]),
       rest("ebook_licenses?select=*&order=created_at.desc").catch(()=>[]),
       rest("shop_products?select=*&order=sort_order.asc").catch(()=>[]),
-      rest("ebook_content?select=id,title,subtitle,authors,chapters,pdf_filename,updated_at&id=eq.1").catch(()=>[])
+      rest("ebook_content?select=id,title,subtitle,authors,chapters,pdf_filename,updated_at&id=eq.1").catch(()=>[]),
+      rest("blog_posts?select=*&order=created_at.desc").then(d=>{ blogTableMissing=false; return d; }).catch(()=>{ blogTableMissing=true; return []; })
     ]);
     if(poll && lastCount!==null && r.length>lastCount) toast((r.length-lastCount===1?"1 nytt svar":(r.length-lastCount)+" nya svar")+" har kommit in");
     lastCount=r.length; responses=r; contacts=c;
-    shopOrders=ord||[]; ebookLicenses=lic||[]; shopProducts=prod||[]; ebookContent=(eb&&eb[0])||null;
+    shopOrders=ord||[]; ebookLicenses=lic||[]; shopProducts=prod||[]; ebookContent=(eb&&eb[0])||null; blogPosts=bp||[];
     $("updated").textContent="Uppdaterad "+new Date().toLocaleTimeString("sv-SE",{hour:"2-digit",minute:"2-digit"});
     render();
     if(manual) toast("Uppdaterat");
@@ -467,11 +470,11 @@ let statsCatFilter = "all", statsSearch = "", allSearch = "", allSort = "newest"
 
 function switchTab(tabName){
   document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.tab===tabName)));
-  ["charts","stats","all","contacts","shop","account"].forEach(k=>{
+  ["charts","stats","all","contacts","shop","blog","account"].forEach(k=>{
     const el=$("tab-"+k);
     if(el) el.hidden = k!==tabName;
   });
-  $("filter-wrap").hidden = tabName==="contacts"||tabName==="shop"||tabName==="account";
+  $("filter-wrap").hidden = tabName==="contacts"||tabName==="shop"||tabName==="blog"||tabName==="account";
 }
 
 function render(){
@@ -484,7 +487,7 @@ function render(){
     <div class="tile" data-goto-tab="shop" title="Klicka för att visa butik &amp; e-bok"><span>Ordrar &amp; Licenser</span><b>${shopOrders.length} / ${ebookLicenses.length}</b><em>${shopOrders.length} ordrar · ${ebookLicenses.filter(l=>l.active).length} aktiva licenser →</em></div>
     <div class="tile" data-goto-tab="contacts" title="Klicka för att visa kontakter"><span>Kontakter</span><b>${contacts.length}</b><em>${contacts.filter(c=>c.purpose==="uppfoljning").length} uppföljning · ${contacts.filter(c=>c.purpose==="resultat").length} resultat →</em></div>`;
   $("tiles").querySelectorAll("[data-goto-tab]").forEach(t=>t.onclick=()=>switchTab(t.dataset.gotoTab));
-  renderStats(R); renderAll(R); renderContacts(); renderShop(); renderBigCharts(R);
+  renderStats(R); renderAll(R); renderContacts(); renderShop(); renderBlog(); renderBigCharts(R);
 }
 function donutSvg(segments, total, centerTop, centerSub){
   const r = 60, c = 2 * Math.PI * r;
@@ -1176,6 +1179,145 @@ function renderShop(){
   });
 }
 
+const BLOG_SQL = `create table if not exists public.blog_posts (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  summary text not null,
+  body text not null,
+  author text,
+  published boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+alter table public.blog_posts enable row level security;
+create policy "Public can read published blog posts" on public.blog_posts
+  for select using (published = true);
+create policy "Admins can manage blog posts" on public.blog_posts
+  for all using (public.is_survey_admin()) with check (public.is_survey_admin());`;
+
+function renderBlog(){
+  const host = $("tab-blog");
+  if(!host) return;
+  const editing = editingBlogId ? blogPosts.find(p => p.id === editingBlogId) : null;
+
+  const setupNotice = blogTableMissing ? `
+    <div class="note" style="margin-bottom:18px;border:1px solid var(--accent)">
+      <strong>Engångsinställning i Supabase krävs för att spara blogginlägg</strong>
+      <p style="margin:6px 0 10px">Tabellen <code>blog_posts</code> finns inte i databasen ännu. Klistra in SQL-koden nedan i Supabase → <em>SQL Editor</em> och klicka på <em>Run</em>, ladda sedan om den här sidan.</p>
+      <pre id="blog-sql-code" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px;overflow:auto;font-size:12.5px;margin:0 0 10px">${esc(BLOG_SQL)}</pre>
+      <button type="button" class="btn small primary" id="copy-blog-sql">Kopiera SQL</button>
+    </div>` : "";
+
+  const postsHtml = blogPosts.length ? `<div class="list">${blogPosts.map(p => `
+    <div class="qcard" style="margin:0;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <div>
+          <span class="pill ${p.published ? "ja" : ""}">${p.published ? "Publicerad" : "Utkast"}</span>
+          <small style="color:var(--muted);margin-left:8px">${p.created_at ? new Date(p.created_at).toLocaleDateString("sv-SE") : ""}${p.author ? " · " + esc(p.author) : ""}</small>
+          <h3 style="margin:6px 0 4px;font-size:17px">${esc(p.title)}</h3>
+          <p style="margin:0;color:var(--muted);font-size:14px">${esc(p.summary)}</p>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" class="btn small" data-edit-blog="${esc(p.id)}">Redigera</button>
+          <button type="button" class="btn small ghost" data-toggle-blog="${esc(p.id)}" data-pub="${p.published ? "1" : "0"}">${p.published ? "Avpublicera" : "Publicera"}</button>
+          <button type="button" class="btn small danger" data-del-blog="${esc(p.id)}">Radera</button>
+        </div>
+      </div>
+    </div>`).join("")}</div>` : `<p class="empty">Inga blogginlägg skapade via mallen ännu. Fyll i mallen ovan för att publicera ditt första inlägg under ”Pod och Blogg”.</p>`;
+
+  host.innerHTML = `
+    ${setupNotice}
+    <div class="qcard" style="margin:0 0 20px">
+      <h2 class="section-title" style="margin-top:0">${editing ? "Redigera blogginlägg" : "Mall för nytt blogginlägg"}</h2>
+      <p style="color:var(--muted);font-size:.92rem;margin:4px 0 14px">
+        Fyll i <strong>Rubrik</strong>, <strong>Sammanfattning</strong> och <strong>Text</strong>. Inlägget visas direkt under <em>Pod och Blogg</em> på hemsidan och öppnas i ett eget läsfönster när besökaren klickar på <em>Läs hela artikeln</em>.
+      </p>
+      <form id="blog-form" class="list" style="gap:14px">
+        <div class="field">
+          <label for="blog-title">Rubrik *</label>
+          <input type="text" id="blog-title" required placeholder="Skriv artikelns rubrik här..." value="${esc(editing ? editing.title : "")}">
+        </div>
+        <div class="field">
+          <label for="blog-summary">Sammanfattning * <small style="color:var(--muted);font-weight:400">(visas på kortet innan man öppnar artikeln)</small></label>
+          <textarea id="blog-summary" rows="3" required placeholder="En kort sammanfattning eller ingress på 1–3 meningar..." style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;resize:vertical">${esc(editing ? editing.summary : "")}</textarea>
+        </div>
+        <div class="field">
+          <label for="blog-body">Text * <small style="color:var(--muted);font-weight:400">(lämna en tom rad mellan stycken; skriv ## före en rad för mellanrubrik)</small></label>
+          <textarea id="blog-body" rows="12" required placeholder="Skriv hela blogginlägget här...&#10;&#10;## Exempel på mellanrubrik&#10;&#10;Nytt stycke..." style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;line-height:1.55;resize:vertical">${esc(editing ? editing.body : "")}</textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end">
+          <div class="field" style="margin:0">
+            <label for="blog-author">Författare / byline (valfritt)</label>
+            <input type="text" id="blog-author" placeholder="T.ex. Av Billy Ljungberg och Jeanette Johansson" value="${esc(editing ? (editing.author || "") : "")}">
+          </div>
+          <label style="display:inline-flex;align-items:center;gap:8px;padding:10px 4px;font-weight:500;cursor:pointer">
+            <input type="checkbox" id="blog-published" ${!editing || editing.published ? "checked" : ""}> Publicera direkt
+          </label>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button type="submit" class="btn primary">${editing ? "Spara ändringar" : "Publicera blogginlägg"}</button>
+          ${editing ? `<button type="button" class="btn ghost" id="blog-cancel-edit">Avbryt redigering</button>` : `<button type="button" class="btn ghost" id="blog-clear">Rensa fält</button>`}
+        </div>
+        <div id="blog-msg" class="msg" hidden></div>
+      </form>
+    </div>
+
+    <div class="qcard" style="margin:0">
+      <h2 class="section-title" style="margin-top:0">Sparade blogginlägg (${blogPosts.length})</h2>
+      ${postsHtml}
+    </div>
+  `;
+
+  const copySqlBtn = $("copy-blog-sql");
+  if(copySqlBtn) copySqlBtn.addEventListener("click", async ()=>{
+    try{ await navigator.clipboard.writeText(BLOG_SQL); toast("SQL kopierad!"); }catch(e){ toast("Markera och kopiera SQL-texten manuellt."); }
+  });
+
+  const cancelBtn = $("blog-cancel-edit");
+  if(cancelBtn) cancelBtn.addEventListener("click", ()=>{ editingBlogId = null; renderBlog(); });
+
+  const clearBtn = $("blog-clear");
+  if(clearBtn) clearBtn.addEventListener("click", ()=>{
+    $("blog-title").value = ""; $("blog-summary").value = ""; $("blog-body").value = ""; $("blog-author").value = "";
+  });
+
+  const blogForm = $("blog-form");
+  if(blogForm) blogForm.addEventListener("submit", async e=>{
+    e.preventDefault();
+    const m = $("blog-msg");
+    m.hidden = true;
+    const payload = {
+      title: $("blog-title").value.trim(),
+      summary: $("blog-summary").value.trim(),
+      body: $("blog-body").value.trim(),
+      author: $("blog-author").value.trim() || null,
+      published: Boolean($("blog-published").checked),
+      updated_at: new Date().toISOString()
+    };
+    if(!payload.title || !payload.summary || !payload.body){
+      m.hidden = false; m.className = "msg err"; m.textContent = "Fyll i rubrik, sammanfattning och text."; return;
+    }
+    try{
+      if(editingBlogId){
+        await rest("blog_posts?id=eq."+encodeURIComponent(editingBlogId),{
+          method:"PATCH", headers:{"Prefer":"return=minimal"}, body:JSON.stringify(payload)
+        });
+        editingBlogId = null;
+        toast("Blogginlägget uppdaterat!");
+      } else {
+        await rest("blog_posts",{
+          method:"POST", headers:{"Prefer":"return=minimal"}, body:JSON.stringify(payload)
+        });
+        toast("Blogginlägget publicerat!");
+      }
+      await load(false);
+    }catch(err){
+      m.hidden = false; m.className = "msg err";
+      m.textContent = blogTableMissing ? "Skapa tabellen blog_posts i Supabase först (se SQL-rutan ovan)." : err.message;
+    }
+  });
+}
+
 /* Radering & shop-åtgärder med bekräftelse */
 document.addEventListener("click", async e=>{
   const toggleBtn = e.target.closest("[data-toggle-lic]");
@@ -1209,12 +1351,34 @@ document.addEventListener("click", async e=>{
     }catch(x){ toast(x.message); }
     return;
   }
-  const b = e.target.closest("[data-del],[data-delc],[data-del-lic]"); if(!b) return;
+  const editBlogBtn = e.target.closest("[data-edit-blog]");
+  if(editBlogBtn){
+    editingBlogId = editBlogBtn.dataset.editBlog;
+    renderBlog();
+    $("tab-blog").scrollIntoView({behavior:"smooth",block:"start"});
+    return;
+  }
+  const toggleBlogBtn = e.target.closest("[data-toggle-blog]");
+  if(toggleBlogBtn){
+    try{
+      const nextPub = toggleBlogBtn.dataset.pub !== "1";
+      await rest("blog_posts?id=eq."+encodeURIComponent(toggleBlogBtn.dataset.toggleBlog),{
+        method:"PATCH",
+        headers:{"Prefer":"return=minimal"},
+        body:JSON.stringify({published: nextPub, updated_at: new Date().toISOString()})
+      });
+      toast(nextPub ? "Inlägg publicerat" : "Inlägg avpublicerat");
+      await load(false);
+    }catch(x){ toast(x.message); }
+    return;
+  }
+  const b = e.target.closest("[data-del],[data-delc],[data-del-lic],[data-del-blog]"); if(!b) return;
   if(b.dataset.armed!=="1"){ b.dataset.armed="1"; b.textContent="Klicka igen för att radera"; setTimeout(()=>{ if(b.isConnected){ b.dataset.armed=""; b.textContent=b.dataset.del?"Radera svaret":"Radera"; } },5000); return; }
   try{
     if(b.dataset.del) await rest("survey_responses?id=eq."+encodeURIComponent(b.dataset.del),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
     else if(b.dataset.delc) await rest("survey_contacts?id=eq."+encodeURIComponent(b.dataset.delc),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
     else if(b.dataset.delLic) await rest("ebook_licenses?id=eq."+encodeURIComponent(b.dataset.delLic),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
+    else if(b.dataset.delBlog) await rest("blog_posts?id=eq."+encodeURIComponent(b.dataset.delBlog),{method:"DELETE",headers:{"Prefer":"return=minimal"}});
     toast("Raderat"); await load(false);
   }catch(x){ toast(x.message); }
 });

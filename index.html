@@ -1192,6 +1192,7 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
             </dl>
           </div>
         </div>
+        <div id="pod-blog-dynamic"></div>
         <article class="course" style="margin-top:24px" aria-labelledby="art-mit-namn">
           <p class="course-kicker">Blogg &amp; debattartikel</p>
           <h4 id="art-mit-namn">Vi har gett fenomenet ett namn – nu måste samhället lära sig se det</h4>
@@ -2593,6 +2594,66 @@ document.addEventListener("click", (e) => {
     e.target.close();
   }
 });
+</script>
+
+<dialog class="art-modal" id="art-modal-dynamic" aria-labelledby="art-dyn-title">
+  <div class="art-modal-head">
+    <p class="art-modal-kicker">Blogg &amp; debattartikel</p>
+    <button type="button" class="art-modal-close" data-close-modal="art-modal-dynamic" aria-label="Stäng artikel">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <article class="art-modal-body" id="art-dyn-body"></article>
+</dialog>
+<script>
+(function(){
+  const cfg = window.HZ_SUPABASE;
+  const host = document.getElementById("pod-blog-dynamic");
+  if (!cfg || !cfg.url || !cfg.key || !host) return;
+  const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const formatBody = txt => String(txt || "").trim().split(/\n\s*\n/).map(block => {
+    const t = block.trim();
+    if (!t) return "";
+    if (/^#{1,3}\s+/.test(t)) return `<h3>${esc(t.replace(/^#{1,3}\s+/, ""))}</h3>`;
+    return `<p>${esc(t).replace(/\n/g, "<br>")}</p>`;
+  }).join("");
+
+  let posts = [];
+  fetch(`${cfg.url}/rest/v1/blog_posts?select=id,title,summary,body,author,created_at&published=eq.true&order=created_at.desc`, {
+    headers: { apikey: cfg.key, Authorization: "Bearer " + cfg.key }
+  })
+  .then(r => r.ok ? r.json() : [])
+  .then(data => {
+    if (!Array.isArray(data) || !data.length) return;
+    posts = data;
+    host.innerHTML = posts.map((p, i) => `
+      <article class="course" style="margin-top:24px">
+        <p class="course-kicker">Blogg &amp; artikel${p.created_at ? " · " + new Date(p.created_at).toLocaleDateString("sv-SE") : ""}</p>
+        <h4>${esc(p.title)}</h4>
+        ${p.author ? `<p class="course-sub">${esc(p.author)}</p>` : ""}
+        <p>${esc(p.summary)}</p>
+        <button type="button" class="art-open-btn" data-open-dyn-post="${i}">Läs hela artikeln <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
+      </article>
+    `).join("");
+  })
+  .catch(() => {});
+
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-open-dyn-post]");
+    if (!btn) return;
+    const p = posts[Number(btn.dataset.openDynPost)];
+    const dlg = document.getElementById("art-modal-dynamic");
+    const body = document.getElementById("art-dyn-body");
+    if (!p || !dlg || !body) return;
+    body.innerHTML = `
+      <h2 id="art-dyn-title">${esc(p.title)}</h2>
+      ${p.author ? `<p class="art-modal-byline">${esc(p.author)}</p>` : ""}
+      ${formatBody(p.body)}
+    `;
+    dlg.showModal();
+    body.scrollTop = 0;
+  });
+})();
 </script>
 
 </body>
