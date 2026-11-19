@@ -610,6 +610,23 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 #integritet .sel{user-select:all;font-weight:500}
 #integritet .note{font-size:14px;color:var(--muted)}
 #integritet .back{margin-bottom:-12px}
+.art-open-btn{display:inline-flex;align-items:center;gap:8px;margin-top:8px;padding:10px 16px;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:#fff;font:600 14px/1.2 var(--body);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+.art-open-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(181,82,12,.25);filter:brightness(1.06)}
+.art-open-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+dialog.art-modal{width:min(740px,calc(100vw - 28px));max-height:88vh;padding:0;border:1px solid var(--glass-border);border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 24px 64px rgba(5,34,59,.28);overflow:hidden;margin:auto}
+dialog.art-modal::backdrop{background:rgba(5,22,38,.56);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .24s cubic-bezier(.22,1,.36,1)}
+@keyframes hzModalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+.art-modal-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 20px;border-bottom:1px solid var(--line);background:var(--glass);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.art-modal-kicker{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin:0}
+.art-modal-close{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;flex-shrink:0;transition:background .15s ease}
+.art-modal-close:hover{background:var(--accent-soft);color:var(--accent)}
+.art-modal-body{padding:24px 26px 30px;overflow-y:auto;line-height:1.7;font-size:16px}
+.art-modal-body h2{font-family:var(--display);font-size:clamp(22px,3.6vw,29px);line-height:1.2;margin:0 0 8px;color:var(--ink)}
+.art-modal-byline{margin:0 0 20px;font-size:14px;color:var(--muted);padding-bottom:14px;border-bottom:1px solid var(--line)}
+.art-modal-body h3{font-family:var(--display);font-size:19px;margin:24px 0 8px;color:var(--ink)}
+.art-modal-body p{margin:0 0 14px}
+.art-modal-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
 </style>
 
 </head>
@@ -1180,29 +1197,7 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
           <h4 id="art-mit-namn">Vi har gett fenomenet ett namn – nu måste samhället lära sig se det</h4>
           <p class="course-sub">Av Billy Ljungberg och Jeanette Johansson</p>
           <p>Det finns i dag inget etablerat begrepp i Sverige för det som händer med en människa när varje ord vänds emot henne i mötet med barnavården. Vi föreslår ett: myndighetsinducerat trauma.</p>
-          <details class="course-more">
-            <summary>Läs hela artikeln <svg class="svc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
-            <div class="course-more-body">
-              <p>Föreställ dig att du är förälder. En dag knackar det på dörren. Ett larm har kommit in, kanske anonymt, kanske grundat i missförstånd. Du gör allt du kan för att förklara, för att samarbeta, för att visa att du älskar ditt barn. Men varje ord du säger vänds emot dig. Din oro tolkas som aggressivitet. Din sorg tolkas som instabilitet. Ju mer du protesterar, desto mer ”bekräftas” bilden av dig som problemet.</p>
-              <p>Det finns i dag inget etablerat begrepp i Sverige för det som händer med en människa i den situationen. Vi föreslår ett: myndighetsinducerat trauma.</p>
-              <p>Vi är själva drabbade – men det här är inte en text om vår egen historia. Det är en text om ett mönster vi tror att alldeles för många känner igen, och som forskningen ännu inte gett ett namn på i svensk kontext.</p>
-              <h5>Ett tomrum i kunskapen</h5>
-              <p>Trauma orsakat av människor vi litar på är sedan länge beskrivet i internationell forskning. Begreppet institutionellt svek (institutional betrayal), format av psykologen Jennifer Freyd, beskriver hur institutioner som borde skydda i stället skadar dem som är beroende av dem. Nyare studier om tidigare familjehemsplacerade barn visar hur institutionella system kan återaktivera och förvärra trauma hos dem de är satta att hjälpa.</p>
-              <p>Vad som saknas är motsvarande uppmärksamhet på föräldrars upplevelser i den svenska barnavården – och en modell för hur skadan byggs upp, steg för steg, över tid.</p>
-              <p>Det är inte heller en okänd mekanism att utredare omedvetet söker information som bekräftar en redan formad misstanke, snarare än att pröva den. Den brittiska forskaren Eileen Munro visade redan 1999, i en genomgång av 45 offentliga utredningar av misslyckanden inom barnavården, hur just detta resonemangsfel återkommer systematiskt. Hennes arbete låg senare till grund för en statlig översyn av hela det brittiska barnskyddssystemet. Motsvarande kritiska granskning av hur bekräftelsebias påverkar svenska utredningar lyser med sin frånvaro.</p>
-              <p>Även anknytningsforskningen ger oss viktiga pusselbitar. Sedan John Bowlbys och Mary Ainsworths grundläggande arbeten har det varit känt att en separation mellan barn och förälder skadar anknytningen – det gäller oavsett hur välmenande separationen är. Ju längre och mer utdragen separationen blir, desto djupare blir skadan, för både barn och förälder.</p>
-              <p>Det är inte en åsikt. Det är etablerad utvecklingspsykologi. Ändå behandlas ofta långa utredningstider och upprepade, förlängda placeringar som en administrativ fråga snarare än som något som i sig orsakar bestående skada.</p>
-              <h5>Namnet är inte det viktiga – processen är det</h5>
-              <p>Myndighetsinducerat trauma beskriver en kumulativ process: en serie steg som var för sig kan se rimliga eller till och med nödvändiga ut, men som tillsammans bryter ner en människas autonomi, tillit och förmåga att bli trodd. Ett avgörande vändpunkt i den processen är när förälderns fullt rimliga reaktion på en genomgripande orättvisa – ilska, sorg, förtvivlan – själv börjar användas som bevis för att ingripandet var befogat. Cirkeln sluts. Det finns ingen giltig reaktion kvar att ha.</p>
-              <p>Att en sådan cirkel kan uppstå säger ingenting om enskilda handläggares goda vilja. De allra flesta som arbetar inom socialtjänsten gör det av rätt skäl, under hög arbetsbelastning och med begränsade resurser. Problemet vi pekar på är strukturellt: en riskbedömningskultur som är byggd för att upptäcka fara, men som saknar tillräckliga mekanismer för att upptäcka sina egna feltolkningar.</p>
-              <h5>Varför ett namn spelar roll</h5>
-              <p>Att sätta ord på en skada är ofta det första steget mot att kunna bemöta den. Så var det med gaslighting. Så var det med institutionellt svek. Innan de begreppen fanns riskerade den som upplevde fenomenet att tro att felet låg hos dem själva – att deras reaktion var problemet, inte det de reagerade på.</p>
-              <p>Vi menar att svensk barnavård behöver en motsvarande vokabulär. Inte för att svartmåla en hel yrkeskår, utan för att ge både utsatta föräldrar och ansvariga myndigheter ett gemensamt språk för att identifiera, diskutera och i förlängningen förebygga en skada som i dag går obenämnd.</p>
-              <p>Det kräver konkret uppföljning: oberoende granskning av hur bekräftelsebias påverkar svenska barnavårdsutredningar, utbildningsinsatser i riskbedömning som aktivt tränar handläggare i att söka motbevis, och en systematisk kartläggning av hur många föräldrar som upplever den process vi beskriver.</p>
-              <p>Vi har gett fenomenet ett namn. Nu är det samhällets tur att lära sig se det.</p>
-              <p><em>Billy Ljungberg och Jeanette Johansson är författare till boken ”Myndighetsinducerat trauma – Från subjekt till objekt”, där teorin och dess sju-stegsprocess beskrivs i sin helhet.</em></p>
-            </div>
-          </details>
+          <button type="button" class="art-open-btn" data-open-modal="art-modal-mit">Läs hela artikeln <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
         </article>
         <div class="svc-cta"><strong>Vill du vara med?</strong><span>Tipsa om ett ämne eller dela din berättelse.</span><div class="copyrow"><span class="sel" id="poddmail">billy@klattertradet.com</span><button type="button" id="copypodd" class="copybtn">Kopiera adressen</button></div></div>
       </div>
@@ -2544,6 +2539,60 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
   renderCart();
   loadProducts();
 })();
+</script>
+
+<dialog class="art-modal" id="art-modal-mit" aria-labelledby="art-modal-title">
+  <div class="art-modal-head">
+    <p class="art-modal-kicker">Blogg &amp; debattartikel</p>
+    <button type="button" class="art-modal-close" data-close-modal="art-modal-mit" aria-label="Stäng artikel">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <article class="art-modal-body">
+    <h2 id="art-modal-title">Vi har gett fenomenet ett namn – nu måste samhället lära sig se det</h2>
+    <p class="art-modal-byline">Av Billy Ljungberg och Jeanette Johansson</p>
+    <p>Föreställ dig att du är förälder. En dag knackar det på dörren. Ett larm har kommit in, kanske anonymt, kanske grundat i missförstånd. Du gör allt du kan för att förklara, för att samarbeta, för att visa att du älskar ditt barn. Men varje ord du säger vänds emot dig. Din oro tolkas som aggressivitet. Din sorg tolkas som instabilitet. Ju mer du protesterar, desto mer ”bekräftas” bilden av dig som problemet.</p>
+    <p>Det finns i dag inget etablerat begrepp i Sverige för det som händer med en människa i den situationen. Vi föreslår ett: myndighetsinducerat trauma.</p>
+    <p>Vi är själva drabbade – men det här är inte en text om vår egen historia. Det är en text om ett mönster vi tror att alldeles för många känner igen, och som forskningen ännu inte gett ett namn på i svensk kontext.</p>
+    <h3>Ett tomrum i kunskapen</h3>
+    <p>Trauma orsakat av människor vi litar på är sedan länge beskrivet i internationell forskning. Begreppet institutionellt svek (institutional betrayal), format av psykologen Jennifer Freyd, beskriver hur institutioner som borde skydda i stället skadar dem som är beroende av dem. Nyare studier om tidigare familjehemsplacerade barn visar hur institutionella system kan återaktivera och förvärra trauma hos dem de är satta att hjälpa.</p>
+    <p>Vad som saknas är motsvarande uppmärksamhet på föräldrars upplevelser i den svenska barnavården – och en modell för hur skadan byggs upp, steg för steg, över tid.</p>
+    <p>Det är inte heller en okänd mekanism att utredare omedvetet söker information som bekräftar en redan formad misstanke, snarare än att pröva den. Den brittiska forskaren Eileen Munro visade redan 1999, i en genomgång av 45 offentliga utredningar av misslyckanden inom barnavården, hur just detta resonemangsfel återkommer systematiskt. Hennes arbete låg senare till grund för en statlig översyn av hela det brittiska barnskyddssystemet. Motsvarande kritiska granskning av hur bekräftelsebias påverkar svenska utredningar lyser med sin frånvaro.</p>
+    <p>Även anknytningsforskningen ger oss viktiga pusselbitar. Sedan John Bowlbys och Mary Ainsworths grundläggande arbeten har det varit känt att en separation mellan barn och förälder skadar anknytningen – det gäller oavsett hur välmenande separationen är. Ju längre och mer utdragen separationen blir, desto djupare blir skadan, för både barn och förälder.</p>
+    <p>Det är inte en åsikt. Det är etablerad utvecklingspsykologi. Ändå behandlas ofta långa utredningstider och upprepade, förlängda placeringar som en administrativ fråga snarare än som något som i sig orsakar bestående skada.</p>
+    <h3>Namnet är inte det viktiga – processen är det</h3>
+    <p>Myndighetsinducerat trauma beskriver en kumulativ process: en serie steg som var för sig kan se rimliga eller till och med nödvändiga ut, men som tillsammans bryter ner en människas autonomi, tillit och förmåga att bli trodd. Ett avgörande vändpunkt i den processen är när förälderns fullt rimliga reaktion på en genomgripande orättvisa – ilska, sorg, förtvivlan – själv börjar användas som bevis för att ingripandet var befogat. Cirkeln sluts. Det finns ingen giltig reaktion kvar att ha.</p>
+    <p>Att en sådan cirkel kan uppstå säger ingenting om enskilda handläggares goda vilja. De allra flesta som arbetar inom socialtjänsten gör det av rätt skäl, under hög arbetsbelastning och med begränsade resurser. Problemet vi pekar på är strukturellt: en riskbedömningskultur som är byggd för att upptäcka fara, men som saknar tillräckliga mekanismer för att upptäcka sina egna feltolkningar.</p>
+    <h3>Varför ett namn spelar roll</h3>
+    <p>Att sätta ord på en skada är ofta det första steget mot att kunna bemöta den. Så var det med gaslighting. Så var det med institutionellt svek. Innan de begreppen fanns riskerade den som upplevde fenomenet att tro att felet låg hos dem själva – att deras reaktion var problemet, inte det de reagerade på.</p>
+    <p>Vi menar att svensk barnavård behöver en motsvarande vokabulär. Inte för att svartmåla en hel yrkeskår, utan för att ge både utsatta föräldrar och ansvariga myndigheter ett gemensamt språk för att identifiera, diskutera och i förlängningen förebygga en skada som i dag går obenämnd.</p>
+    <p>Det kräver konkret uppföljning: oberoende granskning av hur bekräftelsebias påverkar svenska barnavårdsutredningar, utbildningsinsatser i riskbedömning som aktivt tränar handläggare i att söka motbevis, och en systematisk kartläggning av hur många föräldrar som upplever den process vi beskriver.</p>
+    <p>Vi har gett fenomenet ett namn. Nu är det samhällets tur att lära sig se det.</p>
+    <p class="art-modal-foot"><em>Billy Ljungberg och Jeanette Johansson är författare till boken ”Myndighetsinducerat trauma – Från subjekt till objekt”, där teorin och dess sju-stegsprocess beskrivs i sin helhet.</em></p>
+  </article>
+</dialog>
+<script>
+document.addEventListener("click", (e) => {
+  const openBtn = e.target.closest("[data-open-modal]");
+  if (openBtn) {
+    const dlg = document.getElementById(openBtn.dataset.openModal);
+    if (dlg && typeof dlg.showModal === "function") {
+      dlg.showModal();
+      const body = dlg.querySelector(".art-modal-body");
+      if (body) body.scrollTop = 0;
+    }
+    return;
+  }
+  const closeBtn = e.target.closest("[data-close-modal]");
+  if (closeBtn) {
+    const dlg = document.getElementById(closeBtn.dataset.closeModal);
+    if (dlg) dlg.close();
+    return;
+  }
+  if (e.target instanceof HTMLDialogElement && e.target.classList.contains("art-modal")) {
+    e.target.close();
+  }
+});
 </script>
 
 </body>
