@@ -70,8 +70,8 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
   100%{opacity:0;transform:scale(1.58)}
 }
 @keyframes hzFadeUp{
-  0%{opacity:0;transform:translateY(20px);filter:blur(2px)}
-  100%{opacity:1;transform:translateY(0);filter:blur(0)}
+  0%{opacity:0;translate:0 20px;filter:blur(2px)}
+  100%{opacity:1;translate:0 0;filter:blur(0)}
 }
 @keyframes hzBrandIn{
   0%{opacity:0;transform:translateY(22px) scale(.94);filter:blur(3px)}
@@ -97,8 +97,10 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 }
 .choices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 @media (max-width:860px){.choices{grid-template-columns:1fr}}
-.choice{display:flex;flex-direction:column;gap:12px;padding:28px;border-radius:20px;text-decoration:none;color:inherit;min-width:0;transition:transform .15s ease}
-.choice:hover{transform:translateY(-2px)}
+.choice{display:flex;flex-direction:column;gap:12px;padding:28px;border-radius:20px;text-decoration:none;color:inherit;min-width:0;transition:transform .28s cubic-bezier(.22,1,.36,1),box-shadow .28s ease;position:relative}
+.choice:hover{transform:translateY(-3px) scale(1.03);z-index:2}
+.choice.primary:hover{box-shadow:0 20px 44px rgba(5,34,59,.26),inset 0 1px 0 rgba(255,255,255,.22)}
+.choice.secondary:hover{box-shadow:0 16px 38px rgba(5,34,59,.13)}
 .choice:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .choice.primary{background:var(--navy);color:var(--navy-ink)}
 .choice.secondary{background:var(--surface);border:1px solid var(--line)}
