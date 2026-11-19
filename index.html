@@ -1735,7 +1735,10 @@ function render(){
   $("kraftsamling-app").classList.toggle("is-intro", s.id==="intro");
   if($("intro-start-btn")) $("intro-start-btn").onclick=next;
   $("next").textContent = sending ? "Skickar…" : s.type==="done" ? "Stäng" : (s.next || (i===vs.length-2?"Skicka in":"Nästa"));
-  $("next").disabled = sending;
+  const syncConsentBtn = () => {
+    $("next").disabled = sending || (Array.isArray(s.required) && s.required.some(k => !A[k]));
+  };
+  syncConsentBtn();
   $("next").hidden = s.type==="done" || s.id==="intro";
   $("savednote").hidden = s.type==="done";
   if($("del")) $("del").onclick=removeMine;
@@ -1746,6 +1749,7 @@ function render(){
     else if(el.type==="checkbox") A[el.dataset.k]=el.checked;
     else A[el.dataset.k]=el.value;
     save();
+    syncConsentBtn();
   }));
   if(location.hash==="#kraftsamling") window.scrollTo(0,0);
   $("main").querySelector("h1").setAttribute("tabindex","-1");
