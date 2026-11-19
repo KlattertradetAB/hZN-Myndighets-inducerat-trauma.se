@@ -944,7 +944,7 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
             </div>
           </details>
 
-          <div class="svc-cta"><strong>Anmäl dig till Behandlingsassistent</strong><span>Boka direkt via kassan eller mejla med ämnet ”Anmälan Behandlingsassistent”.</span><div class="copyrow"><button type="button" class="buy-btn" style="padding:0 20px;min-height:44px" data-cart-buy="course-behandlingsassistent">Lägg utbildning i kassan</button><span class="sel" id="utbmail1">billy@klattertradet.com</span><button type="button" id="copyutb1" class="copybtn">Kopiera adressen</button></div></div>
+          <div class="svc-cta"><strong>Anmäl dig till Behandlingsassistent</strong><span>Mejla med ämnet ”Anmälan Behandlingsassistent”.</span><div class="copyrow"><span class="sel" id="utbmail1">billy@klattertradet.com</span><button type="button" id="copyutb1" class="copybtn">Kopiera adressen</button></div></div>
         </article>
 
         <!-- Utbildning 2 -->
@@ -1005,7 +1005,7 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
             </div>
           </details>
 
-          <div class="svc-cta"><strong>Anmäl dig till Gestalt- &amp; Traumaterapeut</strong><span>Boka direkt via kassan eller mejla med ämnet ”Anmälan Gestalt- &amp; Traumaterapeut”.</span><div class="copyrow"><button type="button" class="buy-btn" style="padding:0 20px;min-height:44px" data-cart-buy="course-gestalt">Lägg utbildning i kassan</button><span class="sel" id="utbmail2">billy@klattertradet.com</span><button type="button" id="copyutb2" class="copybtn">Kopiera adressen</button></div></div>
+          <div class="svc-cta"><strong>Anmäl dig till Gestalt- &amp; Traumaterapeut</strong><span>Mejla med ämnet ”Anmälan Gestalt- &amp; Traumaterapeut”.</span><div class="copyrow"><span class="sel" id="utbmail2">billy@klattertradet.com</span><button type="button" id="copyutb2" class="copybtn">Kopiera adressen</button></div></div>
         </article>
 
         <!-- Utbildning 3 -->
@@ -1080,7 +1080,7 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
             </div>
           </details>
 
-          <div class="svc-cta"><strong>Anmäl dig till Introkurs – Dialog &amp; familjeombud</strong><span>Boka direkt via kassan eller mejla med ämnet ”Anmälan Introkurs MiT / Familjeombud”.</span><div class="copyrow"><button type="button" class="buy-btn" style="padding:0 20px;min-height:44px" data-cart-buy="course-mit-intro">Lägg kurs i kassan</button><span class="sel" id="utbmail3">billy@klattertradet.com</span><button type="button" id="copyutb3" class="copybtn">Kopiera adressen</button></div></div>
+          <div class="svc-cta"><strong>Anmäl dig till Introkurs – Dialog &amp; familjeombud</strong><span>Mejla med ämnet ”Anmälan Introkurs MiT / Familjeombud”.</span><div class="copyrow"><span class="sel" id="utbmail3">billy@klattertradet.com</span><button type="button" id="copyutb3" class="copybtn">Kopiera adressen</button></div></div>
         </article>
 
         <!-- Utbildning 4 (Specialistutbildning) -->
@@ -1968,16 +1968,13 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
   const DEFAULT_PRODUCTS = [
     {id:"ebook-read", title:"E-bok: Läs boken digitalt", subtitle:"Låst till personlig inloggning direkt på webbplatsen", category:"ebook", price_sek:200, shipping_sek:0, requires_shipping:false, grants_ebook:true, allows_pdf_download:false},
     {id:"ebook-pdf", title:"E-bok: Ladda ner PDF + Läs online", subtitle:"Högupplöst PDF för nedladdning samt direkt läsbehörighet online", category:"ebook", price_sek:250, shipping_sek:0, requires_shipping:false, grants_ebook:true, allows_pdf_download:true},
-    {id:"book-physical", title:"Fysisk bok (Pocket) – Myndighetsinducerat trauma", subtitle:"Tryckt bok (ca 240 sidor) levererad hem till dig (+ 49 kr frakt)", category:"physical", price_sek:299, shipping_sek:49, requires_shipping:true, grants_ebook:false, allows_pdf_download:false},
-    {id:"course-behandlingsassistent", title:"Utbildning: Behandlingsassistent (12-stegsinriktning)", subtitle:"1-årig processinriktad grundutbildning (8 träffar á 2,5 dagar)", category:"course", price_sek:24900, shipping_sek:0, requires_shipping:false, grants_ebook:false, allows_pdf_download:false},
-    {id:"course-gestalt", title:"Utbildning: Gestalt- & Traumaterapeut (Basår)", subtitle:"2-årig processutbildning – avgift per läsår", category:"course", price_sek:32000, shipping_sek:0, requires_shipping:false, grants_ebook:false, allows_pdf_download:false},
-    {id:"course-mit-intro", title:"Utbildning: Myndighetsinducerat Trauma (Introkurs)", subtitle:"Introkurs till dialog- & familjeombud (3 dagar online + 3 dagar i Gävle)", category:"course", price_sek:4900, shipping_sek:0, requires_shipping:false, grants_ebook:false, allows_pdf_download:false}
+    {id:"book-physical", title:"Fysisk bok (Pocket) – Myndighetsinducerat trauma", subtitle:"Tryckt bok (ca 240 sidor) levererad hem till dig (+ 49 kr frakt)", category:"physical", price_sek:299, shipping_sek:49, requires_shipping:true, grants_ebook:false, allows_pdf_download:false}
   ];
 
   let PRODUCTS = [...DEFAULT_PRODUCTS];
   let cart = [];
   let payMethod = "stripe_card";
-  try { cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]") || []; } catch(e){ cart = []; }
+  try { cart = (JSON.parse(localStorage.getItem(CART_KEY) || "[]") || []).filter(x => !String(x.id || "").startsWith("course-")); } catch(e){ cart = []; }
 
   const fmtKr = n => Number(n || 0).toLocaleString("sv-SE") + " kr";
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);
@@ -1991,7 +1988,7 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
       if (r.ok) {
         const rows = await r.json();
         if (Array.isArray(rows) && rows.length > 0) {
-          PRODUCTS = rows;
+          PRODUCTS = rows.filter(p => p.category !== "course" && !String(p.id || "").startsWith("course-"));
           PRODUCTS.forEach(p => {
             document.querySelectorAll(`[data-price-for="${p.id}"]`).forEach(el => { el.textContent = fmtKr(p.price_sek); });
           });
