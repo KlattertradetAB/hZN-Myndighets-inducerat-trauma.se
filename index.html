@@ -1371,7 +1371,7 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 
       <!-- PDF-visare (om en PDF är uppladdad och användaren växlar till PDF-vy) -->
       <div id="r-pdf-view" hidden style="padding:16px;background:var(--bg)">
-        <iframe id="r-pdf-frame" title="E-bok PDF" style="width:100%;height:clamp(420px,75vh,780px);border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
+        <iframe id="r-pdf-frame" title="E-bok PDF" style="width:100%;height:clamp(540px,82vh,920px);border:1px solid var(--line);border-radius:12px;background:#fff"></iframe>
       </div>
 
       <!-- Kapitelbaserad läsvy -->
@@ -2340,6 +2340,7 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
     }
     ebookData = data;
     currentChapIdx = 0;
+    showingPdfView = Boolean(data.pdf_data_url);
     try { sessionStorage.setItem(SESSION_KEY, JSON.stringify({ email: data.email, code: data.license_code })); } catch(e){}
     renderReader();
     return data;
@@ -2380,7 +2381,9 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
     if (showingPdfView && ebookData.pdf_data_url) {
       pdfView.hidden = false;
       chapView.hidden = true;
-      document.getElementById("r-pdf-frame").src = ebookData.pdf_data_url;
+      const pdfSrc = ebookData.tier === "pdf" ? ebookData.pdf_data_url : (ebookData.pdf_data_url + "#toolbar=0");
+      const frame = document.getElementById("r-pdf-frame");
+      if (frame.getAttribute("src") !== pdfSrc) frame.setAttribute("src", pdfSrc);
     } else {
       pdfView.hidden = true;
       chapView.hidden = false;
