@@ -448,15 +448,20 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 .choice.primary{box-shadow:0 14px 34px rgba(5,34,59,.18),inset 0 1px 0 rgba(255,255,255,.16)}
 .choice-head{display:flex;align-items:center;gap:14px}
 .choice-thumb{width:48px;height:62px;object-fit:contain;background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 14px rgba(0,0,0,.22);flex-shrink:0}
-#kraftsamling .app.is-intro{max-width:720px}
-#kraftsamling .intro-stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(200px,.85fr);gap:28px;align-items:center;margin:8px 0 20px}
-@media (max-width:600px){#kraftsamling .intro-stage{grid-template-columns:1fr;gap:18px}}
-#kraftsamling .intro-cover{position:relative;max-width:360px;width:100%;margin:0 auto;background:rgba(255,255,255,.58);backdrop-filter:blur(14px) saturate(135%);-webkit-backdrop-filter:blur(14px) saturate(135%);border-radius:22px;padding:14px;border:1.5px solid rgba(255,255,255,.85);box-shadow:0 22px 52px rgba(5,34,59,.20),0 8px 22px rgba(181,82,12,.14);transition:transform .42s cubic-bezier(.22,1,.36,1),box-shadow .42s ease,background .3s ease;cursor:pointer;overflow:hidden}
-#kraftsamling .intro-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 42%,rgba(255,255,255,.22) 100%);pointer-events:none;border-radius:22px;transition:opacity .4s ease}
-#kraftsamling .intro-cover:hover{transform:translateY(-6px) scale(1.03) rotate(-1.2deg);box-shadow:0 30px 64px rgba(5,34,59,.28),0 12px 28px rgba(181,82,12,.22);background:rgba(255,255,255,.72)}
-#kraftsamling .intro-cover img{display:block;width:100%;height:auto;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.08);transition:transform .42s cubic-bezier(.22,1,.36,1)}
+#kraftsamling .app.is-intro{max-width:780px}
+#kraftsamling .app.is-intro main{padding-top:14px}
+#kraftsamling .intro-stage{display:grid;grid-template-columns:auto minmax(0,1fr);gap:28px;align-items:center;margin:10px 0 8px}
+@media (max-width:640px){#kraftsamling .intro-stage{grid-template-columns:1fr;gap:16px}}
+#kraftsamling .intro-cover{position:relative;max-width:300px;width:100%;margin:0 auto;background:rgba(255,255,255,.55);backdrop-filter:blur(14px) saturate(135%);-webkit-backdrop-filter:blur(14px) saturate(135%);border-radius:16px;padding:6px;border:1px solid rgba(255,255,255,.85);box-shadow:0 20px 46px rgba(5,34,59,.20),0 6px 18px rgba(181,82,12,.14);transition:transform .42s cubic-bezier(.22,1,.36,1),box-shadow .42s ease,background .3s ease;cursor:pointer;overflow:hidden}
+#kraftsamling .intro-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.45) 0%,rgba(255,255,255,0) 42%,rgba(255,255,255,.22) 100%);pointer-events:none;border-radius:16px;transition:opacity .4s ease}
+#kraftsamling .intro-cover:hover{transform:translateY(-6px) scale(1.03) rotate(-1.2deg);box-shadow:0 28px 60px rgba(5,34,59,.28),0 10px 24px rgba(181,82,12,.22);background:rgba(255,255,255,.72)}
+#kraftsamling .intro-cover img{display:block;width:100%;max-height:56vh;object-fit:contain;height:auto;border-radius:11px;box-shadow:0 4px 12px rgba(0,0,0,.08);transition:transform .42s cubic-bezier(.22,1,.36,1)}
 #kraftsamling .intro-cover:hover img{transform:scale(1.015)}
-#kraftsamling .intro-aside{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center}
+#kraftsamling .intro-aside{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:14px;text-align:left}
+#kraftsamling .intro-aside .prose p{margin:0 0 8px;font-size:15px;line-height:1.48}
+#kraftsamling .intro-aside .prose p:last-child{margin-bottom:0}
+#kraftsamling .intro-cta{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:260px;margin-top:4px}
+@media (max-width:640px){#kraftsamling .intro-aside{align-items:center;text-align:center}#kraftsamling .intro-cta{max-width:100%}}
 #kraftsamling .intro-aside .primary{width:100%;padding:0 24px;box-shadow:0 10px 24px rgba(181,82,12,.25);transition:transform .2s ease,box-shadow .2s ease}
 #kraftsamling .intro-aside .primary:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(181,82,12,.32)}
 #kraftsamling .intro-arrow{display:inline-flex;align-items:center;gap:6px;color:var(--action);font-size:13.5px;font-weight:600;opacity:.92}
@@ -1572,7 +1577,7 @@ const JNV = ["Ja","Nej","Vet ej"];
 
 const steps = [
   {id:"intro", type:"info", kicker:"Kraftsamling för Barnens Bästa", title:"Kartläggning av upplevelser",
-   html:`<div class="intro-stage"><div class="intro-cover"><img src="kraftsamling-omslag.png" alt="Kraftsamling för barnens bästa"></div><div class="intro-aside"><button type="button" class="primary" id="intro-start-btn">Börja</button><span class="intro-arrow" aria-hidden="true"><span>Fortsätt</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div></div><div class="prose"><p>Vi på Horizonten vill förstå och synliggöra vad familjer går igenom i samband med ett ärende om omhändertagande av barn – och beskriva det vi kallar myndighetsinducerat trauma.</p><p>Det tar 3–8 minuter. Bara samtycket och första frågan är obligatoriska.</p><p><a href="#integritet">Läs om integritet och sekretess</a></p></div>`, next:"Börja"},
+   html:`<div class="intro-stage"><div class="intro-cover"><img src="kraftsamling-omslag.png" alt="Kraftsamling för barnens bästa"></div><div class="intro-aside"><div class="prose"><p>Vi på Horizonten vill förstå och synliggöra vad familjer går igenom i samband med ett ärende om omhändertagande av barn – och beskriva det vi kallar myndighetsinducerat trauma.</p><p>Det tar 3–8 minuter. Bara samtycket och första frågan är obligatoriska.</p><p><a href="#integritet">Läs om integritet och sekretess</a></p></div><div class="intro-cta"><button type="button" class="primary" id="intro-start-btn">Börja</button><span class="intro-arrow" aria-hidden="true"><span>Fortsätt</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div></div></div>`, next:"Börja"},
   {id:"samtycke", type:"checks", required:"samtycke_behandling", kicker:"Integritet", title:"Så hanterar vi dina svar",
    html:`<div class="prose"><ul><li>Svaren sammanställs anonymt och kopplas inte till dig.</li><li>Vi delar aldrig uppgifter med myndigheter eller socialtjänst.</li><li>Du kan när som helst begära att dina svar raderas.</li><li>Personuppgiftsansvarig är Horizonten (GDPR).</li></ul><p><a href="#integritet">Läs hela integritets- och sekretesspolicyn</a></p></div>`,
    options:[["samtycke_behandling","Jag har läst informationen och samtycker till att Horizonten behandlar mina svar. (Obligatoriskt)"],
