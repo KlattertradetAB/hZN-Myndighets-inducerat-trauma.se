@@ -1634,10 +1634,10 @@ const JNV = ["Ja","Nej","Vet ej"];
 const steps = [
   {id:"intro", type:"info", kicker:"Kraftsamling för Barnens Bästa", title:"Kartläggning av upplevelser",
    html:`<div class="intro-stage"><div class="intro-cover"><img src="kraftsamling-omslag.png" alt="Kraftsamling för barnens bästa"></div><div class="intro-aside"><div class="prose"><p>Vi på Horizonten vill förstå och synliggöra vad familjer går igenom i samband med ett ärende om omhändertagande av barn – och beskriva det vi kallar myndighetsinducerat trauma.</p><p>Det tar 3–8 minuter. Bara samtycket och första frågan är obligatoriska.</p><p><a href="#integritet">Läs om integritet och sekretess</a></p></div><div class="intro-cta"><button type="button" class="primary" id="intro-start-btn">Börja</button><span class="intro-arrow" aria-hidden="true"><span>Fortsätt</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></div></div></div>`, next:"Börja"},
-  {id:"samtycke", type:"checks", required:"samtycke_behandling", kicker:"Integritet", title:"Så hanterar vi dina svar",
+  {id:"samtycke", type:"checks", required:["samtycke_behandling","samtycke_halsodata"], kicker:"Integritet", title:"Så hanterar vi dina svar",
    html:`<div class="prose"><ul><li>Svaren sammanställs anonymt och kopplas inte till dig.</li><li>Vi delar aldrig uppgifter med myndigheter eller socialtjänst.</li><li>Du kan när som helst begära att dina svar raderas.</li><li>Personuppgiftsansvarig är Horizonten (GDPR).</li></ul><p><a href="#integritet">Läs hela integritets- och sekretesspolicyn</a></p></div>`,
    options:[["samtycke_behandling","Jag har läst informationen och samtycker till att Horizonten behandlar mina svar. (Obligatoriskt)"],
-            ["samtycke_halsodata","Jag samtycker uttryckligen till att ni behandlar de hälsouppgifter jag eventuellt lämnar."]]},
+            ["samtycke_halsodata","Jag samtycker uttryckligen till att ni behandlar de hälsouppgifter jag eventuellt lämnar. (Obligatoriskt)"]]},
   {id:"f1", type:"radio", required:true, kicker:"Fråga 1 · obligatorisk", title:"Upplever du att du eller din familj har blivit felaktigt eller illa behandlad av socialtjänsten i ett ärende om omhändertagande av barn?", options:["Ja","Nej"]},
   {id:"tack1", type:"info", kicker:"Tack", title:"Du har nu bidragit med ovärderlig information",
    html:`<p class="help">Allt härifrån är frivilligt. Fortsätt bara om det känns rätt och du orkar – varje svar hjälper.</p>`, next:"Fortsätt", alt:"Skicka in nu"},
@@ -1816,8 +1816,8 @@ async function removeMine(){
 async function next(){
   const vs=visible(), s=vs[i];
   if(s.type==="done") return;
-  const missing = s.required===true ? !A[s.id] : (typeof s.required==="string" && !A[s.required]);
-  if(missing){const e=$("err");e.hidden=false;e.textContent= s.type==="checks"?"Kryssa i samtycket för att fortsätta.":"Välj ett svar för att fortsätta.";return}
+  const missing = s.required===true ? !A[s.id] : Array.isArray(s.required) ? s.required.some(k=>!A[k]) : (typeof s.required==="string" && !A[s.required]);
+  if(missing){const e=$("err");e.hidden=false;e.textContent= s.type==="checks"?"Kryssa i båda samtyckena för att fortsätta.":"Välj ett svar för att fortsätta.";return}
   if(vs[i+1] && vs[i+1].type==="done"){ if(!(await submit())) return; i=visible().length-1; render(); return; }
   i++; save(); render();
 }
