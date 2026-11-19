@@ -627,6 +627,8 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
 .art-modal-body h3{font-family:var(--display);font-size:19px;margin:24px 0 8px;color:var(--ink)}
 .art-modal-body p{margin:0 0 14px}
 .art-modal-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.art-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
+.art-tag{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:600}
 </style>
 
 </head>
@@ -2618,11 +2620,17 @@ document.addEventListener("click", (e) => {
     return `<p>${esc(t).replace(/\n/g, "<br>")}</p>`;
   }).join("");
 
+  const formatTags = raw => {
+    const tags = String(raw || "").trim().split(/[\s,]+/).filter(Boolean).map(t => t.startsWith("#") ? t : "#" + t);
+    return tags.length ? `<div class="art-tags">${tags.map(t => `<span class="art-tag">${esc(t)}</span>`).join("")}</div>` : "";
+  };
+
   let posts = [];
-  fetch(`${cfg.url}/rest/v1/blog_posts?select=id,title,summary,body,author,created_at&published=eq.true&order=created_at.desc`, {
+  const loadPosts = (cols) => fetch(`${cfg.url}/rest/v1/blog_posts?select=${cols}&published=eq.true&order=created_at.desc`, {
     headers: { apikey: cfg.key, Authorization: "Bearer " + cfg.key }
-  })
-  .then(r => r.ok ? r.json() : [])
+  });
+  loadPosts("id,title,summary,body,author,hashtags,created_at")
+  .then(r => r.ok ? r.json() : loadPosts("id,title,summary,body,author,created_at").then(r2 => r2.ok ? r2.json() : []))
   .then(data => {
     if (!Array.isArray(data) || !data.length) return;
     posts = data;
@@ -2632,6 +2640,7 @@ document.addEventListener("click", (e) => {
         <h4>${esc(p.title)}</h4>
         ${p.author ? `<p class="course-sub">${esc(p.author)}</p>` : ""}
         <p>${esc(p.summary)}</p>
+        ${formatTags(p.hashtags)}
         <button type="button" class="art-open-btn" data-open-dyn-post="${i}">Läs hela artikeln <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
       </article>
     `).join("");
@@ -2648,6 +2657,7 @@ document.addEventListener("click", (e) => {
     body.innerHTML = `
       <h2 id="art-dyn-title">${esc(p.title)}</h2>
       ${p.author ? `<p class="art-modal-byline">${esc(p.author)}</p>` : ""}
+      ${formatTags(p.hashtags)}
       ${formatBody(p.body)}
     `;
     dlg.showModal();
