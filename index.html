@@ -2114,6 +2114,10 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
     } else if (rawCode === "VHUUCDGK" || rawCode === "RABATT25") {
       discountPct = 25;
       discountLabel = "Rabatt (25%)";
+    } else if (/^HJUL(10|25)-[A-Z0-9]{6}$/.test(rawCode)) {
+      // Engångskod från lyckohjulet – kontrolleras på servern vid beställning
+      discountPct = Number(rawCode.slice(4, 6));
+      discountLabel = "Lyckohjulet (" + discountPct + "%)";
     }
     const discountSek = discountPct > 0 ? Math.round(subtotal * discountPct / 100) : 0;
     const discRow = document.getElementById("sum-discount-row");
@@ -2165,6 +2169,10 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
       couponMsg.hidden = false;
     } else if (code === "VHUUCDGK" || code === "RABATT25") {
       couponMsg.textContent = "✓ Rabatt 25% aktiverad!";
+      couponMsg.style.color = "#1F6B3A";
+      couponMsg.hidden = false;
+    } else if (/^HJUL(10|25)-[A-Z0-9]{6}$/.test(code)) {
+      couponMsg.textContent = "✓ Lyckohjulets rabatt " + code.slice(4, 6) + "% aktiverad! (gäller för ett köp)";
       couponMsg.style.color = "#1F6B3A";
       couponMsg.hidden = false;
     } else {

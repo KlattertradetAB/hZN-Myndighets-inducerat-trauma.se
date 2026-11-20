@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snurra hjulet – Horizonten</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg1: #5f7473;
+    --bg2: #1d2424;
+    --panel: rgba(36, 42, 42, 0.92);
+    --text: #f2f4f3;
+    --muted: #b9c4c2;
+    --seg-a: #2b3434;
+    --seg-b: #445453;
+    --seg-win: #8fa7a3;
+    --accent: #d9e4e1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "Jost", "Futura", "Century Gothic", system-ui, sans-serif;
+    color: var(--text);
+    background: radial-gradient(ellipse at 50% 0%, var(--bg1) 0%, #34403f 45%, var(--bg2) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px 48px;
+  }
+  .card {
+    width: 100%;
+    max-width: 520px;
+    background: var(--panel);
+    padding: 36px 28px 32px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: .35em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  h1 {
+    font-weight: 700;
+    font-size: clamp(26px, 7vw, 38px);
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+    padding-left: .28em; /* balanserar letter-spacing */
+  }
+  .lead { color: var(--muted); margin: 0 0 26px; line-height: 1.5; }
+
+  .wheel-wrap {
+    position: relative;
+    width: min(340px, 82vw);
+    aspect-ratio: 1;
+    margin: 0 auto 26px;
+  }
+  .pointer {
+    position: absolute;
+    top: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 26px solid var(--accent);
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,.4));
+    z-index: 2;
+  }
+  #wheel {
+    width: 100%; height: 100%;
+    transition: transform 5.2s cubic-bezier(.12,.72,.12,1);
+  }
+  #wheel text {
+    fill: var(--text);
+    font-family: inherit;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  form { display: flex; flex-direction: column; gap: 10px; }
+  input[type=email] {
+    font: inherit;
+    padding: 14px 16px;
+    border: 1px solid #5b6b6a;
+    background: #1f2626;
+    color: var(--text);
+    font-size: 16px;
+  }
+  input[type=email]:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  button {
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    padding: 15px 16px;
+    border: 0;
+    background: var(--accent);
+    color: #1d2424;
+    cursor: pointer;
+    transition: opacity .2s;
+  }
+  button:disabled { opacity: .5; cursor: default; }
+  .consent { font-size: 12px; color: var(--muted); margin: 4px 0 0; line-height: 1.4; }
+  .msg { min-height: 22px; margin-top: 12px; color: #f0c9c0; font-size: 14px; }
+
+  .result { display: none; margin-top: 6px; }
+  .result.show { display: block; animation: fade .6s ease; }
+  .result h2 {
+    font-size: 20px; letter-spacing: .2em; text-transform: uppercase; margin: 0 0 10px;
+  }
+  .result p { color: var(--muted); margin: 0 0 16px; line-height: 1.5; }
+  .code-box {
+    display: flex; align-items: stretch; justify-content: center; gap: 0;
+    margin: 0 auto 16px; max-width: 320px;
+  }
+  .code {
+    flex: 1;
+    font-size: 22px; font-weight: 700; letter-spacing: .2em;
+    padding: 12px 14px; border: 2px dashed var(--accent);
+    background: #1f2626;
+  }
+  .copy { padding: 0 16px; letter-spacing: .15em; font-size: 13px; }
+  .shop-link {
+    display: inline-block; color: var(--text); text-decoration: none;
+    letter-spacing: .25em; text-transform: uppercase; font-size: 13px;
+    border-bottom: 1px solid var(--muted); padding-bottom: 3px;
+  }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<main class="card">
+  <p class="eyebrow">Horizonten</p>
+  <h1>Snurra hjulet</h1>
+  <p class="lead">Skriv in din e-post och snurra – alla vinner rabatt på boken <em>Myndighetsinducerat trauma</em>. Koden skickas till din e-post. En chans per person.</p>
+
+  <div class="wheel-wrap">
+    <div class="pointer" aria-hidden="true"></div>
+    <svg id="wheel" viewBox="-110 -110 220 220" role="img" aria-label="Lyckohjul"></svg>
+  </div>
+
+  <form id="spinForm" novalidate>
+    <input type="email" id="email" placeholder="din@epost.se" autocomplete="email" required aria-label="E-postadress">
+    <button type="submit" id="spinBtn">Snurra</button>
+    <p class="consent">Genom att delta godkänner du att Horizonten sparar din e-postadress för tävlingen och mejlar dig din vinst.</p>
+  </form>
+  <div class="msg" id="msg" role="alert"></div>
+
+  <section class="result" id="result" aria-live="polite">
+    <h2 id="resTitle"></h2>
+    <p id="resText"></p>
+    <div class="code-box" id="codeBox">
+      <div class="code" id="code"></div>
+      <button type="button" class="copy" id="copyBtn">Kopiera</button>
+    </div>
+    <a class="shop-link" id="shopLink" href="index.html">Till butiken →</a>
+  </section>
+</main>
+
+<script src="config.js"></script>
+<script>
+  // ---- Inställningar ----
+  // Hämtas från config.js (samma som resten av webbplatsen), med reserv om filen saknas
+  const SUPABASE_URL = (window.HZ_SUPABASE && window.HZ_SUPABASE.url) || "https://ygwmhiwztokfdedqlwfn.supabase.co";
+  const SUPABASE_KEY = (window.HZ_SUPABASE && window.HZ_SUPABASE.key) || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlnd21oaXd6dG9rZmRlZHFsd2ZuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwNjE4MjUsImV4cCI6MjEwMjYzNzgyNX0.QSdQ3hfNXvNuwqdwJZuDwpoivua9xaxo8B3EMMHomr8";
+  const SHOP_URL = "index.html#kassa"; // ändra om butiken ligger på en annan sida
+
+  // Hur hjulet ser ut. Vinsten avgörs på servern – det här styr bara utseendet.
+  // Etiketterna måste matcha "label" i tabellen wheel_prizes.
+  const SEGMENTS = ["10 %", "25 %", "10 %", "10 %", "25 %", "10 %", "25 %", "10 %"];
+
+  // ---- Rita hjulet ----
+  const svg = document.getElementById("wheel");
+  const NS = "http://www.w3.org/2000/svg";
+  const SEG = 360 / SEGMENTS.length;
+  const R = 100;
+  const colors = ["var(--seg-a)", "var(--seg-b)"];
+
+  function polar(angleDeg, r) {
+    const a = (angleDeg - 90) * Math.PI / 180; // 0° = toppen
+    return [r * Math.cos(a), r * Math.sin(a)];
+  }
+
+  SEGMENTS.forEach((label, i) => {
+    const start = i * SEG, end = (i + 1) * SEG;
+    const [x1, y1] = polar(start, R), [x2, y2] = polar(end, R);
+    const path = document.createElementNS(NS, "path");
+    path.setAttribute("d", `M0 0 L${x1} ${y1} A${R} ${R} 0 0 1 ${x2} ${y2} Z`);
+    path.setAttribute("fill", label === "25 %" ? "var(--seg-win)" : colors[i % 2]);
+    path.setAttribute("stroke", "#1d2424");
+    path.setAttribute("stroke-width", "1");
+    svg.appendChild(path);
+
+    const mid = start + SEG / 2;
+    const [tx, ty] = polar(mid, R * 0.64);
+    const text = document.createElementNS(NS, "text");
+    text.setAttribute("x", tx);
+    text.setAttribute("y", ty);
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("dominant-baseline", "middle");
+    text.setAttribute("font-size", label === "Nitlott" ? "9" : "13");
+    text.setAttribute("transform", `rotate(${mid} ${tx} ${ty})`);
+    text.textContent = label;
+    svg.appendChild(text);
+  });
+
+  const hub = document.createElementNS(NS, "circle");
+  hub.setAttribute("r", "14");
+  hub.setAttribute("fill", "var(--accent)");
+  svg.appendChild(hub);
+  const rim = document.createElementNS(NS, "circle");
+  rim.setAttribute("r", String(R));
+  rim.setAttribute("fill", "none");
+  rim.setAttribute("stroke", "var(--accent)");
+  rim.setAttribute("stroke-width", "3");
+  svg.appendChild(rim);
+
+  // ---- Snurra ----
+  let rotation = 0;
+  let spinning = false;
+
+  // Snurrar direkt när man klickar, medan vi väntar på servern
+  function startSpin() {
+    spinning = true;
+    svg.style.transition = "none";
+    let speed = 0;
+    (function frame() {
+      if (!spinning) return;
+      speed = Math.min(speed + 0.6, 14);
+      rotation += speed;
+      svg.style.transform = `rotate(${rotation}deg)`;
+      requestAnimationFrame(frame);
+    })();
+  }
+
+  // Stoppar mjukt på rätt fält
+  function landOn(label) {
+    spinning = false;
+    const matches = SEGMENTS.map((l, i) => l === label ? i : -1).filter(i => i >= 0);
+    const idx = matches.length ? matches[Math.floor(Math.random() * matches.length)] : 0;
+    const jitter = (Math.random() - 0.5) * SEG * 0.6;
+    const target = 360 - (idx * SEG + SEG / 2) + jitter;
+    const current = ((rotation % 360) + 360) % 360;
+    rotation += 360 * 4 + ((target - current + 360) % 360);
+    void svg.getBoundingClientRect(); // låt webbläsaren registrera läget innan övergången
+    svg.style.transition = "transform 4.5s cubic-bezier(.2,.75,.15,1)";
+    svg.style.transform = `rotate(${rotation}deg)`;
+    return new Promise(res => setTimeout(res, 4600));
+  }
+
+  // Stoppar utan vinst (vid fel)
+  function stopSpin() {
+    spinning = false;
+    rotation += 90;
+    svg.style.transition = "transform 1.2s ease-out";
+    svg.style.transform = `rotate(${rotation}deg)`;
+  }
+
+  const form = document.getElementById("spinForm");
+  const emailEl = document.getElementById("email");
+  const btn = document.getElementById("spinBtn");
+  const msg = document.getElementById("msg");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.textContent = "";
+    const email = emailEl.value.trim();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      msg.textContent = "Skriv in en giltig e-postadress.";
+      return;
+    }
+    btn.disabled = true;
+    emailEl.disabled = true;
+    btn.textContent = "Snurrar…";
+    startSpin();
+    const startedAt = Date.now();
+
+    try {
+      let timer;
+      const timeout = new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error("timeout")), 12000);
+      });
+      const r = await Promise.race([
+        fetch(`${SUPABASE_URL}/functions/v1/lyckohjul`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + SUPABASE_KEY
+          },
+          body: JSON.stringify({ email })
+        }),
+        timeout
+      ]);
+      clearTimeout(timer);
+      if (!r.ok) throw new Error("http " + r.status + " " + (await r.text()).slice(0, 200));
+      const data = await r.json();
+
+      if (data.error === "invalid_email") throw new Error("invalid");
+      if (data.error === "closed") {
+        stopSpin();
+        msg.textContent = "Tävlingen är avslutad just nu. Tack för ditt intresse!";
+        btn.textContent = "Avslutad";
+        return;
+      }
+
+      // Låt hjulet snurra minst 1,2 s innan det börjar bromsa
+      const wait = 1200 - (Date.now() - startedAt);
+      if (wait > 0) await new Promise(res => setTimeout(res, wait));
+
+      await landOn(data.label);
+      showResult(data);
+      form.style.display = "none";
+    } catch (err) {
+      console.error("Lyckohjul: " + (err && err.name) + ": " + (err && err.message));
+      stopSpin();
+      if (err.message === "invalid") {
+        msg.textContent = "Skriv in en giltig e-postadress.";
+      } else if (location.protocol === "file:" || err.message === "timeout" || err instanceof TypeError) {
+        msg.textContent = "Kunde inte nå servern. Hjulet fungerar när sidan ligger uppe på webbplatsen och du har internet.";
+      } else {
+        msg.textContent = "Något gick fel. Försök igen om en stund.";
+      }
+      btn.disabled = false;
+      emailEl.disabled = false;
+      btn.textContent = "Snurra";
+    }
+  });
+
+  function showResult(data) {
+    const res = document.getElementById("result");
+    const title = document.getElementById("resTitle");
+    const text = document.getElementById("resText");
+    const codeBox = document.getElementById("codeBox");
+    const shop = document.getElementById("shopLink");
+    shop.href = SHOP_URL;
+
+    if (data.code) {
+      title.textContent = data.already ? "Du har redan snurrat" : `Grattis – ${data.label} rabatt!`;
+      text.textContent = data.already
+        ? `Du vann ${data.label} rabatt förra gången. Här är din kod igen – ange den i kassan.`
+        : data.email_sent
+          ? "Vi har också skickat koden till din e-post. Ange den i kassan när du köper boken – den gäller för ett köp."
+          : "Spara koden och ange den i kassan när du köper boken – den gäller för ett köp.";
+      document.getElementById("code").textContent = data.code;
+      codeBox.style.display = "";
+    } else {
+      title.textContent = data.already ? "Du har redan snurrat" : "Ingen vinst den här gången";
+      text.textContent = "Tack för att du var med! Följ oss för fler tävlingar framöver.";
+      codeBox.style.display = "none";
+    }
+    res.classList.add("show");
+  }
+
+  document.getElementById("copyBtn").addEventListener("click", async () => {
+    const code = document.getElementById("code").textContent;
+    const b = document.getElementById("copyBtn");
+    try { await navigator.clipboard.writeText(code); b.textContent = "Kopierad!"; }
+    catch { b.textContent = "Markera & kopiera"; }
+    setTimeout(() => (b.textContent = "Kopiera"), 2000);
+  });
+</script>
+</body>
+</html>
