@@ -1,0 +1,58 @@
+# Publicerar webbplatsen till STRATO automatiskt varje gång något ändras på main.
+# Kan också köras manuellt under fliken "Actions" → "Publicera till STRATO" → "Run workflow".
+#
+# Kräver fyra hemligheter i GitHub (Settings → Secrets and variables → Actions):
+#   STRATO_SFTP_HOST      t.ex. 50xxxxxx03.ssh.w2.strato.hosting
+#   STRATO_SFTP_USER      t.ex. su15xxx9
+#   STRATO_SFTP_PASSWORD  lösenordet för SFTP-kontot
+#   STRATO_SFTP_DIR       mappen på STRATO dit sidan ska, t.ex. /  eller  /horizonten
+
+name: Publicera till STRATO
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: strato-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hämta koden
+        uses: actions/checkout@v4
+
+      - name: Installera lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Ladda upp till STRATO via SFTP
+        env:
+          SFTP_HOST: ${{ secrets.STRATO_SFTP_HOST }}
+          SFTP_USER: ${{ secrets.STRATO_SFTP_USER }}
+          LFTP_PASSWORD: ${{ secrets.STRATO_SFTP_PASSWORD }}
+          SFTP_DIR: ${{ secrets.STRATO_SFTP_DIR }}
+        run: |
+          set -e
+          if [ -z "$SFTP_HOST" ] || [ -z "$SFTP_USER" ] || [ -z "$LFTP_PASSWORD" ]; then
+            echo "::error::Lägg in STRATO_SFTP_HOST, STRATO_SFTP_USER och STRATO_SFTP_PASSWORD under Settings → Secrets."
+            exit 1
+          fi
+          TARGET="${SFTP_DIR:-/}"
+          # Laddar upp nya och ändrade filer. Filer som bara finns på STRATO lämnas orörda.
+          lftp --env-password -u "$SFTP_USER" "sftp://$SFTP_HOST:22" <<EOF
+          set sftp:auto-confirm yes
+          set net:max-retries 3
+          set net:timeout 30
+          mirror --reverse --verbose \
+            --exclude-glob .git* \
+            --exclude-glob .github/ \
+            --exclude-glob supabase/ \
+            --exclude-glob README.md \
+            --exclude-glob .nojekyll \
+            ./ "$TARGET"
+          bye
+          EOF
+          echo "Klart! Sidan är uppladdad till STRATO ($TARGET)."
