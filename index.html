@@ -627,6 +627,73 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
 .art-modal-body h3{font-family:var(--display);font-size:19px;margin:24px 0 8px;color:var(--ink)}
 .art-modal-body p{margin:0 0 14px}
 .art-modal-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+/* === Blogg i e-bokens stil === */
+.eb-list{display:grid;gap:18px;margin-top:24px}
+.eb-card{position:relative;overflow:hidden;border-radius:16px;background:#161B22;color:#F2EEE6;padding:26px 24px 22px 46px;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 30px rgba(5,22,38,.18)}
+.eb-card::before{content:"";position:absolute;left:22px;top:0;width:2px;height:58px;background:#C4915C}
+.eb-card::after{content:"";position:absolute;left:22.5px;top:70px;bottom:0;width:1px;background:#3D4145}
+.eb-card .eb-dia{position:absolute;left:18px;top:58px;width:10px;height:10px;border:1.5px solid #C4915C;transform:rotate(45deg);background:#161B22}
+.eb-card .eb-glow{position:absolute;right:-120px;top:-120px;width:300px;height:300px;background:radial-gradient(circle,rgba(70,62,52,.55) 0%,rgba(40,38,38,.2) 45%,rgba(22,27,34,0) 70%);pointer-events:none}
+.eb-kicker{position:relative;margin:0;font:700 11px/1.3 "Liberation Sans",Arial,sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#C4915C}
+.eb-card h4{position:relative;margin:2px 0 0;font-family:"Liberation Serif","Times New Roman",Georgia,serif;font-weight:700;font-size:clamp(23px,4.4vw,30px);line-height:1.16;color:#F2EEE6}
+.eb-card h4 em,.eb-cover h2 em{font-weight:400;font-style:italic;color:#CFCAC2}
+.eb-sub{position:relative;margin:0;font-family:"Liberation Serif","Times New Roman",Georgia,serif;font-style:italic;font-size:16px;color:#C4915C}
+.eb-teaser{position:relative;margin:4px 0 0;font-family:"DejaVu Serif",Georgia,serif;font-size:15px;line-height:1.6;color:#D8D3CB}
+.eb-foot{position:relative;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:8px}
+.eb-authors{font-family:"Liberation Serif","Times New Roman",Georgia,serif;font-style:italic;font-size:15px;color:#F2EEE6}
+.eb-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.eb-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:10px;border:1px solid #C4915C;background:#C4915C;color:#161B22;font:600 14px/1.2 var(--body);cursor:pointer;text-decoration:none;transition:filter .18s ease,transform .18s ease}
+.eb-btn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.eb-btn.ghost{background:transparent;color:#E0BE97}
+.eb-btn:focus-visible{outline:3px solid #E0BE97;outline-offset:2px}
+.eb-label{font:400 10px/1 "Liberation Sans",Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A8E93}
+
+dialog.art-modal.ebok{width:min(820px,calc(100vw - 20px));max-height:92vh;background:#FFFFFF;color:#1C1C1C;border:1px solid #2A2F36;position:relative}
+dialog.art-modal.ebok .art-modal-close{position:absolute;top:12px;right:12px;z-index:3;border-color:#3D4145;background:rgba(22,27,34,.85);color:#F2EEE6}
+dialog.art-modal.ebok .art-modal-close:hover{background:#C4915C;color:#161B22}
+dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
+.eb-cover{position:relative;overflow:hidden;background:#161B22;color:#F2EEE6;padding:64px 28px 40px 64px;min-height:360px;display:flex;flex-direction:column}
+.eb-cover::before{content:"";position:absolute;left:30px;top:0;width:2px;height:190px;background:#C4915C}
+.eb-cover::after{content:"";position:absolute;left:30.5px;top:204px;bottom:0;width:1px;background:#3D4145}
+.eb-cover .eb-dia{position:absolute;left:25.5px;top:189px;width:11px;height:11px;border:1.5px solid #C4915C;transform:rotate(45deg);background:#161B22}
+.eb-cover .eb-glow{position:absolute;right:-160px;top:-160px;width:440px;height:440px;background:radial-gradient(circle,rgba(70,62,52,.55) 0%,rgba(40,38,38,.2) 45%,rgba(22,27,34,0) 70%);pointer-events:none}
+.eb-cover h2{position:relative;margin:16px 0 0;font-family:"Liberation Serif","Times New Roman",Georgia,serif;font-weight:700;font-size:clamp(28px,5.6vw,42px);line-height:1.15;color:#F2EEE6}
+.eb-cover .eb-sub{margin-top:22px;font-size:17px}
+.eb-cover .eb-foot{margin-top:auto;padding-top:56px}
+.eb-page{padding:34px clamp(20px,6vw,64px) 44px;font-family:"DejaVu Serif",Georgia,serif;font-size:16px;line-height:1.65;color:#1C1C1C}
+.eb-page h3{font-family:"DejaVu Serif",Georgia,serif;font-size:24px;line-height:1.3;margin:0 0 20px;color:#1A1A1A}
+.eb-page h4{font-family:"DejaVu Serif",Georgia,serif;font-size:19px;line-height:1.35;color:#C4915C;margin:30px 0 10px}
+.eb-page h5{font-family:"DejaVu Serif",Georgia,serif;font-size:16.5px;font-style:italic;font-weight:700;margin:22px 0 8px;color:#1A1A1A}
+.eb-page p{margin:0 0 14px}
+.eb-page .lead{font-style:italic}
+.eb-page .meta{font-style:italic;color:#C4915C;margin-bottom:22px}
+.eb-page a{color:#A8743F;text-decoration:none;border-bottom:1px solid #D9BC9C}
+.eb-page ul,.eb-page ol{margin:0 0 14px;padding-left:28px}
+.eb-page li{margin:0 0 8px}
+.eb-page ul li::marker{content:"●  ";font-size:13px}
+.eb-page ol li::marker{font-weight:700;color:#C4915C}
+.eb-page hr{border:0;border-top:1px solid #C4915C;width:80px;margin:30px 0 18px}
+.eb-page .bio{font-style:italic}
+.eb-flow{margin:8px 0 22px;display:flex;flex-direction:column;align-items:stretch;text-align:center;font-size:14.5px;line-height:1.45}
+.eb-flow .box{border:1px solid #9A9A9A;background:#F0F0F0;padding:8px 12px}
+.eb-flow .box b{display:block;text-transform:uppercase}
+.eb-flow .box.end{background:#EDDCC8}
+.eb-flow .arrow{color:#9A9A9A;font-size:18px;line-height:1.2;padding:2px 0}
+.eb-flow .step{color:#777;font-style:italic;font-size:13.5px;padding-bottom:4px}
+.eb-table{overflow-x:auto;margin:6px 0 22px}
+.eb-table table{border-collapse:collapse;width:100%;min-width:600px;font-size:13.5px;line-height:1.45}
+.eb-table th{background:#3A3A3A;color:#FFF;text-align:left;vertical-align:top;padding:9px 10px;border:1px solid #3A3A3A}
+.eb-table td{vertical-align:top;padding:9px 10px;border:1px solid #9A9A9A}
+.eb-check{margin:0 0 16px}
+.eb-check .q{margin:14px 0 4px;font-size:16px}
+.eb-check .q::before{content:"☐";margin-right:10px;color:#1A1A1A}
+.eb-check .q b{margin-right:4px}
+.eb-check p.sub{margin:0 0 4px 30px;font-size:14.5px}
+.eb-page .kann{font-style:italic;font-size:14.5px}
+.eb-dl{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px;padding-top:18px;border-top:1px solid #E3DED6}
+.eb-dl .eb-btn{color:#161B22}
+.eb-dl .eb-btn.ghost{color:#A8743F}
+.eb-band{background:#3A3A3A;color:#FFF;font-weight:700;padding:6px 10px;margin:28px 0 4px;font-size:15.5px;line-height:1.35}
 .art-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
 .art-tag{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:600}
 </style>
@@ -1195,13 +1262,49 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
           </div>
         </div>
         <div id="pod-blog-dynamic"></div>
-        <article class="course" style="margin-top:24px" aria-labelledby="art-mit-namn">
-          <p class="course-kicker">Blogg &amp; debattartikel</p>
-          <h4 id="art-mit-namn">Vi har gett fenomenet ett namn – nu måste samhället lära sig se det</h4>
-          <p class="course-sub">Av Billy Ljungberg och Jeanette Johansson</p>
-          <p>Det finns i dag inget etablerat begrepp i Sverige för det som händer med en människa när varje ord vänds emot henne i mötet med barnavården. Vi föreslår ett: myndighetsinducerat trauma.</p>
-          <button type="button" class="art-open-btn" data-open-modal="art-modal-mit">Läs hela artikeln <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M10 14L21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></button>
-        </article>
+        <div class="eb-list" id="blogg-texter">
+          <article class="eb-card" aria-labelledby="eb-c-pastoral">
+            <span class="eb-glow"></span><span class="eb-dia"></span>
+            <p class="eb-kicker">Ett fördjupningskapitel</p>
+            <h4 id="eb-c-pastoral">Den pastorala apparaten <em>&amp;</em> barnet som <em>verksamhetskapital</em></h4>
+            <p class="eb-sub">Om pastoralmakt, avsubjektifiering och myndighetsinducerat trauma hos barnet</p>
+            <p class="eb-teaser">Inom den samtida välfärdsbyråkratin har maktutövningen genomgått en grundläggande metamorfos.</p>
+            <div class="eb-foot">
+              <span class="eb-authors">Billy Ljungberg &amp; Jeanette Johansson</span>
+              <div class="eb-actions">
+                <button type="button" class="eb-btn" data-open-modal="art-modal-pastoral">Läs kapitlet</button>
+                <a class="eb-btn ghost" href="texter/den-pastorala-apparaten.pdf" download>PDF</a>
+              </div>
+            </div>
+          </article>
+          <article class="eb-card" aria-labelledby="eb-c-debatt">
+            <span class="eb-glow"></span><span class="eb-dia"></span>
+            <p class="eb-kicker">Debattartikel</p>
+            <h4 id="eb-c-debatt">Vi har gett fenomenet ett namn&nbsp;<em>–</em> nu måste samhället <em>lära sig se det</em></h4>
+            <p class="eb-teaser">Föreställ dig att du är förälder. En dag knackar det på dörren.</p>
+            <div class="eb-foot">
+              <span class="eb-authors">Billy Ljungberg &amp; Jeanette Johansson</span>
+              <div class="eb-actions">
+                <button type="button" class="eb-btn" data-open-modal="art-modal-mit">Läs artikeln</button>
+                <a class="eb-btn ghost" href="texter/vi-har-gett-fenomenet-ett-namn.pdf" download>PDF</a>
+              </div>
+            </div>
+          </article>
+          <article class="eb-card" aria-labelledby="eb-c-blogg">
+            <span class="eb-glow"></span><span class="eb-dia"></span>
+            <p class="eb-kicker">Blogginlägg</p>
+            <h4 id="eb-c-blogg">När myndigheten blir det som skadar <em>– om MiT</em></h4>
+            <p class="eb-sub">Nov 19, 2026</p>
+            <p class="eb-teaser">Den här veckan har två nyheter visat samma sak: det som ska skydda oss kan också skada oss.</p>
+            <div class="eb-foot">
+              <span class="eb-authors">Billy Ljungberg</span>
+              <div class="eb-actions">
+                <button type="button" class="eb-btn" data-open-modal="art-modal-blogg-mit">Läs inlägget</button>
+                <a class="eb-btn ghost" href="texter/nar-myndigheten-blir-det-som-skadar.pdf" download>PDF</a>
+              </div>
+            </div>
+          </article>
+        </div>
         <div class="svc-cta"><strong>Vill du vara med?</strong><span>Tipsa om ett ämne eller dela din berättelse.</span><div class="copyrow"><span class="sel" id="poddmail">billy@klattertradet.com</span><button type="button" id="copypodd" class="copybtn">Kopiera adressen</button></div></div>
       </div>
       </details>
@@ -2569,35 +2672,249 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
 })();
 </script>
 
-<dialog class="art-modal" id="art-modal-mit" aria-labelledby="art-modal-title">
-  <div class="art-modal-head">
-    <p class="art-modal-kicker">Blogg &amp; debattartikel</p>
-    <button type="button" class="art-modal-close" data-close-modal="art-modal-mit" aria-label="Stäng artikel">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
+<dialog class="art-modal ebok" id="art-modal-pastoral" aria-labelledby="eb-t-pastoral">
+  <button type="button" class="art-modal-close" data-close-modal="art-modal-pastoral" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="art-modal-body">
+    <header class="eb-cover"><span class="eb-glow"></span><span class="eb-dia"></span>
+      <p class="eb-kicker">Ett fördjupningskapitel</p>
+      <h2 id="eb-t-pastoral">Den pastorala<br>apparaten <em>&amp;</em><br>barnet som <em>verksamhetskapital</em></h2>
+      <p class="eb-sub">Om pastoralmakt, avsubjektifiering och myndighetsinducerat trauma hos barnet</p>
+      <div class="eb-foot"><span class="eb-authors">Billy Ljungberg &amp; Jeanette Johansson</span><span class="eb-label">E-bok</span></div>
+    </header>
+    <article class="eb-page">
+<h3>KAPITEL: Den pastorala apparaten och barnet som verksamhetskapital</h3>
+
+<h4>1. Inledning: Omsorgens totalitära ansikte</h4>
+<p>Inom den samtida välfärdsbyråkratin har maktutövningen genomgått en grundläggande metamorfos. Där staten tidigare uppträdde som en explicit disciplinär eller juridisk domsmakt, framträder den i dag företrädesvis i skepnad av en terapeutisk, omhändertagande och djupt pastoral instans. Denna maktordning – det som med Michel Foucaults begreppsapparat kan förstås som pastoralmakt – hämtar sin legitimitet inte ur rätten att straffa, utan ur plikten att rädda, hela och leda den vilsna själen mot frälsning och anpassning.</p>
+<p>När denna pastorala mekanism appliceras inom socialtjänstens barn- och familjevård uppstår dock en förödande paradox. Under parollen ”barnets bästa” och med FN:s barnkonvention som en juridiskt-retorisk fasad, initieras en process där barnet i realiteten berövas sin ontologiska status som levande mänskligt subjekt. I stället drivs en administrativ, psykologisk och materiell omvandling där barnet systematiskt rekonfigureras till ett mätbart, debiterbart och cirkulerande verksamhetskapital.</p>
+<p>Detta kapitel analyserar hur denna transformation sker i skärningspunkten mellan pastoral maktutövning och myndighetsinducerat trauma (MIT). Genom att dissekera hur barnets röst tystas, hur dess anknytningssystem fragmenteras och hur dess lidande kapitaliseras inom en expanderande vårdindustri, synliggörs den mekanik som förvandlar subjekt till objekt – och hur omsorgens imperativ i praktiken blir ett instrument för institutionellt våld.</p>
+
+<h4>2. Pastoralmaktens metodologi: Det bekännande subjektet</h4>
+<p>Pastoralmakten skiljer sig från suverän makt genom sitt krav på total intimitet. Herden måste inte bara veta var fåren befinner sig fysiskt; herden måste känna varje enskilt fårs inre tankevärld, dess hemligheter, rädslor och svagheter. Inom socialtjänstens utredningspraktik operacionaliseras detta genom det institutionaliserade bekännelsetvånget.</p>
+<h5>Den fabricerade alliansen och det epistemiska övergreppet</h5>
+<p>När ett barn och dess familj dras in i en utredning möts de av en skenbart icke-hotande, stödjande miljö. Samtalsrum inreds med symboler för mjukhet – leksaker, ritblock, mjuka mattor – och handläggaren ikläder sig rollen som den välvillige lyssnaren. Barnet uppmuntras att berätta om sina innersta känslor, konflikter i hemmet och tillfälliga rädslor.</p>
+<p>Här inträffar utredningens första fundamentala svek:</p>
+<ul>
+<li>Barnet förmås tro att samtalet sker i ett konfidentiellt, terapeutiskt rum där sårbarhet belönas med trygghet och förståelse.</li>
+<li>I realiteten är samtalsrummet en administrativ förhörssituation där varje yttrande, tvekan eller teckning fungerar som råmaterial för myndighetens hypotesprövning.</li>
+<li>Barnets autentiska berättelse dekonstrueras och omkodas till standardiserade riskmarkörer i utredningsakten (via system som BBIC). Ett barns naturliga ilska mot en gränssättande förälder journalförs som tecken på ”otrygg anknytning”; en tillfällig oro tolkas som ”systematisk försummelse”.</li>
+</ul>
+<p>Detta utgör ett djupt epistemiskt våld. Barnets egen förståelse av sin livsvärld och sina relationer underkänns. Handläggaren övertar tolkningsföreträdet över barnets själ, varpå barnets faktiska röst ersätts av en institutionellt tillverkad textversion av barnet.</p>
+
+<h4>3. Mekaniken bakom förvandlingen: Från subjekt till objekt</h4>
+<p>För att ett barn ska kunna fungera som verksamhetskapital måste det först avsubjektifieras. Ett unikt mänskligt subjekt – med specifika emotionella band, en historisk kontinuitet och en egen agens – är administrativt svårhanterligt och ekonomiskt trögrörligt. Objektifieringen sker därför längs en deterministisk bana:</p>
+<div class="eb-flow">
+  <div class="box"><b>Levande subjekt</b>Unik livsvärld, relationer, förankring och röst.</div>
+  <div class="arrow">↓</div><div class="step">Fas 1: Textuell rekonstruktion</div>
+  <div class="box"><b>Textuellt objekt</b>Journalfört symtomkluster, riskkatalog och patologiserad akt.</div>
+  <div class="arrow">↓</div><div class="step">Fas 2: Administrativ inventarie</div>
+  <div class="box"><b>Placeringsbar enhet</b>Vårdtyngdsklassning, avtalsmatchning och logistisk resurs.</div>
+  <div class="arrow">↓</div><div class="step">Fas 3: Monetarisering &amp; Cirkulation</div>
+  <div class="box end"><b>Verksamhetskapital</b>Genererar dygnstaxor, säkrar förvaltningsbudgetar och expanderar vårdmarknaden.</div>
+</div>
+<h5>Fas 1: Textuell rekonstruktion och patologisering</h5>
+<p>Barnet reduceras till de problem det antas bära på. Genom ett selektivt urval av negativa observationer skapas en bild av ett barn i akut behov av extern intervention. Alla friskfaktorer, resurser i familjen och nätverkets skyddande förmåga tonas ned eller skrivs bort, eftersom de hotar utredningens pastorala narrativ om det nödvändiga räddandet.</p>
+<h5>Fas 2: Standardisering och logistisk abstraktion</h5>
+<p>När barnet har reducerats till en textuell diagnos- och riskprofil förlorar det sin relationella förankring. Det blir en ”ärendeenhet” som kan flyttas, fördelas och upphandlas. I stället för att fråga ”Hur mår detta specifika barn av att ryckas upp från sin skola och sina syskon?” ställer byråkratin frågan: ”Var finns en ledig plats som matchar upphandlat ramavtal och beslutad vårdnivå?”</p>
+<h5>Fas 3: Fullbordan som verksamhetskapital</h5>
+<p>När barnet skiljs från sitt sammanhang och placeras i en extern vårdform fullbordas dess status som verksamhetskapital. Barnet är inte längre enbart en medborgare med rättigheter; det är nu en ekonomisk och administrativ tillgång som:</p>
+<ul>
+<li>Motiverar och säkrar socialförvaltningens årliga budgetallokeringar och personaldimensionering.</li>
+<li>Skapar intäkter för privata aktörer (konsulentstödda familjehemsföretag, HVB-hem, utredningshem) med dygnskostnader som ofta spänner mellan 6 000 och 25 000 kronor per dygn.</li>
+<li>Upprätthåller en massiv kringapparat av konsulter, jurister, särskilda förordnade vårdnadshavare, handledare och tillsynstjänstemän.</li>
+</ul>
+
+<h4>4. Det myndighetsinducerade traumat (MIT) hos barnet</h4>
+<p>När barnet hanteras som ett pastoralt objekt genereras en specifik traumaprofil som fundamentalt skiljer sig från vanligt relationellt trauma. Inom MIT-teorin identifieras skador som uppstår direkt ur myndighetens procedurer, maktutövning och institutionella svek.</p>
+<h5>1. Det akuta ingreppstraumat (Hämtningen)</h5>
+<p>Oavsett om hämtningen sker i skolan med hjälp av civilklädd polis eller genom en plötslig separation i hemmet under förespegling av "ett kort besök", registreras händelsen i barnets nervsystem som en existentiell katastrof. Den pastorala ambitionen att göra ingreppet "lugnt och odramatiskt" förstärker ofta chocken: vuxenvärlden ler och talar med mild röst samtidigt som den fysiskt avlägsnar barnet från dess trygghetsbas. Detta skapar en kognitiv och fysiologisk kortslutning som ofta slungar barnet rakt in i en massiv dorsal vagus-aktivering (frysrespons, dissociation och paralys).</p>
+<h5>2. Den relationella amputationens trauma</h5>
+<p>Genom att placera barnet i en främmande miljö och införa restriktioner för kontakt med föräldrar och anhöriga ("umgängesbegränsning"), skärs barnets anknytningslinjer brutalt av.</p>
+<ul>
+<li>Barnet berövas sin spegling, sin historia och sin biologiska kontext.</li>
+<li>När barnet reagerar på denna förlust med sorg, förtvivlan eller raseri, tolkas reaktionen inte som sund sorgbearbetning, utan som bevis på hur djupt stört barnet var redan innan omhändertagandet.</li>
+<li>Systemet applicerar här en förödande cirkelargumentation: reaktionen på institutionens våld används som bevis för att institutionens våld var nödvändigt.</li>
+</ul>
+<h5>3. Den strukturella gaslightingen och den falska självbilden</h5>
+<p>Barnet tvingas navigera i en verklighet där dess egna sinnesintryck ständigt förnekas. Myndighetspersoner och institutionspersonal upprepar att placeringen sker "för din egen skull", samtidigt som barnet upplever en total inre fragmentering.</p>
+<p>För att överleva i den pastorala miljön utvecklar barnet ofta en patologisk anpassning – en institutionell persona. Barnet blir överdrivet medgörligt, svarar vad personalen vill höra och undertrycker sina egna behov. Detta tolkas av socialsekreteraren som "positiv utveckling och framsteg i vården", medan det i verkligheten rör sig om en djup traumatisk dissociation och uppgivenhet.</p>
+
+<h4>5. Barnkonventionen som retorisk kuliss</h4>
+<p>Inkorporeringen av FN:s barnkonvention i svensk lagstiftning var tänkt att stärka barnets ställning som självständigt rättssubjekt. Inom den pastorala maktapparaten har konventionen emellertid i stor utsträckning förvandlats till en legitimerande kuliss – en språklig fernissa som döljer och rättfärdigar barnets transformation till verksamhetskapital.</p>
+<div class="eb-table"><table>
+<thead><tr><th>Artikel i Barnkonventionen</th><th>Folkrättslig intention (Subjekt)</th><th>Pastoral/ Byråkratisk tillämpning (Objekt)</th><th>MIT-konsekvens</th></tr></thead>
+<tbody>
+<tr><td>Artikel 12 (Rätten att bli hörd)</td><td>Barnets autentiska vilja ska inhämtas, respekteras och tillmätas verklig juridisk tyngd.</td><td>Rätten att bli hörd reduceras till ett obligatoriskt "alibi-samtal". Barnets åsikter filtreras selektivt: medhåll används som bevis, motstånd avfärdas som föräldrapåverkan eller bristande mognad.</td><td>Epistemisk alienation: Barnet erfar att dess ord saknar reell betydelse, vilket skapar kronisk vanmakt och tystnad.</td></tr>
+<tr><td>Artikel 3 (Barnets bästa)</td><td>Ett materiellt skydd mot godtyckliga ingrepp; åtgärder måste bevisas vara proportionerliga och gynnsamma.</td><td>Ett tomt, flexibelt begrepp som myndigheten ensidigt definierar för att legitimera budgetallokeringar, placeringar och administrativa beslut.</td><td>Institutionellt svek: Barnet utsätts för övergrepp i "omsorgens och godhetens" namn, vilket avväpnar dess försvarsmekanismer.</td></tr>
+<tr><td>Artikel 9 (Skydd mot separation)</td><td>Familjen är barnets grundläggande miljö. Separation är en extrem sista utväg efter att alla stödinsatser i hemmet uttömts.</td><td>Separation väljs rutinmässigt framför hemmabaserade insatser eftersom placeringar är administrativt enklare att standardisera och skapar tydligare verksamhetsvolym.</td><td>Anknytningstrauma: Barnets primära relationer kapas, vilket leder till fragmentering av självbilden och otrygghet.</td></tr>
+<tr><td>Artikel 8 (Rätten till identitet)</td><td>Skydd för barnets namn, släktband, kultur och relationella historia.</td><td>Barnets relationer till ursprungsfamilj, släkt och social miljö minimeras genom administrativa restriktioner för att tvinga fram lojalitet mot den nya vårdmiljön.</td><td>Identitetsupplösning: Barnet berövas sin historia och reduceras till en lösryckt modul i vårdapparaten.</td></tr>
+</tbody></table></div>
+
+<h4>6. Den självreproducerande cirkeln: Hur MIT föder nytt kapital</h4>
+<p>Det mest destruktiva draget i den pastorala vårdapparaten är dess förmåga till självgenerering. Genom att utsätta barnet för myndighetsinducerat trauma producerar systemet kontinuerligt det tillstånd av psykisk och social instabilitet som krävs för att motivera sin egen fortsatta existens och expansion.</p>
+<div class="eb-flow">
+  <div class="box"><b>1. Initial intervention</b>Mindre eller måttlig problematik tolkas pastoralt. Familjen definieras som dysfunktionell. Barnet görs till skyddsobjekt.</div>
+  <div class="arrow">↓</div>
+  <div class="box"><b>2. Avsubjektifiering &amp; placering</b>Barnet omvandlas till placeringsbar enhet. Flyttas till extern vård. Dygnstaxor börjar ticka. Barnet etableras som verksamhetskapital.</div>
+  <div class="arrow">↓</div>
+  <div class="box"><b>3. Utveckling av MIT-symtom</b>Separationen och objektifieringen skapar trauma: självskada, rymningar, utagerande, panikångest, djup depression eller dissociation.</div>
+  <div class="arrow">↓</div>
+  <div class="box"><b>4. Cirkulärt rättfärdigande &amp; eskalering</b>Symtomen tolkas som "bevis på ursprunglig skada". Vårdnivån höjs (HVB → SiS). Dygnskostnaden ökar. Verksamhetskapitalet expanderar.</div>
+  <div class="arrow">↓</div><div class="step">(Reproduktion över tid)</div>
+  <div class="box end"><b>5. Den permanenta klienten</b>Barnet skrivs ut som vuxen med krossad tillit och komplext trauma. Kliver direkt in i vuxenpsykiatrins och socialtjänstens system.</div>
+</div>
+<p>När ett barn till slut lämnar den sociala barnavården vid 18 eller 21 års ålder har det ofta genomgått en mångårig institutionskarriär. De skador som barnet bär med sig är sällan enbart de problem som en gång föranledde den första orosanmälan; de är i stället produkten av det myndighetsinducerade traumat – den långsamma, metodiska förvandlingen från ett levande mänskligt subjekt till en förbrukad enhet av verksamhetskapital.</p>
+
+<h3 style="margin-top:40px">ANALYSSCHEMA: Från subjekt till verksamhetskapital</h3>
+<p class="lead">Detta analysschema är utformat som ett metodologiskt och kritiskt granskningsverktyg för att identifiera, kartlägga och analysera hur pastoral makt och avsubjektifiering opererar i enskilda socialutredningar, domstolshandlingar och vårdprocesser.</p>
+
+<div class="eb-band">NIVÅ 1: DISKURSIV OCH RETORISK NIVÅ (Den pastorala fasaden)</div>
+<p class="kann">Kännetecken: Hur språket används för att etablera godhet, dölja maktasymmetrier och oskadliggöra kritik.</p>
+<div class="eb-check">
+  <p class="q"><b>1.1</b> Terapeutisk skenallians</p>
+  <p class="sub">– Framställs utredningen som "stöd och hjälp" trots att den sker under latent hot om tvång?</p>
+  <p class="sub">– Används bekännelser och öppna svar från klienten senare som bevisunderlag mot familjen?</p>
+  <p class="q"><b>1.2</b> Retoriskt beslagtagande av "Barnets bästa"</p>
+  <p class="sub">– Används begreppet "barnets bästa" som ett allmänt svepskäl utan konkret riskanalys?</p>
+  <p class="sub">– Saknas en proportionalitetsbedömning av hur själva ingreppet (separationen) skadar barnet?</p>
+  <p class="q"><b>1.3</b> Barnkonventionen som alibi</p>
+  <p class="sub">– Refereras Barnkonventionen mekaniskt (t.ex. art. 3 och 12) samtidigt som barnets explicita vilja ignoreras i sakbeslutet?</p>
+</div>
+
+<div class="eb-band">NIVÅ 2: DEN EPISTEMISKA OCH TEXTUELLA NIVÅN (Objektifieringen)</div>
+<p class="kann">Kännetecken: Hur barnets personlighet och subjektivitet raderas i det administrativa materialet.</p>
+<div class="eb-check">
+  <p class="q"><b>2.1</b> Filtrering och devalvering av barnets röst (Art. 12-brott)</p>
+  <p class="sub">– Avfärdas barnets önskan om att bo kvar/ha kontakt med föräldrar som "lojalitetskonflikt", "medberoende" eller "påverkan"?</p>
+  <p class="sub">– Tillmäts barnets utsagor endast värde när de bekräftar socialtjänstens förutbestämda hypotes?</p>
+  <p class="q"><b>2.2</b> Patologiserande kodning (Från reaktion till defekt)</p>
+  <p class="sub">– Beskrivs barnets naturliga kris- och separationsreaktioner som inneboende psykiatriska symtom eller personlighetsstörningar hos barnet?</p>
+  <p class="sub">– Skrivs resurser, nätverk och fungerande skyddsfaktorer systematiskt bort ur utredningsakten?</p>
+  <p class="q"><b>2.3</b> Administrativ fixering</p>
+  <p class="sub">– Konstrueras en "pappersperson" i akterna som markant avviker från barnets faktiska fungerande i vardagen utanför myndighetens blick?</p>
+</div>
+
+<div class="eb-band">NIVÅ 3: DEN STRUKTURELLA OCH EKONOMISKA NIVÅN (Kapitaliseringen)</div>
+<p class="kann">Kännetecken: Hur barnet hanteras som en resurs, logistisk modul och ekonomisk drivkraft.</p>
+<div class="eb-check">
+  <p class="q"><b>3.1</b> Prissättning via vårdtyngd</p>
+  <p class="sub">– Används en förhöjd problembeskrivning för att motivera en högre placeringsnivå och därmed en högre dygnstaxa hos privat utförare/konsulentbolag?</p>
+  <p class="sub">– Finns ekonomiska incitament för vårdgivaren att behålla barnet genom att upprätthålla bilden av barnet som "icke-rehabiliterat"?</p>
+  <p class="q"><b>3.2</b> Logistisk utbytbarhet</p>
+  <p class="sub">– Flyttas barnet mellan jourhem, utredningshem och HVB utifrån avtal, platstillgång och kommunens budgethänsyn snarare än barnets anknytningsbehov?</p>
+  <p class="sub">– Behandlas relationer till syskon, skola och biologiskt nätverk som sekundära eller umbärliga?</p>
+  <p class="q"><b>3.3</b> Institutionell självlegitimering</p>
+  <p class="sub">– Motiveras förlängda insatser med symtom som i själva verket har orsakats av tidigare placeringar och myndighetsingripanden (den cirkulära reproduktionen)?</p>
+</div>
+
+<div class="eb-band">NIVÅ 4: DEN KLINISKA MIT-NIVÅN (Traumatiseringsgraden)</div>
+<p class="kann">Kännetecken: De fysiologiska och psykologiska skadorna som uppstår av själva systemutövningen.</p>
+<div class="eb-check">
+  <p class="q"><b>4.1</b> Ingreppschock och akut dissociation</p>
+  <p class="sub">– Förekomst av dorsal vagus-kollaps (frys/uppgivenhet) vid hämtning eller akuta beslut?</p>
+  <p class="sub">– Misstolkas barnets dissociation/tystnad som att det "funnit ro" i placeringen?</p>
+  <p class="q"><b>4.2</b> Strukturell gaslighting och fragmentering</p>
+  <p class="sub">– Uppvisar barnet förvirring kring vad som är sant gällande sin familj och sin egen historia?</p>
+  <p class="sub">– Har barnet tvingats utveckla en falsk, överanpassad anstalts-/institutionspersona?</p>
+  <p class="q"><b>4.3</b> Myndighetsfobi och kronisk hypervigilans</p>
+  <p class="sub">– Uppvisar barnet panikresponser vid kontakt med socialsekreterare, officiella lokaler, myndighetspost eller rättsliga miljöer?</p>
+</div>
+
+      <div class="eb-dl"><a class="eb-btn" href="texter/den-pastorala-apparaten.pdf" download>Ladda ner som PDF</a><button type="button" class="eb-btn ghost" data-close-modal="art-modal-pastoral">Stäng</button></div>
+    </article>
   </div>
-  <article class="art-modal-body">
-    <h2 id="art-modal-title">Vi har gett fenomenet ett namn – nu måste samhället lära sig se det</h2>
-    <p class="art-modal-byline">Av Billy Ljungberg och Jeanette Johansson</p>
-    <p>Föreställ dig att du är förälder. En dag knackar det på dörren. Ett larm har kommit in, kanske anonymt, kanske grundat i missförstånd. Du gör allt du kan för att förklara, för att samarbeta, för att visa att du älskar ditt barn. Men varje ord du säger vänds emot dig. Din oro tolkas som aggressivitet. Din sorg tolkas som instabilitet. Ju mer du protesterar, desto mer ”bekräftas” bilden av dig som problemet.</p>
-    <p>Det finns i dag inget etablerat begrepp i Sverige för det som händer med en människa i den situationen. Vi föreslår ett: myndighetsinducerat trauma.</p>
-    <p>Vi är själva drabbade – men det här är inte en text om vår egen historia. Det är en text om ett mönster vi tror att alldeles för många känner igen, och som forskningen ännu inte gett ett namn på i svensk kontext.</p>
-    <h3>Ett tomrum i kunskapen</h3>
-    <p>Trauma orsakat av människor vi litar på är sedan länge beskrivet i internationell forskning. Begreppet institutionellt svek (institutional betrayal), format av psykologen Jennifer Freyd, beskriver hur institutioner som borde skydda i stället skadar dem som är beroende av dem. Nyare studier om tidigare familjehemsplacerade barn visar hur institutionella system kan återaktivera och förvärra trauma hos dem de är satta att hjälpa.</p>
-    <p>Vad som saknas är motsvarande uppmärksamhet på föräldrars upplevelser i den svenska barnavården – och en modell för hur skadan byggs upp, steg för steg, över tid.</p>
-    <p>Det är inte heller en okänd mekanism att utredare omedvetet söker information som bekräftar en redan formad misstanke, snarare än att pröva den. Den brittiska forskaren Eileen Munro visade redan 1999, i en genomgång av 45 offentliga utredningar av misslyckanden inom barnavården, hur just detta resonemangsfel återkommer systematiskt. Hennes arbete låg senare till grund för en statlig översyn av hela det brittiska barnskyddssystemet. Motsvarande kritiska granskning av hur bekräftelsebias påverkar svenska utredningar lyser med sin frånvaro.</p>
-    <p>Även anknytningsforskningen ger oss viktiga pusselbitar. Sedan John Bowlbys och Mary Ainsworths grundläggande arbeten har det varit känt att en separation mellan barn och förälder skadar anknytningen – det gäller oavsett hur välmenande separationen är. Ju längre och mer utdragen separationen blir, desto djupare blir skadan, för både barn och förälder.</p>
-    <p>Det är inte en åsikt. Det är etablerad utvecklingspsykologi. Ändå behandlas ofta långa utredningstider och upprepade, förlängda placeringar som en administrativ fråga snarare än som något som i sig orsakar bestående skada.</p>
-    <h3>Namnet är inte det viktiga – processen är det</h3>
-    <p>Myndighetsinducerat trauma beskriver en kumulativ process: en serie steg som var för sig kan se rimliga eller till och med nödvändiga ut, men som tillsammans bryter ner en människas autonomi, tillit och förmåga att bli trodd. Ett avgörande vändpunkt i den processen är när förälderns fullt rimliga reaktion på en genomgripande orättvisa – ilska, sorg, förtvivlan – själv börjar användas som bevis för att ingripandet var befogat. Cirkeln sluts. Det finns ingen giltig reaktion kvar att ha.</p>
-    <p>Att en sådan cirkel kan uppstå säger ingenting om enskilda handläggares goda vilja. De allra flesta som arbetar inom socialtjänsten gör det av rätt skäl, under hög arbetsbelastning och med begränsade resurser. Problemet vi pekar på är strukturellt: en riskbedömningskultur som är byggd för att upptäcka fara, men som saknar tillräckliga mekanismer för att upptäcka sina egna feltolkningar.</p>
-    <h3>Varför ett namn spelar roll</h3>
-    <p>Att sätta ord på en skada är ofta det första steget mot att kunna bemöta den. Så var det med gaslighting. Så var det med institutionellt svek. Innan de begreppen fanns riskerade den som upplevde fenomenet att tro att felet låg hos dem själva – att deras reaktion var problemet, inte det de reagerade på.</p>
-    <p>Vi menar att svensk barnavård behöver en motsvarande vokabulär. Inte för att svartmåla en hel yrkeskår, utan för att ge både utsatta föräldrar och ansvariga myndigheter ett gemensamt språk för att identifiera, diskutera och i förlängningen förebygga en skada som i dag går obenämnd.</p>
-    <p>Det kräver konkret uppföljning: oberoende granskning av hur bekräftelsebias påverkar svenska barnavårdsutredningar, utbildningsinsatser i riskbedömning som aktivt tränar handläggare i att söka motbevis, och en systematisk kartläggning av hur många föräldrar som upplever den process vi beskriver.</p>
-    <p>Vi har gett fenomenet ett namn. Nu är det samhällets tur att lära sig se det.</p>
-    <p class="art-modal-foot"><em>Billy Ljungberg och Jeanette Johansson är författare till boken ”Myndighetsinducerat trauma – Från subjekt till objekt”, där teorin och dess sju-stegsprocess beskrivs i sin helhet.</em></p>
-  </article>
+</dialog>
+<dialog class="art-modal ebok" id="art-modal-mit" aria-labelledby="art-modal-title">
+  <button type="button" class="art-modal-close" data-close-modal="art-modal-mit" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="art-modal-body">
+    <header class="eb-cover"><span class="eb-glow"></span><span class="eb-dia"></span>
+      <p class="eb-kicker">Debattartikel</p>
+      <h2 id="art-modal-title">Vi har gett fenomenet ett namn&nbsp;<em>–</em><br>nu måste samhället<br><em>lära sig se det</em></h2>
+      
+      <div class="eb-foot"><span class="eb-authors">Billy Ljungberg &amp; Jeanette Johansson</span><span class="eb-label">Debatt</span></div>
+    </header>
+    <article class="eb-page">
+<h3>Vi har gett fenomenet ett namn – nu måste samhället lära sig se det</h3>
+
+<p>Föreställ dig att du är förälder. En dag knackar det på dörren. Ett larm har kommit in, kanske anonymt, kanske grundat i missförstånd. Du gör allt du kan för att förklara, för att samarbeta, för att visa att du älskar ditt barn. Men varje ord du säger vänds emot dig. Din oro tolkas som aggressivitet. Din sorg tolkas som instabilitet. Ju mer du protesterar, desto mer “bekräftas” bilden av dig som problemet.</p>
+<p>Det finns i dag inget etablerat begrepp i Sverige för det som händer med en människa i den situationen. Vi föreslår ett: <strong>myndighetsinducerat trauma.</strong></p>
+<p>Vi är själva drabbade – men det här är inte en text om vår egen historia. Det är en text om ett mönster vi tror att alldeles för många känner igen, och som forskningen ännu inte gett ett namn på i svensk kontext.</p>
+
+<h4>Ett tomrum i kunskapen</h4>
+<p>Trauma orsakat av människor vi litar på är sedan länge beskrivet i internationell forskning. Begreppet institutionellt svek (<em>institutional betrayal</em>), format av psykologen Jennifer Freyd, beskriver hur institutioner som borde skydda i stället skadar dem som är beroende av dem. Nyare studier om tidigare familjehemsplacerade barn visar hur institutionella system kan återaktivera och förvärra trauma hos dem de är satta att hjälpa.</p>
+<p>Vad som saknas är motsvarande uppmärksamhet på <strong>föräldrars</strong> upplevelser i den svenska barnavården – och en modell för hur skadan byggs upp, steg för steg, över tid.</p>
+<p>Det är inte heller en okänd mekanism att utredare omedvetet söker information som bekräftar en redan formad misstanke, snarare än att pröva den. Den brittiska forskaren Eileen Munro visade redan 1999, i en genomgång av 45 offentliga utredningar av misslyckanden inom barnavården, hur just detta resonemangsfel återkommer systematiskt. Hennes arbete låg senare till grund för en statlig översyn av hela det brittiska barnskyddssystemet. Motsvarande kritiska granskning av hur bekräftelsebias påverkar svenska utredningar lyser med sin frånvaro.</p>
+<p>Även anknytningsforskningen ger oss viktiga pusselbitar. Sedan John Bowlbys och Mary Ainsworths grundläggande arbeten har det varit känt att en separation mellan barn och förälder skadar anknytningen – det gäller oavsett hur välmenande separationen är. Ju längre och mer utdragen separationen blir, desto djupare blir skadan, för både barn och förälder.</p>
+<p>Det är inte en åsikt. Det är etablerad utvecklingspsykologi. Ändå behandlas ofta långa utredningstider och upprepade, förlängda placeringar som en administrativ fråga snarare än som något som i sig orsakar bestående skada.</p>
+
+<h4>Namnet är inte det viktiga – processen är det</h4>
+<p>Myndighetsinducerat trauma beskriver en kumulativ process: en serie steg som var för sig kan se rimliga eller till och med nödvändiga ut, men som tillsammans bryter ner en människas autonomi, tillit och förmåga att bli trodd. Ett avgörande vändpunkt i den processen är när förälderns fullt rimliga reaktion på en genomgripande orättvisa – ilska, sorg, förtvivlan – själv börjar användas som bevis för att ingripandet var befogat. Cirkeln sluts. Det finns ingen giltig reaktion kvar att ha.</p>
+<p>Att en sådan cirkel kan uppstå säger ingenting om enskilda handläggares goda vilja. De allra flesta som arbetar inom socialtjänsten gör det av rätt skäl, under hög arbetsbelastning och med begränsade resurser. Problemet vi pekar på är strukturellt: en riskbedömningskultur som är byggd för att upptäcka fara, men som saknar tillräckliga mekanismer för att upptäcka sina egna feltolkningar.</p>
+
+<h4>Varför ett namn spelar roll</h4>
+<p>Att sätta ord på en skada är ofta det första steget mot att kunna bemöta den. Så var det med <em>gaslighting</em>. Så var det med <em>institutionellt svek</em>. Innan de begreppen fanns riskerade den som upplevde fenomenet att tro att felet låg hos dem själva – att deras reaktion var problemet, inte det de reagerade på.</p>
+<p>Vi menar att svensk barnavård behöver en motsvarande vokabulär. Inte för att svartmåla en hel yrkeskår, utan för att ge både utsatta föräldrar och ansvariga myndigheter ett gemensamt språk för att identifiera, diskutera och i förlängningen förebygga en skada som i dag går obenämnd.</p>
+<p>Det kräver konkret uppföljning: oberoende granskning av hur bekräftelsebias påverkar svenska barnavårdsutredningar, utbildningsinsatser i riskbedömning som aktivt tränar handläggare i att söka motbevis, och en systematisk kartläggning av hur många föräldrar som upplever den process vi beskriver.</p>
+<p>Vi har gett fenomenet ett namn. Nu är det samhällets tur att lära sig se det.</p>
+
+<hr>
+<p class="bio">Billy Ljungberg och Jeanette Johansson är författare till boken “Myndighetsinducerat trauma – Från subjekt till objekt”, där teorin och dess sju-stegsprocess beskrivs i sin helhet.</p>
+      <div class="eb-dl"><a class="eb-btn" href="texter/vi-har-gett-fenomenet-ett-namn.pdf" download>Ladda ner som PDF</a><button type="button" class="eb-btn ghost" data-close-modal="art-modal-mit">Stäng</button></div>
+    </article>
+  </div>
+</dialog>
+<dialog class="art-modal ebok" id="art-modal-blogg-mit" aria-labelledby="eb-t-blogg">
+  <button type="button" class="art-modal-close" data-close-modal="art-modal-blogg-mit" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="art-modal-body">
+    <header class="eb-cover"><span class="eb-glow"></span><span class="eb-dia"></span>
+      <p class="eb-kicker">Blogginlägg</p>
+      <h2 id="eb-t-blogg">När myndigheten blir<br>det som skadar <em>– om MiT</em></h2>
+      <p class="eb-sub">Nov 19, 2026</p>
+      <div class="eb-foot"><span class="eb-authors">Billy Ljungberg</span><span class="eb-label">Blogg</span></div>
+    </header>
+    <article class="eb-page">
+<h3>När myndigheten blir det som skadar – om MiT</h3>
+<p class="meta">Nov 19, 2026 · Billy Ljungberg</p>
+
+<p class="lead">Den här veckan har två nyheter visat samma sak: det som ska skydda oss kan också skada oss. En pappa i Örebro berättar att han pressades att svika sitt barns mamma. En kommunpolitiker i Alvesta medger att människor har slutat våga söka hjälp. Det jag kallar myndighetsinducerat trauma, MiT, finns i båda historierna.</p>
+
+<h4>Vad är MiT?</h4>
+<p>Myndighetsinducerat trauma är skadan som kan uppstå när du är beroende av en myndighet som du inte kan påverka. Det kan vara socialtjänsten, Försäkringskassan eller en domstol. Varje beslut går kanske att försvara på papperet. Men tillsammans drar de åt, långsamt.</p>
+<p>Jag brukar beskriva det som en anakonda. Den biter inte. Den kramar lite hårdare varje gång du andas ut. Du slutar ifrågasätta, du anpassar dig och du säger det du tror att handläggaren vill höra. Till slut handlar allt om att överleva processen.</p>
+
+<h4>Fallet Malin: pappan som fick välja sida</h4>
+<p>I SVT:s Uppdrag granskning berättar pappan till "Leo" om sonen, som omhändertogs av socialtjänsten i Örebro när han var tre dagar gammal. Omhändertagandet byggde på en felaktig uppgift i mammans journal. Felet rättades, men socialtjänsten ändrade sig inte. Pappan säger att han ställdes inför ett val. Han kunde hålla med om bilden av Malin som olämplig förälder. Annars riskerade han att sonen placerades hos främlingar. (<a href="https://www.svt.se/nyheter/granskning/ug/pappan-jag-pressades-att-baktala-malin-nar-var-son-omhandertogs">SVT, 18 nov 2026</a>)</p>
+<p>Hans advokat menar att mönstret är strukturellt. Anonyma socialsekreterare i Örebro beskriver en kultur där man letar efter fel när beslutet väl är fattat. En av dem kallar det nästan ett krig mot föräldrar.</p>
+<p>Här syns MiT tydligt. Skadan drabbar inte bara den som pekas ut. Den drabbar också den som tvingas säga emot det han vet är sant, för att få behålla sitt barn. Tvångsvården hävdes efter två år. Frågan är vad de två åren gjorde med familjen.</p>
+
+<h4>Alvesta: när människor slutar våga söka hjälp</h4>
+<p>Samma dag skriver kommunstyrelsens ordförande i Alvesta, Claudia Crowley Sörensson (M), i Smålandsposten att kommunen måste ta kritiken mot socialtjänsten på allvar och bygga upp förtroendet igen. (<a href="https://smp.se/debatt/nar-manniskor-inte-langre-vagar-soka-hjalp-har-vi-misslyckats">Smålandsposten, 19 nov 2026</a>)</p>
+<p>Texten skrivs efter en höst av granskningar. Tidigare medarbetare beskriver hög personalomsättning och en organisation i kris. (<a href="https://www.smp.se/tidigare-anstalld-en-trasig-organisation-motte-nya-pa-socialen/">Smålandsposten</a>)</p>
+<p>Rubriken säger något viktigt. När människor inte längre vågar söka hjälp har MiT spridit sig från individen till hela samhället. Rädslan för myndigheten blir större än rädslan för problemet. Det är så anakondan fungerar på kollektiv nivå.</p>
+
+<h4>Känner du igen dig?</h4>
+<p>Du är inte ensam, och du är inte svag. Det här är några saker som brukar hjälpa:</p>
+<ol>
+<li><strong>Dokumentera allt.</strong> Skriv ner datum, namn och vad som sades direkt efter varje kontakt.</li>
+<li><strong>Begär ut dina handlingar.</strong> Du har rätt att läsa vad som står om dig. Fel i journaler och utredningar går att rätta, men bara om du vet att de finns.</li>
+<li><strong>Ta med någon.</strong> Ett ombud, en vän eller en stödperson gör det svårare att bli överkörd.</li>
+<li><strong>Använd tillsynen.</strong> JO och IVO finns för att granska myndigheter. En anmälan är din rätt.</li>
+<li><strong>Ta hand om dig själv.</strong> MiT sätter sig i kroppen. Prata med någon utanför processen.</li>
+</ol>
+
+<h4>Att börja andas igen</h4>
+<p>I MiT skrev jag om hur det känns att sitta på ena sidan skrivbordet. Nu arbetar jag på uppföljaren, <em>MiV: På andra sidan skrivbordet</em>. Den handlar om myndighetsinducerat våld och om vad som händer i systemet när det blir så här. Örebro och Alvesta är inte undantag. De är exempel på något som behöver ett namn för att kunna förändras.</p>
+<p>Har du egna erfarenheter? Skriv gärna i kommentarerna.</p>
+
+<h4>Källor</h4>
+<ul>
+<li><a href="https://www.svt.se/nyheter/granskning/ug/pappan-jag-pressades-att-baktala-malin-nar-var-son-omhandertogs">SVT Uppdrag granskning: Pappan: Jag pressades att baktala Malin när vår son omhändertogs</a> (18 nov 2026)</li>
+<li><a href="https://smp.se/debatt/nar-manniskor-inte-langre-vagar-soka-hjalp-har-vi-misslyckats">Smålandsposten, debatt: När människor inte längre vågar söka hjälp har vi misslyckats</a> (19 nov 2026)</li>
+<li><a href="https://www.smp.se/tidigare-anstalld-en-trasig-organisation-motte-nya-pa-socialen/">Smålandsposten: Tidigare anställd: "En trasig organisation" mötte nya på socialen</a></li>
+</ul>
+      <div class="eb-dl"><a class="eb-btn" href="texter/nar-myndigheten-blir-det-som-skadar.pdf" download>Ladda ner som PDF</a><button type="button" class="eb-btn ghost" data-close-modal="art-modal-blogg-mit">Stäng</button></div>
+    </article>
+  </div>
 </dialog>
 <script>
 document.addEventListener("click", (e) => {
