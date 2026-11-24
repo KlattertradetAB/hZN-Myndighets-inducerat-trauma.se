@@ -1,5 +1,4 @@
-# Publicerar webbplatsen till STRATO automatiskt varje gång något ändras på main.
-# Kan också köras manuellt under fliken "Actions" → "Publicera till STRATO" → "Run workflow".
+# Publicerar webbplatsen till STRATO:s webbhotell. Körs manuellt under fliken "Actions" → "Publicera till STRATO" → "Run workflow".
 #
 # Kräver fyra hemligheter i GitHub (Settings → Secrets and variables → Actions):
 #   STRATO_SFTP_HOST      t.ex. 50xxxxxx03.ssh.w2.strato.hosting
@@ -9,9 +8,9 @@
 
 name: Publicera till STRATO
 
+# Avstängd vid push: sidan ligger på GitHub Pages med domänen horizonten.nu.
+# Kör manuellt under Actions om du vill ladda upp till STRATO:s webbhotell.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 concurrency:
