@@ -634,7 +634,11 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
 .art-modal-kicker{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--accent);margin:0}
 .art-modal-close{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;flex-shrink:0;transition:background .15s ease}
 .art-modal-close:hover{background:var(--accent-soft);color:var(--accent)}
-.art-modal-body{padding:24px 26px 30px;overflow-y:auto;line-height:1.7;font-size:16px}
+.art-modal-body{padding:24px 26px 30px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;min-height:0;flex:1 1 auto;line-height:1.7;font-size:16px}
+.eb-card[data-card-modal]{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.eb-card .eb-dia{pointer-events:none}
+/* Reserv om webbläsaren saknar stöd för <dialog> */
+dialog.art-modal.hz-fallback[open]{position:fixed;inset:0;z-index:9999;margin:auto;height:fit-content}
 .art-modal-body h2{font-family:var(--display);font-size:clamp(22px,3.6vw,29px);line-height:1.2;margin:0 0 8px;color:var(--ink)}
 .art-modal-byline{margin:0 0 20px;font-size:14px;color:var(--muted);padding-bottom:14px;border-bottom:1px solid var(--line)}
 .art-modal-body h3{font-family:var(--display);font-size:19px;margin:24px 0 8px;color:var(--ink)}
@@ -1248,7 +1252,7 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
         <p>I bloggen skriver vi om det som händer med familjer när myndigheter tar över – om myndighetsinducerat trauma, rättssäkerhet och om hur man hittar tillbaka till sin röst och sin berättelse.</p>
         <div id="pod-blog-dynamic"></div>
         <div class="eb-list" id="blogg-texter">
-          <article class="eb-card" aria-labelledby="eb-c-pastoral">
+          <article class="eb-card" data-card-modal aria-labelledby="eb-c-pastoral">
             <span class="eb-glow"></span><span class="eb-dia"></span>
             <p class="eb-kicker">Ett fördjupningskapitel</p>
             <h4 id="eb-c-pastoral">Den pastorala apparaten <em>&amp;</em> barnet som <em>verksamhetskapital</em></h4>
@@ -1262,7 +1266,7 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
               </div>
             </div>
           </article>
-          <article class="eb-card" aria-labelledby="eb-c-debatt">
+          <article class="eb-card" data-card-modal aria-labelledby="eb-c-debatt">
             <span class="eb-glow"></span><span class="eb-dia"></span>
             <p class="eb-kicker">Debattartikel</p>
             <h4 id="eb-c-debatt">Vi har gett fenomenet ett namn&nbsp;<em>–</em> nu måste samhället <em>lära sig se det</em></h4>
@@ -1275,7 +1279,7 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
               </div>
             </div>
           </article>
-          <article class="eb-card" aria-labelledby="eb-c-blogg">
+          <article class="eb-card" data-card-modal aria-labelledby="eb-c-blogg">
             <span class="eb-glow"></span><span class="eb-dia"></span>
             <p class="eb-kicker">Blogginlägg</p>
             <h4 id="eb-c-blogg">När myndigheten blir det som skadar <em>– om MiT</em></h4>
@@ -2903,11 +2907,21 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
 </dialog>
 <script>
 document.addEventListener("click", (e) => {
-  const openBtn = e.target.closest("[data-open-modal]");
+  // Hela kortet går att trycka på, inte bara knappen (PDF-länken laddar fortfarande ner)
+  const card = e.target.closest(".eb-card");
+  const openBtn = e.target.closest("[data-open-modal]") || (card && !e.target.closest("a") && card.querySelector("[data-open-modal]"));
   if (openBtn) {
     const dlg = document.getElementById(openBtn.dataset.openModal);
-    if (dlg && typeof dlg.showModal === "function") {
-      dlg.showModal();
+    if (dlg) {
+      e.preventDefault();
+      try {
+        if (dlg.open) dlg.close();
+        if (typeof dlg.showModal === "function") dlg.showModal();
+        else throw new Error("no dialog");
+      } catch (err) {
+        dlg.classList.add("hz-fallback");
+        dlg.setAttribute("open", "");
+      }
       const body = dlg.querySelector(".art-modal-body");
       if (body) body.scrollTop = 0;
     }
@@ -2916,7 +2930,7 @@ document.addEventListener("click", (e) => {
   const closeBtn = e.target.closest("[data-close-modal]");
   if (closeBtn) {
     const dlg = document.getElementById(closeBtn.dataset.closeModal);
-    if (dlg) dlg.close();
+    if (dlg) { if (typeof dlg.close === "function") dlg.close(); else dlg.removeAttribute("open"); dlg.classList.remove("hz-fallback"); }
     return;
   }
   if (e.target instanceof HTMLDialogElement && e.target.classList.contains("art-modal")) {
