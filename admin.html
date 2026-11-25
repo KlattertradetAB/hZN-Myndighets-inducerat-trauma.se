@@ -1226,7 +1226,7 @@ function renderBlog(forceForm){
           <button type="button" class="btn small danger" data-del-blog="${esc(p.id)}">Radera</button>
         </div>
       </div>
-    </div>`).join("")}</div>` : `<p class="empty">Inga blogginlägg skapade via mallen ännu. Fyll i mallen ovan för att publicera ditt första inlägg under ”Pod och Blogg”.</p>`;
+    </div>`).join("")}</div>` : `<p class="empty">Inga blogginlägg skapade via mallen ännu. Fyll i mallen ovan för att publicera ditt första inlägg under ”Blogg”.</p>`;
 
   const postsCardHtml = `
     <h2 class="section-title" style="margin-top:0">Sparade blogginlägg (${blogPosts.length})</h2>
@@ -1250,7 +1250,7 @@ function renderBlog(forceForm){
     <div class="qcard" style="margin:0 0 20px">
       <h2 class="section-title" style="margin-top:0">${editing ? "Redigera blogginlägg" : "Mall för nytt blogginlägg"}</h2>
       <p style="color:var(--muted);font-size:.92rem;margin:4px 0 14px">
-        Fyll i <strong>Rubrik</strong>, <strong>Sammanfattning</strong>, <strong>Text</strong> och eventuella <strong>Hashtags</strong>. Inlägget visas direkt under <em>Pod och Blogg</em> på hemsidan och öppnas i ett eget läsfönster när besökaren klickar på <em>Läs hela artikeln</em>.
+        Fyll i <strong>Rubrik</strong>, <strong>Sammanfattning</strong>, <strong>Text</strong> och eventuella <strong>Hashtags</strong>. Inlägget visas direkt under <em>Blogg</em> på hemsidan och öppnas i ett eget läsfönster när besökaren klickar på <em>Läs hela artikeln</em>.
       </p>
       <form id="blog-form" class="list" style="gap:14px">
         <div class="field">
