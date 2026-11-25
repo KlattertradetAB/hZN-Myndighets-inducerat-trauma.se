@@ -6,6 +6,19 @@
 <title>Horizonten – Kraftsamling, boken och tjänster</title>
 <meta name="description" content="Horizonten synliggör myndighetsinducerat trauma. Kartläggningen Kraftsamling för Barnens Bästa, boken Från subjekt till objekt, terapi, utbildning, självhjälpsmöten och blogg.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<!-- Förhandsvisning när länken delas: bara loggan och "Horizonten.nu" -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://horizonten.nu/">
+<meta property="og:site_name" content="Horizonten.nu">
+<meta property="og:title" content="Horizonten.nu">
+<meta property="og:image" content="https://horizonten.nu/og-bild.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Horizontens logga">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Horizonten.nu">
+<meta name="twitter:image" content="https://horizonten.nu/og-bild.png">
 <script src="config.js"></script>
 <style>
 :root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -708,10 +721,6 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
       <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:var(--accent)"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
       <span class="cart-badge" id="top-cart-badge">0</span>
     </a>
-    <a class="admin-btn outline" href="#boklasare" id="top-reader-link">
-      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      <span id="top-reader-label">Kundlogin</span>
-    </a>
     <a class="admin-btn" href="admin.html">
       <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       Admin login
@@ -746,7 +755,7 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
           <h2>Boken &amp; Butik</h2>
         </div>
       </div>
-      <p>Läs om <em>Myndighetsinducerat trauma, från subjekt till objekt</em>, köp e-boken eller den fysiska boken direkt i kassan.</p>
+      <p>Läs om <em>Myndighetsinducerat trauma, från subjekt till objekt</em>, beställ pocketboken direkt i kassan.</p>
       <span class="go">Till boken &amp; kassan <span class="cart-badge" id="cart-count-badge" hidden>0</span> <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
     <a class="choice secondary" href="#tjanster">
@@ -788,34 +797,13 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
 
         <h3 class="buy-title">Köp boken</h3>
         <dl class="rel-facts">
-            <div><dt>Format</dt><dd>Pocket / Digital</dd></div>
+            <div><dt>Format</dt><dd>Pocket</dd></div>
             <div><dt>Omfång</dt><dd>Ca 240 sidor</dd></div>
             <div><dt>Utgivare</dt><dd>Horizonten</dd></div>
             <div><dt>Forskningsfält</dt><dd>Rättssociologi</dd></div>
           </dl>
 
         <div class="buy">
-          <div class="buy-card">
-            <h4>Läs boken digitalt</h4>
-            <span class="buy-tag">Låst till inloggning</span>
-            <p>Läs den kompletta boken direkt här på webbplatsen med din e-post och personliga säkerhetskod.</p>
-            <p class="price" data-price-for="ebook-read">200 kr</p>
-            <div class="buy-actions">
-              <button type="button" class="buy-btn" data-cart-buy="ebook-read">Köp direkt i kassan</button>
-              <button type="button" class="buy-btn sec" data-cart-add="ebook-read">+ Lägg i varukorg</button>
-            </div>
-          </div>
-          <div class="buy-card premium">
-            <span class="buy-premium">Premium</span>
-            <h4>Ladda ner boken (PDF)</h4>
-            <span class="buy-tag">Nedladdning + Läs online</span>
-            <p>Ladda ner hela boken i högupplöst PDF-format att spara för alltid samt fri läsbehörighet online.</p>
-            <p class="price" data-price-for="ebook-pdf">250 kr</p>
-            <div class="buy-actions">
-              <button type="button" class="buy-btn" data-cart-buy="ebook-pdf">Köp &amp; ladda ner direkt</button>
-              <button type="button" class="buy-btn sec" data-cart-add="ebook-pdf">+ Lägg i varukorg</button>
-            </div>
-          </div>
           <div class="buy-card">
             <h4>Fysisk bok (Pocket)</h4>
             <span class="buy-tag">Skickas med post (+ 49 kr frakt)</span>
@@ -1355,7 +1343,7 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
     <div>
       <span class="course-no">Säker beställning · Stripe Checkout (Kort &amp; Swish)</span>
       <h2 id="kassarubrik" tabindex="-1">Kassa &amp; Varukorg</h2>
-      <p class="byline" style="margin-top:4px">Köp e-boken (med omedelbar personlig inloggningskod), beställ den tryckta boken eller boka plats på våra utbildningar.</p>
+      <p class="byline" style="margin-top:4px">Beställ pocketboken.</p>
     </div>
 
     <div id="order-confirmation" class="order-done" hidden></div>
@@ -1379,7 +1367,7 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
             <input type="text" id="chk-name" required placeholder="Anna Andersson" autocomplete="name">
           </div>
           <div class="kassa-field">
-            <label for="chk-email">E-postadress * <span style="font-weight:400;color:var(--muted)">(används för inloggning till e-boken &amp; kvitto)</span></label>
+            <label for="chk-email">E-postadress * <span style="font-weight:400;color:var(--muted)">(för orderbekräftelse &amp; kvitto)</span></label>
             <input type="email" id="chk-email" required placeholder="namn@exempel.se" autocomplete="email">
           </div>
           <div class="kassa-field">
@@ -1441,9 +1429,6 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
           <button type="submit" class="buy-btn" id="chk-submit-btn" style="width:100%;min-height:52px;font-size:16.5px">
             Slutför köp &amp; betala
           </button>
-          <p style="font-size:12.5px;color:var(--muted);text-align:center;margin:0">
-            Vid köp av e-boken genereras din personliga säkerhetskod direkt på skärmen så att du kan logga in och läsa boken omedelbart.
-          </p>
         </form>
       </div>
     </div>
@@ -2072,10 +2057,12 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
     {id:"book-physical", title:"Fysisk bok (Pocket) – Myndighetsinducerat trauma", subtitle:"Tryckt bok (ca 240 sidor) levererad hem till dig (+ 49 kr frakt)", category:"physical", price_sek:299, shipping_sek:49, requires_shipping:true, grants_ebook:false, allows_pdf_download:false}
   ];
 
-  let PRODUCTS = [...DEFAULT_PRODUCTS];
+  // E-boken säljs inte just nu, bara pocketboken.
+  const forSale = p => p.category !== "ebook" && p.category !== "course" && !String(p.id || "").startsWith("course-");
+  let PRODUCTS = DEFAULT_PRODUCTS.filter(forSale);
   let cart = [];
   let payMethod = "stripe_card";
-  try { cart = (JSON.parse(localStorage.getItem(CART_KEY) || "[]") || []).filter(x => !String(x.id || "").startsWith("course-")); } catch(e){ cart = []; }
+  try { cart = (JSON.parse(localStorage.getItem(CART_KEY) || "[]") || []).filter(x => !String(x.id || "").startsWith("course-") && !String(x.id || "").startsWith("ebook-")); } catch(e){ cart = []; }
 
   const fmtKr = n => Number(n || 0).toLocaleString("sv-SE") + " kr";
   const esc = s => String(s == null ? "" : s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);
@@ -2089,7 +2076,7 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
       if (r.ok) {
         const rows = await r.json();
         if (Array.isArray(rows) && rows.length > 0) {
-          PRODUCTS = rows.filter(p => p.category !== "course" && !String(p.id || "").startsWith("course-"));
+          PRODUCTS = rows.filter(forSale);
           PRODUCTS.forEach(p => {
             document.querySelectorAll(`[data-price-for="${p.id}"]`).forEach(el => { el.textContent = fmtKr(p.price_sek); });
           });
