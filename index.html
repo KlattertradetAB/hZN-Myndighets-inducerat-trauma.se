@@ -1931,13 +1931,8 @@ render();
     if (view !== current){ previous = current; current = view; }
     const inHome = view === "" || view in sub;
     home.hidden = !inHome;
-    const inShop = view === "boken" || view === "kassa";
-    for (const k in sub) {
-      if (k === "boken" || k === "kassa") document.getElementById(k).hidden = !inShop;
-      else document.getElementById(k).hidden = k !== view;
-    }
-    const kassaBack = document.querySelector("#kassa > .back");
-    if (kassaBack) kassaBack.hidden = inShop;
+    // Varukorgen visas bara när man går in på den (ikonen högst upp eller Beställ-knappen), inte under boken
+    for (const k in sub) document.getElementById(k).hidden = k !== view;
     hero.hidden = choices.hidden = view !== "";
     foot.hidden = !inHome; document.getElementById("nyhetsbrev").hidden = !inHome;
     enk.hidden = view !== "kraftsamling";
@@ -1957,7 +1952,7 @@ render();
   // Tillbaka: till vyn man kom ifrån (policyn öppnad från enkäten går tillbaka till enkäten, med svaren kvar)
   document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => {
     if (current === "integritet" && previous === "kraftsamling") location.hash = "kraftsamling";
-    else if (current === "boklasare" && previous) location.hash = previous;
+    else if ((current === "boklasare" || current === "kassa") && previous) location.hash = previous;
     else location.hash = "";
   }));
   addEventListener("hashchange", route);
