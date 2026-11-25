@@ -7,6 +7,7 @@ Statisk webbplats för Horizonten: kartläggningen Kraftsamling för Barnens Bä
 |---|---|
 | `index.html` | Hela den publika webbplatsen |
 | `admin.html` | Inloggning och dashboard för enkätsvaren (indexeras inte av sökmotorer) |
+| `texter/` | PDF:er till blogginläggen under Pod och Blogg |
 | `config.js` | Adress och publik nyckel till databasen |
 | `supabase/kraftsamling.sql` | Databasens tabeller och säkerhetsregler – körs en gång |
 
