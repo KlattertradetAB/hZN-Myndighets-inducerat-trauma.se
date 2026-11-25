@@ -627,6 +627,8 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 .art-open-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(181,82,12,.25);filter:brightness(1.06)}
 .art-open-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 dialog.art-modal{width:min(740px,calc(100vw - 28px));max-height:88vh;padding:0;border:1px solid var(--glass-border);border-radius:18px;background:var(--surface);color:var(--ink);box-shadow:0 24px 64px rgba(5,34,59,.28);overflow:hidden;margin:auto}
+/* Safari visar annars rutan längst ner på sidan och bara den suddiga bakgrunden syns */
+dialog.art-modal[open]{position:fixed;inset:0;margin:auto;height:max-content}
 dialog.art-modal::backdrop{background:rgba(5,22,38,.56);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
 dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .24s cubic-bezier(.22,1,.36,1)}
 @keyframes hzModalIn{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
@@ -665,7 +667,7 @@ dialog.art-modal.hz-fallback[open]{position:fixed;inset:0;z-index:9999;margin:au
 .eb-btn:focus-visible{outline:3px solid #E0BE97;outline-offset:2px}
 .eb-label{font:400 10px/1 "Liberation Sans",Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A8E93}
 
-dialog.art-modal.ebok{width:min(820px,calc(100vw - 20px));max-height:92vh;background:#FFFFFF;color:#1C1C1C;border:1px solid #2A2F36;position:relative}
+dialog.art-modal.ebok{width:min(820px,calc(100vw - 20px));max-height:92vh;background:#FFFFFF;color:#1C1C1C;border:1px solid #2A2F36}
 dialog.art-modal.ebok .art-modal-close{position:absolute;top:12px;right:12px;z-index:3;border-color:#3D4145;background:rgba(22,27,34,.85);color:#F2EEE6}
 dialog.art-modal.ebok .art-modal-close:hover{background:#C4915C;color:#161B22}
 dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
