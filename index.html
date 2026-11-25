@@ -917,6 +917,12 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
       <details class="svc" id="svc-utbildning">
         <summary class="svc-head"><svg class="svc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8l9-4 9 4-9 4-9-4z"/><path d="M7 10v5c0 1.7 2.2 3 5 3s5-1.3 5-3v-5"/></svg><div><span class="svc-kind">För yrkesverksamma &amp; engagerade</span><h3 id="h-utb">Utbildningar</h3></div><svg class="svc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></summary>
         <div class="svc-body">
+        <div class="svc-cta">
+          <strong>Under uppbyggnad</strong>
+          <span>Våra utbildningar håller på att byggas upp. Information om kommande utbildningar och anmälan kommer snart här.</span>
+        </div>
+        <!-- Utbildningarna är dolda tills vidare. Ta bort "hidden" nedan för att visa dem igen. -->
+        <div class="utb-arkiv" hidden>
         <p>Vi erbjuder processinriktade utbildningar för dig som vill arbeta med människor i utsatta situationer, terapi, beroendevård eller som dialog- och familjeombud vid myndighetsinducerat trauma. Utbildningarna vilar på gedigen klinisk erfarenhet, forskning och boken <a href="#boken" style="color:var(--accent)">Från subjekt till objekt</a>.</p>
 
         <!-- Utbildning 1 -->
@@ -1216,6 +1222,7 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
 
           <div class="svc-cta"><strong>Anmäl dig här</strong><span>Mejla med ämnet ”Anmälan MiT-utbildning” och skriv ditt namn, din arbetsplats och din yrkesroll.</span><div class="copyrow"><span class="sel" id="utbmail">billy@klattertradet.com</span><button type="button" id="copyutb" class="copybtn">Kopiera adressen</button></div></div>
         </article>
+        </div>
       </div>
       </details>
 
@@ -1234,15 +1241,9 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
             </ul>
           </div>
           <div class="meet">
-            <span class="meet-kind">Digitalt möte online</span>
-            <h4>Självhjälp via länk</h4>
-            <p class="meet-when">Varje lördag kl. 18.00</p>
-            <ul>
-              <li>Samma terapeutledda premisser och trygga struktur som live-mötena</li>
-              <li>Helt gratis – träffa andra drabbade bekvämt hemifrån online</li>
-            </ul>
-            <button type="button" class="meet-btn" id="meet-link-btn" aria-expanded="false" aria-controls="meet-link">Hämta möteslänk</button>
-            <p class="meet-link" id="meet-link" hidden>Möteslänken finns i Horizonten-appen. <span class="fill">[Eller länk till mötet]</span></p>
+            <span class="meet-kind">Digital grupp</span>
+            <h4>Öppnar efter årsskiftet</h4>
+            <p>Vi startar en digital självhjälpsgrupp efter årsskiftet. Mer information kommer här.</p>
           </div>
         </div>
       </div>
@@ -2020,7 +2021,7 @@ render();
 })();
 
 (function(){const b=document.getElementById("meet-link-btn"),l=document.getElementById("meet-link");
-b.addEventListener("click",()=>{const o=l.hidden;l.hidden=!o;b.setAttribute("aria-expanded",String(o));});})();
+if(!b||!l)return;b.addEventListener("click",()=>{const o=l.hidden;l.hidden=!o;b.setAttribute("aria-expanded",String(o));});})();
 
 (function(){
   const panel=document.getElementById("buy-panel"), what=document.getElementById("buy-what");
