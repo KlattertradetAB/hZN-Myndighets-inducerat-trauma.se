@@ -661,10 +661,10 @@ dialog.art-modal[open]{display:flex;flex-direction:column;animation:hzModalIn .2
 .eb-btn:focus-visible{outline:3px solid #E0BE97;outline-offset:2px}
 .eb-label{font:400 10px/1 "Liberation Sans",Arial,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A8E93}
 
-dialog.art-modal.ebok{width:min(820px,calc(100vw - 20px));max-height:92vh;background:#FFFFFF;color:#1C1C1C;border:1px solid #2A2F36;position:relative}
+dialog.art-modal.ebok{width:min(820px,calc(100vw - 20px));max-height:92vh;max-height:92dvh;background:#FFFFFF;color:#1C1C1C;border:1px solid #2A2F36;position:fixed;inset:0;margin:auto}
 dialog.art-modal.ebok .art-modal-close{position:absolute;top:12px;right:12px;z-index:3;border-color:#3D4145;background:rgba(22,27,34,.85);color:#F2EEE6}
 dialog.art-modal.ebok .art-modal-close:hover{background:#C4915C;color:#161B22}
-dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65}
+dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65;flex:1 1 auto;min-height:0;-webkit-overflow-scrolling:touch}
 .eb-cover{position:relative;overflow:hidden;background:#161B22;color:#F2EEE6;padding:64px 28px 40px 64px;min-height:360px;display:flex;flex-direction:column}
 .eb-cover::before{content:"";position:absolute;left:30px;top:0;width:2px;height:190px;background:#C4915C}
 .eb-cover::after{content:"";position:absolute;left:30.5px;top:204px;bottom:0;width:1px;background:#3D4145}
