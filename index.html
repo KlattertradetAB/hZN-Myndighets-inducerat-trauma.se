@@ -707,6 +707,33 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65;
 .eb-dl .eb-btn{color:#161B22}
 .eb-dl .eb-btn.ghost{color:#A8743F}
 .eb-band{background:#3A3A3A;color:#FFF;font-weight:700;padding:6px 10px;margin:28px 0 4px;font-size:15.5px;line-height:1.35}
+.eb-toc{margin:0 0 30px;padding:18px 20px;border:1px solid #E3DED6;background:#FAF8F4}
+.eb-toc-h{margin:0 0 8px;font:700 11px/1.3 "Liberation Sans",Arial,sans-serif;letter-spacing:.3em;text-transform:uppercase;color:#C4915C}
+.eb-toc ol{margin:0;padding-left:26px;columns:2 260px;column-gap:28px}
+.eb-toc li{margin:0 0 6px;break-inside:avoid}
+.eb-toc a{border-bottom:0;color:#1C1C1C}
+.eb-toc a:hover{color:#A8743F}
+.eb-chap{scroll-margin-top:16px}
+.eb-chap+.eb-chap{margin-top:38px;padding-top:30px;border-top:1px solid #E3DED6}
+.eb-chap>h3{font-size:22px}
+.eb-chap h4{font-size:18px}
+.eb-model-intro{font-style:italic;color:#555}
+.eb-defs{list-style:none;padding-left:0}
+.eb-defs li::marker{content:""}
+.eb-qs p{border-left:2px solid #C4915C;background:#FAF8F4;padding:12px 16px;margin:0 0 12px}
+.eb-copy{text-align:center;font-style:italic;color:#8A8E93;letter-spacing:.12em;font-size:13px;margin-top:34px}
+.eb-model{margin:14px 0 22px;display:flex;flex-direction:column;align-items:stretch;gap:6px;font-family:"DejaVu Serif",Georgia,serif;text-align:center}
+.eb-model .m-row{display:grid;align-items:center;gap:8px}
+.eb-model .m-2{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)}
+.eb-model .m-3{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr)}
+.eb-model .m-box{border:1px solid #9A9A9A;background:#F0F0F0;padding:10px 8px;font-size:14px;line-height:1.35;color:#1A1A1A}
+.eb-model .m-strong{font-weight:700;background:#fff;border-width:2px}
+.eb-model .m-dark{background:#3A3A3A;border-color:#3A3A3A;color:#fff;font-weight:700}
+.eb-model .m-mid{background:#E6E2DB;font-weight:700}
+.eb-model .m-soft{font-size:13px}
+.eb-model .m-arrow,.eb-model .m-down{color:#9A9A9A;font-size:18px;line-height:1}
+.eb-model .m-final{align-self:center;background:#161B22;color:#F2EEE6;border:2px solid #C4915C;padding:12px 22px;font:700 13px/1.3 "Liberation Sans",Arial,sans-serif;letter-spacing:.22em;text-transform:uppercase}
+@media (max-width:600px){.eb-model .m-2,.eb-model .m-3{grid-template-columns:1fr}.eb-model .m-h{transform:rotate(90deg)}}
 .art-tags{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 4px}
 .art-tag{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);font-size:12.5px;font-weight:600}
 </style>
@@ -1259,6 +1286,20 @@ dialog.art-modal.ebok .art-modal-body{padding:0;font-size:16px;line-height:1.65;
               <div class="eb-actions">
                 <button type="button" class="eb-btn" data-open-modal="art-modal-pastoral">Läs kapitlet</button>
                 <a class="eb-btn ghost" href="texter/den-pastorala-apparaten.pdf" download>PDF</a>
+              </div>
+            </div>
+          </article>
+          <article class="eb-card" aria-labelledby="eb-c-pd">
+            <span class="eb-glow"></span><span class="eb-dia"></span>
+            <p class="eb-kicker">E-bok</p>
+            <h4 id="eb-c-pd">Personlighets&shy;störningar</h4>
+            <p class="eb-sub">Problematiken med att använda som vardaglig etikett eller skällsord</p>
+            <p class="eb-teaser">Denna diskussion är särskilt aktuell eftersom termen narcissism har blivit en populär men ofta missförstådd etikett i vardagliga sammanhang.</p>
+            <div class="eb-foot">
+              <span class="eb-authors">Billy Ljungberg</span>
+              <div class="eb-actions">
+                <button type="button" class="eb-btn" data-open-modal="art-modal-pd">Läs e-boken</button>
+                <a class="eb-btn ghost" href="texter/personlighetsstorningar.pdf" download>PDF</a>
               </div>
             </div>
           </article>
@@ -2843,6 +2884,188 @@ b.addEventListener("click",()=>{t.scrollIntoView({behavior:matchMedia("(prefers-
     </article>
   </div>
 </dialog>
+<dialog class="art-modal ebok" id="art-modal-pd" aria-labelledby="eb-t-pd">
+  <button type="button" class="art-modal-close" data-close-modal="art-modal-pd" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <div class="art-modal-body">
+    <header class="eb-cover"><span class="eb-glow"></span><span class="eb-dia"></span>
+      <p class="eb-kicker">E-bok</p>
+      <h2 id="eb-t-pd">Personlighets&shy;störningar</h2>
+      <p class="eb-sub">Problematiken med att använda som vardaglig etikett eller skällsord</p>
+      <div class="eb-foot"><span class="eb-authors">Billy Ljungberg</span><span class="eb-label">23 juli 2025</span></div>
+    </header>
+    <article class="eb-page">
+<nav class="eb-toc" aria-label="Innehåll">
+  <p class="eb-toc-h">Innehåll</p>
+  <ol>
+    <li><a href="#pd-intro">Introduktion</a></li>
+    <li><a href="#pd-visual_model">Modell: Den Psykologiska Processen</a></li>
+    <li><a href="#pd-bpd">Borderline personlighetsstörning (BPD)</a></li>
+    <li><a href="#pd-aspd">Antisocial personlighetsstörning (ASPD)</a></li>
+    <li><a href="#pd-npd">Narcissistisk personlighetsstörning (NPD)</a></li>
+    <li><a href="#pd-debate">Vardagliga etiketter och 'Hobbykliniker'</a></li>
+    <li><a href="#pd-markers_criteria">Markörer och kriterier</a></li>
+    <li><a href="#pd-model_explanation">Förklaring av modellen</a></li>
+    <li><a href="#pd-model_text">Låt oss vända på perspektivet</a></li>
+    <li><a href="#pd-questions">Utmanande frågor för anklagaren</a></li>
+    <li><a href="#pd-conclusion">Slutsats</a></li>
+  </ol>
+</nav>
+
+<section class="eb-chap" id="pd-intro">
+<h3>Introduktion</h3>
+<p>Borderline personlighetsstörning (BPD), antisocial personlighetsstörning (ASPD) och narcissistisk personlighetsstörning (NPD) tillhör kluster B i Diagnostic and Statistical Manual of Mental Disorders (DSM-5), en group av personlighetsstörningar präglade av dramatiska, emotionella eller impulsiva beteenden.</p>
+<p>Dessa störningar delar gemensamma drag såsom instabila interpersonella relationer, svårigheter med emotionell reglering och låg reflektiv funktion (förmågan att förstå egna och andras mentala tillstånd). Genom att analysera dessa störningar parallellt kan vi bättre förstå hur tidiga anknytningsmönster formar olika uttryck av personlighetsdysfunktion, från BPD:s rädsla för övergivande till ASPD:s empatibrist och NPD:s grandiositet eller sårbarhet.</p>
+<p>Denna diskussion är särskilt aktuell eftersom termen narcissism har blivit en populär men ofta missförstådd etikett i vardagliga sammanhang.</p>
+</section>
+
+<section class="eb-chap" id="pd-visual_model">
+<h3>Modell: Den Psykologiska Processen</h3>
+<p class="eb-model-intro">Nedan visualiseras flödet från den initiala besvikelsen till de beteenden som paradoxalt nog speglar narcissistiska markörer hos anklagaren.</p>
+<div class="eb-model" role="img" aria-label="Modell: Besvikelse/Uppbrott leder till etiketten narcissism, via låg självinsikt, brist på empati och behov av bekräftelse samt projicering, demonisering och sympatisökande, till narcissistiska markörer.">
+  <div class="m-row m-2"><div class="m-box m-strong">Besvikelse/Uppbrott</div><div class="m-arrow m-h" aria-hidden="true">→</div><div class="m-box m-strong">Etiketten "narcissism"</div></div>
+  <div class="m-down" aria-hidden="true">↓</div>
+  <div class="m-row m-3"><div class="m-box">Låg självinsikt</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box m-dark">Brist på empati</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box">Behov av bekräftelse</div></div>
+  <div class="m-down" aria-hidden="true">↓</div>
+  <div class="m-row m-3"><div class="m-box m-soft">Projicering av egna brister</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box m-mid">Demonisering av andra</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box m-soft">Söker sympatier i forum</div></div>
+  <div class="m-down" aria-hidden="true">↓</div>
+  <div class="m-final">Narcissistiska markörer</div>
+</div>
+
+</section>
+
+<section class="eb-chap" id="pd-bpd">
+<h3>Borderline personlighetsstörning (BPD)</h3>
+<p>Borderline personlighetsstörning (BPD) är ett kroniskt och försvagande psykiatriskt tillstånd som kännetecknas av instabila och självdestruktiva interpersonella relationer, emotionell labilitet, dålig impulsontroll, ilskna utbrott, frekvent suicidalitet och självskadebeteende.</p>
+<ul>
+<li>Självskadebeteenden förekommer i 69–75 % av fallen (Kjeliander, Bongar &amp; King, 1998).</li>
+<li>Andra självdestruktiva beteenden inkluderar alkohol- och drogmissbruk samt allvarlig över- eller undervikt.</li>
+<li>Patienter med BPD löper hög risk för självmord, med en fullbordad självmordsfrekvens på 3–9,5 %, vilket är 400 gånger högre än i den allmänna befolkningen (McGlashan, 2016).</li>
+</ul>
+<h4>Anknytningsteori:</h4>
+<p>Forskning kopplar BPD till osäkra anknytningsmönster, särskilt upptagna (preoccupied) och rädslofullt upptagna (fearfully preoccupied) stilar.</p>
+<ul>
+<li>Patrick et al. (1994) fann att endast 8 % av BPD-patienter hade en säker anknytningsstil, medan 75 % klassificerades som upptagna, varav 47 % var rädslofullt upptagna (Fonagy et al., 1996).</li>
+<li>89 % av BPD-patienterna var obearbetade (unresolved) för trauma eller förlust, jämfört med 65 % av icke-BPD-patienter.</li>
+<li>Multivariata analyser visar att BPD kännetecknas av högre förekomst av övergrepp och försummelse, lägre reflektiv funktion (RF) och högre frekvenser av obearbetad anknytning.</li>
+</ul>
+<h4>Förklaring:</h4>
+<p>BPD:s symtom, såsom rädsla för övergivande och instabila relationer kan kopplas till tidiga anknytningsstörningar där vårdgivare varit inkonsekventa eller otillgängliga. Låg reflektiv funktion förstärker svårigheter att hantera känslor och relationer- vilket leder till impulsiva och självdestruktiva beteenden.</p>
+</section>
+
+<section class="eb-chap" id="pd-aspd">
+<h3>Antisocial personlighetsstörning (ASPD)</h3>
+<p>Antisocial personlighetsstörning (ASPD) kännetecknas av likgiltighet för andras rättigheter, impulsivitet, aggressivitet och brist på empati eller ånger.</p>
+<ul>
+<li>Prevalensen är 1–4 % i den allmänna befolkningen men upp till 50–80 % i fängelsepopulationer (Black, 2013).</li>
+<li>Cirka 47 % av individer med ASPD rapporterar upprepade lagöverträdelser (Robins et al., 1991).</li>
+<li>Självdestruktiva beteenden är mindre framträdande än i BPD, men kriminellt beteende är vanligt.</li>
+</ul>
+<h4>Anknytningsteori:</h4>
+<p>ASPD är associerat med (A) otrygg undvikande (dismissive) eller obearbetade/disorganiserade anknytningsmönster.</p>
+<ul>
+<li>Van IJzendoorn et al. (1997) fann att cirka 60 % av individer med ASPD klassificerades som avvisande, medan endast 5–10 % hade en säker anknytningsstil.</li>
+<li>Fonagy et al. (1996) rapporterade att 79 % av patienter med paranoid-antisociala drag var obearbetade för trauma eller förlust, vilket är jämförbart med BPD-patienter.</li>
+</ul>
+<h4>Förklaring:</h4>
+<p>Den avvisande anknytningsstilen hos ASPD-individer kan härledas till tidiga erfarenheter av avvisande eller fientligt vårdgivande, vilket formar en intern arbetsmodell där andra ses som opålitliga och självet som känslomässigt avstängt. Detta bidrar till empatibrist och antisociala handlingar utan skuldkänslor.</p>
+</section>
+
+<section class="eb-chap" id="pd-npd">
+<h3>Narcissistisk personlighetsstörning (NPD)</h3>
+<p>Narcissistisk personlighetsstörning (NPD) kännetecknas av grandiositet, behov av beundran och brist på empati, ofta med en underliggande sårbar självkänsla.</p>
+<ul>
+<li>Prevalensen är 1–6 % i den allmänna befolkningen, men högre bland ledare eller offentliga personer (upp till 20 %; Twenge &amp; Campbell, 2009).</li>
+<li>Dickinson och Pincus (2003) fann att 55 % av individer med grandios narcissism uppvisar avvisande anknytning, medan 40 % av de med sårbar narcissism uppvisar upptagna eller rädslofullt upptagna anknytningsmönster.</li>
+<li>Endast 10–15 % av NPD-individer i kliniska prover klassificeras som säkra (Fossati et al., 2005).</li>
+</ul>
+<h4>Anknytningsteori:</h4>
+<p>NPD kan kopplas till tidiga erfarenheter av inkonsekvent vårdgivande, där överdriven beundran leder till grandios narcissism och försummelse till sårbar narcissism. Fonagy et al. (2002) kopplar NPD till låg reflektiv funktion, vilket försvårar mentalisering av andras perspektiv och förstärker empatibrist.</p>
+<h4>Förklaring:</h4>
+<p>Den avvisande anknytningsstilen hos grandiosa narcissister speglar en defensiv strategi för att minimera beroende medan den upptagna stilen hos sårbara narcissister reflekterar ett behov av extern validering. NPD:s dysfunktion uttrycks genom interpersonell manipulation eller arrogans snarare än självdestruktivitet eller kriminellt beteende.</p>
+</section>
+
+<section class="eb-chap" id="pd-debate">
+<h3>Vardagliga etiketter och 'Hobbykliniker'</h3>
+<p>Att använda termen narcissism för att beskriva ex-partners, särskilt ex-män i samband med relationskonflikter, uppbrott eller meningsskiljaktigheter. Det har tyvärr och med samtida och framtida konsekvenser blivit en utbredd trend i dagens samhälle. På sociala medier, i forum och i privata samtal ofta under anonymitetens skydd stämplas män och fäder som “narcissister” av ex-partners som ventilerar frustration eller besvikelse. Denna trend drivs ofta av outbildade individer som agerar som “hobbypsykologer” eller självutnämnda experter i så kallade privata “hobbykliniker”.</p>
+<p>Att reducera komplex psykologisk problematik till en förenklad etikett är inte bara ovetenskapligt utan också djupt problematiskt. Det missförstår både den anklagade och relationens dynamik och kan avslöja mer om anklagarens egna brister – såsom låg självinsikt eller empati – än om den anklagades karaktär.</p>
+<h4>Förenkling av komplex psykologi</h4>
+<p>Narcissistisk personlighetsstörning (NPD) är en klinisk diagnos som kräver omfattande bedömning av kvalificerade psykologer eller psykiatriker, ofta med verktyg som Structured Clinical Interview for DSM-5 (SCID-5) eller Adult Attachment Interview (AAI). Forskning visar att NPD är relativt ovanligt (1–6 % prevalens; APA, 2013) och att dess symtom – grandiositet, behov av beundran, empatibrist – är komplexa och kan överlappa med BPD eller ASPD. Att kalla någon “narcissist” baserat på subjektiva upplevelser av ett uppbrott ignorerar denna komplexitet.</p>
+<h4>Etiska problem och att hänga ut familj</h4>
+<p>Den växande trenden av privata “hobbykliniker” – självutnämnda experter utan formell utbildning – och outbildade individer som fungerar som “hobbypsykologer” på forum är särskilt oroande. Att offentligt eller anonymt stämpla en före detta partner, särskilt en far till gemensamma barn, som narcissist är etiskt tveksamt. Det kan skada personens rykte, påverka deras relation till gemensamma barn och förstärka en ensidig berättelse som ignorerar relationens komplexitet.</p>
+<p>Hur kan man rättfärdiga att kalla någon man en gång älskat – och kanske valt att bilda familj med – för en narcissist utan att reflektera över sin egen roll? Denna fråga är svår att besvara utan att konfrontera sin egen del i relationens dynamik.</p>
+</section>
+
+<section class="eb-chap" id="pd-markers_criteria">
+<h3>Markörer och kriterier</h3>
+<p class="eb-model-intro">Jag tar återigen in modellen jag visade i bokens början som visar på hur Markörer gör sin synliga och en del kriterier för Narcissism genom att säga huruvida andra har diagnosen. Varje del förklaras på nästkommande sida</p>
+<div class="eb-model" role="img" aria-label="Modell: Besvikelse/Uppbrott leder till etiketten narcissism, via låg självinsikt, brist på empati och behov av bekräftelse samt projicering, demonisering och sympatisökande, till narcissistiska markörer.">
+  <div class="m-row m-2"><div class="m-box m-strong">Besvikelse/Uppbrott</div><div class="m-arrow m-h" aria-hidden="true">→</div><div class="m-box m-strong">Etiketten "narcissism"</div></div>
+  <div class="m-down" aria-hidden="true">↓</div>
+  <div class="m-row m-3"><div class="m-box">Låg självinsikt</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box m-dark">Brist på empati</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box">Behov av bekräftelse</div></div>
+  <div class="m-down" aria-hidden="true">↓</div>
+  <div class="m-row m-3"><div class="m-box m-soft">Projicering av egna brister</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box m-mid">Demonisering av andra</div><div class="m-arrow m-h" aria-hidden="true">↔</div><div class="m-box m-soft">Söker sympatier i forum</div></div>
+  <div class="m-down" aria-hidden="true">↓</div>
+  <div class="m-final">Narcissistiska markörer</div>
+</div>
+
+</section>
+
+<section class="eb-chap" id="pd-model_explanation">
+<h3>Förklaring av modellen</h3>
+<h4>Förklaring av modellen:</h4>
+<ul class="eb-defs">
+<li><strong>• Besvikelse/Uppbrott:</strong> En känsloladdad händelse, såsom ett relationsuppbrott, fungerar som en utlösande faktor. Denna besvikelse driver behovet att förklara eller rationalisera varför relationen misslyckades.</li>
+<li><strong>• Användning av “narcissism”-etiketten:</strong> Istället för att reflektera över komplexa orsaker används termen “narcissist” som en förenklad förklaring. Detta beteende är ofta omedvetet och drivs av ett behov att skylla på den andre.</li>
+<li><strong>• Låg självinsikt:</strong> Att snabbt stämpla någon som narcissist tyder på låg reflektiv funktion (RF), en egenskap kopplad till NPD (Fonagy et al., 2002). Anklagaren har svårt att se sin egen roll i konflikten och projicerar istället brister på den andre.</li>
+<li><strong>• Brist på empati:</strong> Genom att demonisera ex-partnern, särskilt offentligt, visar anklagaren en oförmåga att förstå den andres perspektiv (mentalisering) eller känslor vilket är en central markör för NPD.</li>
+<li><strong>• Behov av bekräftelse:</strong> Att använda termen i forum eller sociala medier för att “hänga ut” någon kan drivas av ett behov av sympatier eller validering från andra, en annan narcissistisk egenskap.</li>
+<li><strong>• Projicering av egna brister och Demonisering av andra:</strong> Dessa processer förstärker varandra, där anklagaren projicerar sina egna osäkerheter eller brister (t.ex. låg självinsikt) på den andre, samtidigt som de demoniserar ex-partnern för att framställa sig själv som ett offer.</li>
+<li><strong>• Söker sympatier i forum:</strong> Genom att dela anklagelser i anonyma eller offentliga sammanhang söker anklagaren bekräftelse från en publik, vilket speglar NPD:s behov av beundran.</li>
+<li><strong>• Narcissistiska markörer:</strong> Sammantaget kan dessa beteenden – låg självinsikt, brist på empati, behov av bekräftelse – indikera att anklagaren själv uppvisar drag associerade med narcissism, vilket skapar en paradox.</li>
+</ul>
+<p>Modellen visar att beteendet att använda “narcissism” som en etikett inte bara är en förenkling av komplex psykologi utan också kan spegla narcissistiska drag hos anklagaren. Pilarna illustrerar hur dessa faktorer är sammankopplade, där besvikelse driver projicering, som i sin tur förstärks av låg empati och behov av extern validering</p>
+</section>
+
+<section class="eb-chap" id="pd-model_text">
+<h3>Låt oss vända på perspektivet</h3>
+<p>Låt oss vända på perspektivet: Kan det vara så att den som snabbt använder termen “narcissist” själv uppvisar drag associerade med narcissism? NPD kännetecknas av låg empati, behov av beundran och en tendens att övervärdera sig själv och det ofta genom att undervärdera andra.</p>
+<p>När någon använder “narcissism” för att förklara en ex-partners beteende utan att reflektera över sin egen roll visar de då inte en form av empatibrist genom att ignorera den andres perspektiv? Att offentligt eller anonymt “hänga ut” någon kan också tolkas som ett behov av bekräftelse från andra vilket kan vara en självklar narcissistisk markör. Vidare, om man konsekvent framställer sig själv som ett offer och den andre som en förövare- speglar det inte en grandios självbild där man själv är felfri och den andre är defekt?</p>
+<p>Forskning visar att individer med låg reflektiv funktion ofta har svårt att se nyanser i relationer och tenderar att skylla på andra för konflikter (Fonagy et al., 2002). Om den som använder termen narcissist inte kan reflektera över sin egen roll i en konflikt- är det då inte möjligt att de själva uppvisar narcissistiska drag såsom självupptagenhet eller större svårigheter med att mentalisera? Denna projicering är särskilt tydlig i forum där anonyma inlägg används för att samla sympatier, vilket kan ses som ett sätt att söka beundran från en publik. Modellen ovan illustrerar hur detta beteende kan kopplas till NPD:s markörer, vilket gör det svårt att avfärda utan självreflektion.</p>
+<h4>Besvikelse som drivkraft och projicering som utlopp</h4>
+<p>Användningen av narcissism verkar ofta drivas av besvikelse, smärta, en känsla av att inte bli hörd och en upplevd lite möjlighet att påverka andra. Att stämpla en ex-partner som narcissist kan ge en känsla av kontroll eller rättvisa särskilt om man känner sig övergiven eller kränkt. Men detta beteende riskerar att förstärka en offermentalitet snarare än att främja läkning.</p>
+<h4>Särskilt problematiskt gällande fäder</h4>
+<p>Särskilt problematiskt blir det när termen används om fäder till gemensamma barn.</p>
+<ul>
+<li>Hur påverkar det barnen att höra sin far beskrivas som en patologisk narcissist?</li>
+<li>Hur kan man förklara att man en gång älskade denna person och med kort varsel får kvalifikationer att sätta diagnoser som etiketter för att skada en fader?</li>
+<li>På vilket sätt känns det relevant att skada ett barns ena förälder även om hämnd för många känns frestande och att samtligt säga detta om halva sitt barns?</li>
+</ul>
+<p class="lead">Dessa frågor är svåra att besvara utan att erkänna att termen ofta används som ett sätt att hantera personlig smärta snarare än som en objektiv bedömning.</p>
+</section>
+
+<section class="eb-chap" id="pd-questions">
+<h3>Utmanande frågor för anklagaren</h3>
+<p>För att ytterligare belysa problematiken så har jag nedan listat några frågor som förhoppningsvis är svåra att besvara för den som använder narcissism som en förenklad etikett, om någon av frågorna upplevs svåra att besvara- då kan det vara så att jag är fel ute.</p>
+<div class="eb-qs">
+<p>• Vad kvalificerar dig att ställa en diagnos som narcissism? Utan formell utbildning eller diagnostiska verktyg, hur kan du vara säker på att din bedömning är korrekt? Är det inte möjligt att det du uppfattar som narcissism är en normal reaktion på relationsstress eller konflikt eller annan påfrestning?</p>
+<p>• Har du reflekterat över din egen roll i relationen? Om du snabbt går från att älska någon till att kalla dem narcissist, har du då granskat hur dina egna förväntningar eller beteenden bidrog till uppbrottet? Låg reflektiv funktion är en riskfaktor för personlighetsstörningar – kan det gälla dig?</p>
+<p>• Hur påverkar dina anklagelser gemensamma barn? Att kalla en far narcissist kan skada barnens relation till honom. Är det etiskt försvarbart att prioritera din egen frustration över barnens välbefinnande?</p>
+<p>• Är termen ett sätt att hantera din egen smärta? Använder du “narcissism” för att rationalisera ett uppbrott eller känna dig moraliskt överlägsen? Kan detta beteende i sig självt spegla en narcissistisk tendens att undervärdera andra och övervärdera självet?</p>
+</div>
+</section>
+
+<section class="eb-chap" id="pd-conclusion">
+<h3>Slutsats</h3>
+<p>Att använda termen narcissism som en vardaglig etikett för att beskriva ex-partners, familjemedlemmar och i allra högsta grad män- särskilt i känsloladdade sammanhang som uppbrott eller tvister är inte bara ovetenskapligt utan också skadligt.</p>
+<p><strong>Varför skadligt:</strong> Grundläggande attributionsfel (psykologisk term för att prata illa om någon när det dessutom gäller mig själv) är alltid skadligt även för den som attribuerar, ett samtal av fientlig art riktad mot i detta fall en folkgrupp som en ny trend där mannen ska målas om till en fruktansvärd art skapar polariteter och formar våra barns perception.</p>
+<p>Det förenklar komplexa psykologiska och relationella dynamiker och riskerar att skada både den anklagade och gemensamma barn. Modellen ovan visar hur detta beteende kan kopplas till narcissistiska markörer som låg självinsikt, brist på empati och behov av bekräftelse. Genom att projicera narcissism på andra undviker man att konfrontera sina egna brister vilket paradoxalt nog kan spegla de drag man anklagar andra för. Istället för att använda kliniska termer som vapen bör vi uppmuntra till självreflektion och professionell hjälp för att hantera relationskonflikter på ett moget och etiskt sätt.</p>
+<p class="eb-copy">© 2025 Billy Ljungberg</p>
+</section>
+
+      <div class="eb-dl"><a class="eb-btn" href="texter/personlighetsstorningar.pdf" download>Ladda ner som PDF</a><button type="button" class="eb-btn ghost" data-close-modal="art-modal-pd">Stäng</button></div>
+    </article>
+  </div>
+</dialog>
 <dialog class="art-modal ebok" id="art-modal-blogg-mit" aria-labelledby="eb-t-blogg">
   <button type="button" class="art-modal-close" data-close-modal="art-modal-blogg-mit" aria-label="Stäng"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
   <div class="art-modal-body">
@@ -2988,5 +3211,17 @@ document.addEventListener("click", (e) => {
 })();
 </script>
 
+<script>
+{ // Innehållsförteckningen i e-bokens läsvy: scrolla inom läsvyn utan att ändra sidans adress
+  document.addEventListener("click", e => {
+    const a = e.target.closest(".eb-toc a");
+    if (!a) return;
+    const t = document.getElementById(a.getAttribute("href").slice(1));
+    if (!t) return;
+    e.preventDefault();
+    t.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
+</script>
 </body>
 </html>
