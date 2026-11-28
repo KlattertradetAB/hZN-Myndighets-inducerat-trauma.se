@@ -274,7 +274,8 @@ td{font-variant-numeric:tabular-nums}
         <button role="tab" aria-selected="false" data-tab="contacts">4. Kontakter</button>
         <button role="tab" aria-selected="false" data-tab="shop">5. Butik, Ordrar &amp; E-bok</button>
         <button role="tab" aria-selected="false" data-tab="blog">6. Blogg &amp; Artiklar</button>
-        <button role="tab" aria-selected="false" data-tab="account">7. Konto</button>
+        <button role="tab" aria-selected="false" data-tab="members">7. Medlemmar</button>
+        <button role="tab" aria-selected="false" data-tab="account">8. Konto</button>
       </div>
       <div class="filter" id="filter-wrap">
         <label for="filter">Urval:</label>
@@ -293,6 +294,7 @@ td{font-variant-numeric:tabular-nums}
     <section id="tab-contacts" role="tabpanel" hidden></section>
     <section id="tab-shop" role="tabpanel" hidden></section>
     <section id="tab-blog" role="tabpanel" hidden></section>
+    <section id="tab-members" role="tabpanel" hidden></section>
     <section id="tab-account" role="tabpanel" hidden>
       <div class="card">
         <h3>Byt lösenord</h3>
@@ -401,6 +403,8 @@ async function rest(path, opts={}){
   return r.status===204 ? null : r.json();
 }
 
+window.HZADMIN = { rest, token, toast:(t)=>toast(t), esc, CFG };
+
 /* ---------- Vyer ---------- */
 function show(view){ $("login-view").hidden = view!=="login"; $("app").hidden = view!=="app"; $("setup-view").hidden = view!=="setup"; }
 function toast(t){ const el=$("toast"); el.textContent=t; el.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>el.hidden=true,4000); }
@@ -470,11 +474,12 @@ let statsCatFilter = "all", statsSearch = "", allSearch = "", allSort = "newest"
 
 function switchTab(tabName){
   document.querySelectorAll("[data-tab]").forEach(x=>x.setAttribute("aria-selected",String(x.dataset.tab===tabName)));
-  ["charts","stats","all","contacts","shop","blog","account"].forEach(k=>{
+  ["charts","stats","all","contacts","shop","blog","members","account"].forEach(k=>{
     const el=$("tab-"+k);
     if(el) el.hidden = k!==tabName;
   });
-  $("filter-wrap").hidden = tabName==="contacts"||tabName==="shop"||tabName==="blog"||tabName==="account";
+  $("filter-wrap").hidden = tabName==="contacts"||tabName==="shop"||tabName==="blog"||tabName==="members"||tabName==="account";
+  if(tabName==="members" && window.HZMembers) window.HZMembers.show();
 }
 
 function render(){
@@ -1453,5 +1458,6 @@ try{ session = JSON.parse(sessionStorage.getItem(SKEY)||"null"); }catch(e){ sess
 if(session){ start().catch(()=>logout(true)); } else show("login");
 })();
 </script>
+<script src="admin-medlemmar.js"></script>
 </body>
 </html>

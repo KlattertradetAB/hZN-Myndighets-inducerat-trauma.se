@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Horizonten Gemenskap – medlemskap, stadgar och medlemssida</title>
+<meta name="description" content="Bli medlem i Horizonten Gemenskap – Föreningen. Gratis medlem, Horizonten Stöd eller Gemenskap Premium. Stadgar, medlemsvillkor, integritetspolicy, medlemschatt och bibliotek.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap">
+<style>
+:root{
+  --bg:#F6F4F0; --surface:#FFFFFF; --ink:#13202E; --muted:#56606B; --line:#DCD8D1;
+  --navy:#05223B; --navy-ink:#FFFFFF; --accent:#B5520C; --accent-soft:#FBEBDD; --ok:#1F6B3A; --err:#B3261E;
+  --display:Fraunces,Georgia,"Times New Roman",serif;
+  --body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{--bg:#0D1620;--surface:#16212D;--ink:#EEF1F4;--muted:#A9B3BD;--line:#2A3745;--navy:#1E3A57;--accent:#F08A3C;--accent-soft:#2E241B;--ok:#7BD39A;--err:#FFB4AB;color-scheme:dark}
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;min-height:100%}
+body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8%,rgba(181,82,12,.08),transparent 42%),radial-gradient(circle at 88% 18%,rgba(5,34,59,.07),transparent 46%);background-attachment:fixed;color:var(--ink);font:16px/1.6 var(--body)}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1[tabindex="-1"]:focus{outline:none}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left,0px))}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* Sidhuvud */
+.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:64px;flex-wrap:wrap;padding-block:8px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;margin-right:auto}
+.brand img{width:38px;height:38px;border-radius:50%}
+.brand strong{font-family:var(--display);font-size:19px;font-weight:600;line-height:1.1}
+.brand small{display:block;color:var(--muted);font-size:12px}
+.nav{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.nav a{text-decoration:none;color:var(--ink);font-weight:500;font-size:14.5px;padding:8px 12px;border-radius:10px}
+.nav a:hover,.nav a[aria-current="page"]{background:var(--surface);box-shadow:inset 0 0 0 1px var(--line)}
+.nav a.cta{background:var(--navy);color:var(--navy-ink)}
+.nav a.cta:hover{box-shadow:none;opacity:.92}
+@media (max-width:700px){.top{position:static}.nav a{padding:7px 10px;font-size:14px}}
+
+main{padding-block:36px 56px}
+.view{display:flex;flex-direction:column;gap:28px}
+h1,h2,h3,h4{text-wrap:balance}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,5.6vw,44px);line-height:1.12;margin:0}
+h2{font-family:var(--display);font-weight:600;font-size:clamp(23px,3.6vw,30px);line-height:1.2;margin:0}
+h3{font-size:18px;margin:0}
+.kicker{display:inline-block;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:6px}
+.lede{color:var(--muted);font-size:17.5px;max-width:62ch;margin:10px 0 0}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:860px){.grid3,.grid2{grid-template-columns:1fr}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:12px;border:0;background:var(--navy);color:var(--navy-ink);font-weight:600;cursor:pointer;text-decoration:none}
+.btn:hover{opacity:.92}
+.btn:disabled{opacity:.55;cursor:default}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+.btn.accent{background:var(--accent);color:#fff}
+.btn.danger{background:transparent;color:var(--err);box-shadow:inset 0 0 0 1px var(--err)}
+.btn.small{min-height:38px;padding:0 14px;font-size:14px;border-radius:10px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* Nivåer */
+.tier{display:flex;flex-direction:column;gap:12px;position:relative}
+.tier.feat{border:2px solid var(--accent)}
+.tier .tag{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.tier .price{font-family:var(--display);font-size:34px;font-weight:600;line-height:1}
+.tier .price small{font-family:var(--body);font-size:15px;color:var(--muted);font-weight:500}
+.tier ul{margin:0;padding-left:20px}
+.tier .btn{margin-top:auto}
+.ribbon{position:absolute;top:-12px;right:18px;background:var(--accent);color:#fff;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px}
+
+/* Tabeller */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+table{border-collapse:collapse;width:100%;font-size:15px;min-width:560px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+tbody th{font-weight:500}
+td.c,th.c{text-align:center}
+tr:last-child td,tr:last-child th{border-bottom:0}
+.yes{color:var(--ok);font-weight:600}
+.no{color:var(--muted)}
+
+/* Dokument */
+.doc{max-width:760px}
+.doc h2{margin:30px 0 8px}
+.doc h3{margin:22px 0 6px;font-size:17px}
+.doc p,.doc li{max-width:68ch}
+.doc ol,.doc ul{padding-left:22px}
+.doc .fill{background:var(--accent-soft);color:var(--accent);padding:0 6px;border-radius:6px;font-weight:600}
+.doc blockquote{margin:16px 0;padding:14px 18px;border-left:3px solid var(--accent);background:var(--surface);border-radius:0 12px 12px 0;font-style:italic}
+.doc-nav{display:flex;flex-wrap:wrap;gap:8px}
+.doc-nav a{font-size:14px;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.doc-nav a[aria-current="page"]{background:var(--navy);color:var(--navy-ink);border-color:var(--navy)}
+.meta{color:var(--muted);font-size:14px}
+
+/* Formulär */
+form.stack{display:flex;flex-direction:column;gap:16px;max-width:560px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label,.field legend{font-weight:500;font-size:14.5px}
+.field input,.field select,.field textarea{min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--bg);padding:0 14px;font-size:16px}
+.field textarea{padding:12px 14px;min-height:110px;resize:vertical}
+.field .hint{font-size:13.5px;color:var(--muted)}
+fieldset{border:0;padding:0;margin:0}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);cursor:pointer}
+.opt input{margin-top:4px;accent-color:var(--accent);width:18px;height:18px;flex-shrink:0}
+.opt:has(input:checked){border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.opt span small{display:block;color:var(--muted);font-size:13.5px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:15px}
+.check input{margin-top:4px;accent-color:var(--accent);width:18px;height:18px;flex-shrink:0}
+.msg{padding:12px 14px;border-radius:12px;font-size:15px}
+.msg.err{background:color-mix(in srgb,var(--err) 12%,transparent);color:var(--err)}
+.msg.ok{background:color-mix(in srgb,var(--ok) 14%,transparent);color:var(--ok)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+/* Medlemssida */
+.mcard{align-self:start;background:var(--navy);color:var(--navy-ink);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden}
+.mcard::after{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(240,138,60,.35),transparent 70%)}
+.mcard .lvl{font-family:var(--display);font-size:28px;font-weight:600}
+.mcard .meta{color:rgba(255,255,255,.75)}
+.badge{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+.mcard .badge{background:rgba(255,255,255,.14);color:#fff}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.item h4{margin:0;font-size:16px}
+.item p{margin:2px 0 0;color:var(--muted);font-size:14.5px}
+.lock{font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.benefits{margin:0;padding-left:20px}
+.benefits li{margin:3px 0}
+
+/* Chatt */
+.chat{display:grid;grid-template-columns:260px 1fr;gap:16px;min-height:520px}
+@media (max-width:760px){.chat{grid-template-columns:1fr}}
+.rooms{display:flex;flex-direction:column;gap:6px}
+.room{display:flex;flex-direction:column;gap:2px;text-align:left;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer}
+.room[aria-current="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.room small{color:var(--muted);font-size:12.5px}
+.room.locked{opacity:.7}
+.pane{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;min-height:520px}
+.pane-head{padding:14px 18px;border-bottom:1px solid var(--line)}
+.pane-head p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.msgs{flex:1;overflow-y:auto;padding:14px 18px;display:flex;flex-direction:column;gap:12px;max-height:60vh}
+.m{display:flex;flex-direction:column;gap:2px;max-width:80%}
+.m.me{align-self:flex-end;align-items:flex-end}
+.m .who{font-size:13px;color:var(--muted);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.m .bubble{background:var(--bg);border:1px solid var(--line);padding:10px 14px;border-radius:14px;white-space:pre-wrap;word-wrap:break-word}
+.m.me .bubble{background:var(--accent-soft);border-color:transparent}
+.m .acts{display:flex;gap:10px}
+.m .acts button{background:none;border:0;padding:0;font-size:12.5px;color:var(--muted);cursor:pointer;text-decoration:underline}
+.composer{display:flex;gap:10px;padding:12px;border-top:1px solid var(--line)}
+.composer textarea{flex:1;min-height:48px;max-height:160px;border-radius:12px;border:1px solid var(--line);background:var(--bg);padding:12px 14px;resize:vertical}
+
+.lib-body h3{margin:22px 0 6px}
+.lib-body ul{padding-left:22px}
+
+.foot{border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:14px}
+.foot .wrap{display:flex;flex-direction:column;gap:8px}
+.foot a{color:inherit}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-weight:500;z-index:30;max-width:90vw}
+.spinner{color:var(--muted);padding:20px 0}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#oversikt"><img src="favicon.svg" alt="" width="38" height="38"><span><strong>Horizonten Gemenskap</strong><small>Föreningen · medlemskap</small></span></a>
+    <nav class="nav" aria-label="Medlemskap">
+      <a href="index.html">Startsidan</a>
+      <a href="#oversikt" data-nav="oversikt">Medlemskap</a>
+      <a href="#stadgar" data-nav="docs">Föreningen</a>
+      <a href="#bibliotek" data-nav="bibliotek">Bibliotek</a>
+      <a href="#chatt" data-nav="chatt">Medlemschatt</a>
+      <a href="#logga-in" class="cta" id="nav-account">Logga in</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap" id="main" tabindex="-1">
+
+<!-- ================= ÖVERSIKT ================= -->
+<section class="view" data-view="oversikt" aria-labelledby="h-oversikt">
+  <div>
+    <span class="kicker">Horizonten Gemenskap – Föreningen</span>
+    <h1 id="h-oversikt">Innovation, trygghet och tillgänglighet</h1>
+    <p class="lede">Horizonten Gemenskap är skapad för att bygga en levande bro mellan teoretisk förståelse och praktisk vardag. Genom att förena modern neurobiologi, fältteori och vår Self-care-modell med en tillgänglig digital mötesplats skapar vi ett sammanhang där personlig utveckling och relationell trygghet får ta plats.</p>
+    <p class="lede">Oavsett om du kliver in via vår kostnadsfria medlemssida för att ta del av basverktyg, eller väljer <strong>Horizonten Stöd</strong> respektive <strong>Gemenskap Premium</strong>, får du konkreta strategier för att reglera nervsystemet, stärka dina gränser och möta livet från en mer förankrad plats.</p>
+    <div class="row" style="margin-top:18px">
+      <a class="btn accent" href="#bli-medlem">Bli medlem</a>
+      <a class="btn ghost" href="#logga-in" id="ov-login">Jag är redan medlem</a>
+    </div>
+  </div>
+
+  <div class="grid3" aria-label="Våra tre grundpelare">
+    <div class="card"><span class="kicker">Pelare</span><h3>Innovation</h3><p class="muted">Vi nyttjar digitaliseringens möjligheter och integrerar modern neurobiologi, somatisk förståelse och fältteori i gemenskapens alla verktyg.</p></div>
+    <div class="card"><span class="kicker">Pelare</span><h3>Trygghet</h3><p class="muted">Vi skapar säker <em>containment</em> genom tydliga gränser, genomtänkt moderering och fokus på att bygga inre och yttre trygghet.</p></div>
+    <div class="card"><span class="kicker">Pelare</span><h3>Tillgänglighet</h3><p class="muted">Genom hemsidan och digitala verktyg sänker vi trösklarna så att verksamt stöd finns till hands i vardagen, oavsett var du befinner dig.</p></div>
+  </div>
+
+  <div>
+    <span class="kicker">Medlemsstruktur &amp; prismodell</span>
+    <h2>Välj din nivå</h2>
+    <p class="muted small">Alla priser inklusive moms. Avgifterna fastställs av föreningens årsmöte.</p>
+  </div>
+  <div class="grid3" id="tiers">
+    <div class="card tier">
+      <span class="tag">Porten</span>
+      <h3>Gratis Medlem</h3>
+      <div class="price">0 kr</div>
+      <p class="muted">För nyfikna och sökande. Sänker tröskeln för att börja utforska Self-care och ta del av basmaterial.</p>
+      <ul><li>Egen medlemssida på webben</li><li>Öppna medlemschatten</li><li>Grundläggande arbetsblad</li><li>Nyhetsbrev och löpande inspiration</li></ul>
+      <a class="btn ghost" href="#bli-medlem" data-plan="gratis">Skapa gratis konto</a>
+    </div>
+    <div class="card tier">
+      <span class="tag">Bron</span>
+      <h3>Horizonten Stöd</h3>
+      <div class="price"><span data-price="stod-ar">295 kr</span> <small>/ år</small></div>
+      <p class="muted">För den medvetna medlemmen. En stabiliserande resurs i vardagen som ger rabatter, communitytillhörighet och övningsstöd.</p>
+      <ul><li>Allt i Gratis Medlem</li><li>10 % rabatt på korta workshops och föreläsningar</li><li>Reducerat pris vid bokning av sessioner</li><li>Ett urval ur biblioteket</li></ul>
+      <a class="btn" href="#bli-medlem" data-plan="stod-ar">Välj Horizonten Stöd</a>
+    </div>
+    <div class="card tier feat">
+      <span class="ribbon">Fördjupningen</span>
+      <span class="tag">För utbildnings- och terapiaktiva</span>
+      <h3>Gemenskap Premium</h3>
+      <div class="price"><span data-price="premium-ar">950 kr</span> <small>/ år</small></div>
+      <p class="muted small" style="margin:-6px 0 0">eller <strong data-price="premium-manad">95 kr</strong> / månad</p>
+      <p class="muted">Full tillgång till fördjupningsuppgifter, alla bilagor, stängda modererade rum och Q&amp;A.</p>
+      <ul><li>Allt i Horizonten Stöd</li><li>20 % rabatt på workshops, 10 % på längre utbildningar</li><li>Fullt bibliotek med bilagor och färdighetsträning</li><li>Stängda, nischade och modererade chattrum</li><li>Förtur vid kursbokningar (48 timmar)</li><li>Exklusiva live-webbinarier och Q&amp;A</li></ul>
+      <div class="row"><a class="btn accent" href="#bli-medlem" data-plan="premium-ar">Premium per år</a><a class="btn ghost" href="#bli-medlem" data-plan="premium-manad">Per månad</a></div>
+    </div>
+  </div>
+
+  <div>
+    <span class="kicker">Förmåns- och rättighetsmatris</span>
+    <h2>Det här ingår</h2>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th scope="col">Förmåner &amp; innehåll</th><th scope="col" class="c">Gratis Medlem</th><th scope="col" class="c">Horizonten Stöd (295 kr)</th><th scope="col" class="c">Gemenskap Premium (950 kr)</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Egen medlemssida på webben</th><td class="c yes">Ja</td><td class="c yes">Ja</td><td class="c yes">Ja</td></tr>
+        <tr><th scope="row">Tillgång till öppen medlemschatt</th><td class="c yes">Ja</td><td class="c yes">Ja</td><td class="c yes">Ja</td></tr>
+        <tr><th scope="row">Grundläggande arbetsblad (Bas)</th><td class="c yes">Ja</td><td class="c yes">Ja</td><td class="c yes">Ja</td></tr>
+        <tr><th scope="row">Nyhetsbrev &amp; löpande inspiration</th><td class="c yes">Ja</td><td class="c yes">Ja</td><td class="c yes">Ja</td></tr>
+        <tr><th scope="row">Rabatt på korta workshops &amp; föreläsningar</th><td class="c no">–</td><td class="c yes">10 %</td><td class="c yes">20 %</td></tr>
+        <tr><th scope="row">Rabatt på längre utbildningar</th><td class="c no">–</td><td class="c no">–</td><td class="c yes">10 %</td></tr>
+        <tr><th scope="row">Reducerat pris vid bokning av sessioner</th><td class="c no">–</td><td class="c yes">Ja</td><td class="c yes">Ja</td></tr>
+        <tr><th scope="row">Fullt bibliotek (bilagor &amp; färdighetsträning)</th><td class="c no">–</td><td class="c yes">Begränsat urval</td><td class="c yes">Full tillgång</td></tr>
+        <tr><th scope="row">Stängda, nischade &amp; modererade chattrum</th><td class="c no">–</td><td class="c no">–</td><td class="c yes">Ja</td></tr>
+        <tr><th scope="row">Förtur vid kursbokningar (48 timmar)</th><td class="c no">–</td><td class="c no">–</td><td class="c yes">Ja</td></tr>
+        <tr><th scope="row">Exklusiva live-webbinarier / Q&amp;A</th><td class="c no">–</td><td class="c no">–</td><td class="c yes">Ja</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="kicker">Kulturbärare</span>
+      <h3>Mer än en medlem</h3>
+      <p class="muted">Som Kulturbärare är du en levande del av Horizontens fundament – trygghetsvärd, förebild i kommunikation, ambassadör för lärande och väktare av sekretess. Betalande medlemmar kan avge Kulturbärarens löfte på sin medlemssida.</p>
+      <a href="#kulturbarare">Läs manifestet och uppdraget →</a>
+    </div>
+    <div class="card">
+      <span class="kicker">Föreningen</span>
+      <h3>Stadgar och villkor</h3>
+      <p class="muted">Horizonten Gemenskap – Föreningen är en partipolitiskt och religiöst obunden, allmännyttig ideell förening med säte i Gävle kommun.</p>
+      <div class="doc-nav"><a href="#stadgar">Stadgar</a><a href="#villkor">Medlemsvillkor</a><a href="#integritetspolicy">Integritetspolicy</a><a href="#chattregler">Regler för medlemschatten</a><a href="#ramverk">Vårt ramverk</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BLI MEDLEM ================= -->
+<section class="view" data-view="bli-medlem" aria-labelledby="h-bli" hidden>
+  <div>
+    <span class="kicker">Bli medlem</span>
+    <h1 id="h-bli">Välkommen in i gemenskapen</h1>
+    <p class="lede">Skapa ditt konto. Väljer du Horizonten Stöd eller Gemenskap Premium går du direkt vidare till kortbetalningen när kontot är klart.</p>
+  </div>
+  <form class="stack" id="signup-form" novalidate>
+    <div class="field"><label for="su-name">För- och efternamn</label><input id="su-name" autocomplete="name" required maxlength="120"></div>
+    <div class="field"><label for="su-email">E-postadress</label><input id="su-email" type="email" autocomplete="email" required maxlength="254"></div>
+    <div class="field"><label for="su-phone">Mobilnummer <span class="muted">(valfritt)</span></label><input id="su-phone" type="tel" autocomplete="tel" maxlength="40"></div>
+    <div class="field"><label for="su-pass">Välj lösenord</label><input id="su-pass" type="password" autocomplete="new-password" minlength="10" required><span class="hint">Minst 10 tecken. En kort mening är både lätt att minnas och säker.</span></div>
+
+    <fieldset class="field">
+      <legend>Nivå</legend>
+      <div class="opts" id="su-plans">
+        <label class="opt"><input type="radio" name="su-plan" value="gratis" checked><span><strong>Gratis Medlem</strong> · 0 kr<small>Medlemssida, öppna chatten, basarbetsblad och nyhetsbrev.</small></span></label>
+        <label class="opt"><input type="radio" name="su-plan" value="stod-ar"><span><strong>Horizonten Stöd</strong> · <span data-price="stod-ar">295 kr</span> per år<small>Rabatter, communitytillhörighet och övningsstöd.</small></span></label>
+        <label class="opt"><input type="radio" name="su-plan" value="premium-ar"><span><strong>Gemenskap Premium</strong> · <span data-price="premium-ar">950 kr</span> per år<small>Allt – fullt bibliotek, stängda rum, webbinarier och Q&amp;A.</small></span></label>
+        <label class="opt"><input type="radio" name="su-plan" value="premium-manad"><span><strong>Gemenskap Premium</strong> · <span data-price="premium-manad">95 kr</span> per månad<small>Löpande månadsbetalning som du kan avsluta när du vill.</small></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset class="field">
+      <legend>Medlemsform enligt stadgarna</legend>
+      <div class="opts">
+        <label class="opt"><input type="radio" name="su-type" value="ordinarie" checked><span><strong>Ordinarie medlem</strong><small>Fysisk person med full närvaro-, yttrande-, förslags- och rösträtt vid årsmötet.</small></span></label>
+        <label class="opt"><input type="radio" name="su-type" value="ungdom_familj"><span><strong>Ungdoms- och familjemedlem</strong><small>Fulla medlemsrättigheter från det år du fyller 15 år.</small></span></label>
+        <label class="opt"><input type="radio" name="su-type" value="stod_samverkan"><span><strong>Stöd- eller samverkansmedlem</strong><small>Person eller organisation som vill stödja verksamheten. Närvaro-, yttrande- och förslagsrätt, men inte rösträtt.</small></span></label>
+      </div>
+    </fieldset>
+    <div class="field" id="su-org-wrap" hidden><label for="su-org">Organisationens namn <span class="muted">(om du ansöker för ett företag, en stiftelse eller organisation)</span></label><input id="su-org" autocomplete="organization" maxlength="160"></div>
+    <label class="check" id="su-guardian-wrap" hidden><input type="checkbox" id="su-guardian"><span>Om jag är under 18 år har min vårdnadshavare godkänt mitt medlemskap.</span></label>
+
+    <label class="check"><input type="checkbox" id="su-terms"><span>Jag delar föreningens värdegrund och godkänner <a href="#stadgar" target="_blank">stadgarna</a>, <a href="#villkor" target="_blank">medlemsvillkoren och communityreglerna</a>.</span></label>
+    <label class="check"><input type="checkbox" id="su-privacy"><span>Jag har läst <a href="#integritetspolicy" target="_blank">integritetspolicyn</a> och godkänner att mina uppgifter behandlas för mitt medlemskap.</span></label>
+    <label class="check"><input type="checkbox" id="su-news"><span>Ja tack, skicka nyhetsbrev och notiser om föreläsningar och event. <span class="muted">(valfritt)</span></span></label>
+    <div class="hp" aria-hidden="true"><label for="su-website">Webbplats</label><input id="su-website" tabindex="-1" autocomplete="off"></div>
+
+    <p class="msg err" id="su-err" role="alert" hidden></p>
+    <button class="btn accent" type="submit" id="su-btn">Skapa mitt konto</button>
+    <p class="muted small">Har du redan ett konto? <a href="#logga-in">Logga in</a>.</p>
+  </form>
+</section>
+
+<!-- ================= LOGGA IN ================= -->
+<section class="view" data-view="logga-in" aria-labelledby="h-login" hidden>
+  <div>
+    <span class="kicker">Medlemssidan</span>
+    <h1 id="h-login">Logga in</h1>
+  </div>
+  <form class="stack" id="login-form" novalidate>
+    <div class="field"><label for="li-email">E-postadress</label><input id="li-email" type="email" autocomplete="email" required></div>
+    <div class="field"><label for="li-pass">Lösenord</label><input id="li-pass" type="password" autocomplete="current-password" required></div>
+    <p class="msg err" id="li-err" role="alert" hidden></p>
+    <button class="btn" type="submit" id="li-btn">Logga in</button>
+    <p class="muted small">Ny här? <a href="#bli-medlem">Bli medlem</a>. · <a href="#glomt">Glömt lösenordet?</a></p>
+  </form>
+</section>
+
+<section class="view" data-view="glomt" aria-labelledby="h-glomt" hidden>
+  <div>
+    <span class="kicker">Medlemssidan</span>
+    <h1 id="h-glomt">Glömt lösenordet?</h1>
+    <p class="lede">Skriv din e-postadress så skickar vi en länk för att välja ett nytt lösenord. Kommer inget mejl inom några minuter – titta i skräpposten eller mejla <span id="glomt-mail">billy@klattertradet.com</span>, så hjälper vi dig.</p>
+  </div>
+  <form class="stack" id="forgot-form" novalidate>
+    <div class="field"><label for="fg-email">E-postadress</label><input id="fg-email" type="email" autocomplete="email" required></div>
+    <p class="msg" id="fg-msg" role="status" hidden></p>
+    <button class="btn" type="submit" id="fg-btn">Skicka länk</button>
+  </form>
+</section>
+
+<section class="view" data-view="nytt-losenord" aria-labelledby="h-nytt" hidden>
+  <div><h1 id="h-nytt">Välj nytt lösenord</h1></div>
+  <form class="stack" id="newpw-form" novalidate>
+    <div class="field"><label for="np-1">Nytt lösenord (minst 10 tecken)</label><input id="np-1" type="password" autocomplete="new-password" minlength="10"></div>
+    <div class="field"><label for="np-2">Upprepa lösenordet</label><input id="np-2" type="password" autocomplete="new-password" minlength="10"></div>
+    <p class="msg" id="np-msg" role="status" hidden></p>
+    <button class="btn" type="submit">Spara lösenordet</button>
+  </form>
+</section>
+
+<!-- Konto finns men medlemsrad saknas (t.ex. admin som vill bli medlem) -->
+<section class="view" data-view="slutfor" aria-labelledby="h-slutfor" hidden>
+  <div>
+    <span class="kicker">Ett sista steg</span>
+    <h1 id="h-slutfor">Slutför din medlemsregistrering</h1>
+    <p class="lede">Du är inloggad, men har ännu ingen medlemsprofil.</p>
+  </div>
+  <form class="stack" id="complete-form" novalidate>
+    <div class="field"><label for="cp-name">För- och efternamn</label><input id="cp-name" autocomplete="name" required maxlength="120"></div>
+    <div class="field"><label for="cp-phone">Mobilnummer <span class="muted">(valfritt)</span></label><input id="cp-phone" type="tel" autocomplete="tel" maxlength="40"></div>
+    <label class="check"><input type="checkbox" id="cp-terms"><span>Jag godkänner <a href="#stadgar" target="_blank">stadgarna</a> och <a href="#villkor" target="_blank">medlemsvillkoren</a>.</span></label>
+    <label class="check"><input type="checkbox" id="cp-privacy"><span>Jag har läst <a href="#integritetspolicy" target="_blank">integritetspolicyn</a>.</span></label>
+    <label class="check"><input type="checkbox" id="cp-news"><span>Skicka nyhetsbrev och notiser. <span class="muted">(valfritt)</span></span></label>
+    <p class="msg err" id="cp-err" role="alert" hidden></p>
+    <button class="btn" type="submit">Skapa medlemsprofil</button>
+  </form>
+</section>
+
+<!-- ================= MIN SIDA ================= -->
+<section class="view" data-view="min-sida" aria-labelledby="h-min" hidden>
+  <div class="row" style="justify-content:space-between">
+    <div><span class="kicker">Min medlemssida</span><h1 id="h-min">Hej!</h1></div>
+    <button class="btn ghost small" type="button" id="logout-btn">Logga ut</button>
+  </div>
+  <div id="pay-msg" class="msg" role="status" hidden></div>
+  <div class="grid2">
+    <div class="mcard" id="mcard"></div>
+    <div class="card" id="mbenefits"></div>
+  </div>
+  <div class="card" id="mplans"></div>
+  <div class="grid2">
+    <div class="card"><h3>Kommande webbinarier och event</h3><div id="mevents" class="list" style="margin-top:12px"><p class="spinner">Hämtar…</p></div></div>
+    <div class="card" id="mkultur"></div>
+  </div>
+  <div class="card">
+    <h3>Mina uppgifter</h3>
+    <form class="stack" id="profile-form" novalidate style="margin-top:12px">
+      <div class="field"><label for="pf-name">För- och efternamn</label><input id="pf-name" autocomplete="name" maxlength="120"></div>
+      <div class="field"><label for="pf-phone">Mobilnummer</label><input id="pf-phone" type="tel" autocomplete="tel" maxlength="40"></div>
+      <div class="field" id="pf-org-wrap"><label for="pf-org">Organisation <span class="muted">(för stöd- och samverkansmedlemmar)</span></label><input id="pf-org" maxlength="160"></div>
+      <label class="check"><input type="checkbox" id="pf-news"><span>Skicka nyhetsbrev och notiser om föreläsningar och event</span></label>
+      <p class="msg" id="pf-msg" role="status" hidden></p>
+      <div class="row"><button class="btn small" type="submit">Spara</button></div>
+    </form>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>Byt lösenord</h3>
+      <form class="stack" id="pw-form" novalidate style="margin-top:12px">
+        <div class="field"><label for="pw-1">Nytt lösenord (minst 10 tecken)</label><input id="pw-1" type="password" autocomplete="new-password" minlength="10"></div>
+        <div class="field"><label for="pw-2">Upprepa</label><input id="pw-2" type="password" autocomplete="new-password" minlength="10"></div>
+        <p class="msg" id="pw-msg" role="status" hidden></p>
+        <div class="row"><button class="btn small" type="submit">Byt lösenord</button></div>
+      </form>
+    </div>
+    <div class="card">
+      <h3>Betalningar</h3>
+      <div id="mpayments" class="list" style="margin-top:12px"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Dina rättigheter</h3>
+    <p class="muted">Enligt dataskyddsförordningen (GDPR) har du rätt att få ett utdrag, få fel rättade, invända mot direktmarknadsföring och bli bortglömd. Du kan också när som helst utträda ur föreningen enligt stadgarna § 2.4.</p>
+    <div class="row">
+      <button class="btn ghost small" type="button" id="export-btn">Ladda ner mina uppgifter</button>
+      <button class="btn ghost small" type="button" id="leave-btn">Utträd ur föreningen</button>
+      <button class="btn danger small" type="button" id="delete-btn">Radera mitt konto</button>
+    </div>
+    <p class="msg" id="rights-msg" role="status" hidden></p>
+  </div>
+</section>
+
+<!-- ================= BIBLIOTEK ================= -->
+<section class="view" data-view="bibliotek" aria-labelledby="h-bib" hidden>
+  <div>
+    <span class="kicker">Kunskapsbanken</span>
+    <h1 id="h-bib">Biblioteket</h1>
+    <p class="lede">Arbetsblad, övningar och fördjupningar för ditt arbete med Self-care-modellen. Grundläggande arbetsblad ingår för alla medlemmar; Horizonten Stöd ger ett urval och Gemenskap Premium hela biblioteket.</p>
+  </div>
+  <div id="lib-list" class="list"><p class="spinner">Hämtar…</p></div>
+</section>
+<section class="view" data-view="bibliotek-las" aria-labelledby="h-libitem" hidden>
+  <a href="#bibliotek">← Till biblioteket</a>
+  <article class="doc lib-body" id="lib-item"></article>
+</section>
+
+<!-- ================= CHATT ================= -->
+<section class="view" data-view="chatt" aria-labelledby="h-chatt" hidden>
+  <div>
+    <span class="kicker">Horizonten Medlemschatt</span>
+    <h1 id="h-chatt">Medlemschatten</h1>
+  </div>
+  <div class="card" id="chat-rules-gate" hidden>
+    <h3>Innan du går in</h3>
+    <p class="muted">För att skapa en trygg och hållbar miljö med utgångspunkt i Self-care – där gränser, trygghet och självvalidering står i centrum – gäller våra regler för medlemschatten.</p>
+    <ul>
+      <li><strong>Hållbar ton:</strong> Vi bemöter varandra med ömsesidig respekt och nyfikenhet. Bakom varje skärm finns ett nervsystem med olika förutsättningar och dagsform.</li>
+      <li><strong>Sekretess och integritet:</strong> Det som delas i stängda rum stannar i rummet.</li>
+      <li><strong>Fokus på process framför fixering:</strong> Undvik oombedda råd eller ”fixande”; dela hellre egna reflektioner.</li>
+      <li><strong>Moderering och åtgärder:</strong> Inlägg eller deltagare som bryter mot riktlinjerna kan tas bort.</li>
+    </ul>
+    <p><a href="#chattregler">Läs reglerna i sin helhet</a></p>
+    <div class="row"><button class="btn" type="button" id="accept-rules-btn">Jag har läst och följer reglerna</button></div>
+  </div>
+  <div class="chat" id="chat-ui" hidden>
+    <div class="rooms" id="rooms"></div>
+    <div class="pane">
+      <div class="pane-head"><h3 id="room-name">Välj ett rum</h3><p id="room-desc"></p></div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <form class="composer" id="composer">
+        <label for="msg-input" class="sr-only">Skriv ett inlägg</label>
+        <textarea id="msg-input" maxlength="2000" placeholder="Skriv ett inlägg…" rows="1"></textarea>
+        <button class="btn" type="submit" id="send-btn">Skicka</button>
+      </form>
+    </div>
+  </div>
+  <p class="muted small">Behöver du prata med någon nu? Chatten läses inte dygnet runt. Självmordslinjen 90101 · 1177 · vid akut fara 112.</p>
+</section>
+
+<!-- ================= DOKUMENT ================= -->
+<nav class="doc-nav" id="doc-nav" aria-label="Föreningens dokument" hidden>
+  <a href="#stadgar">Stadgar</a><a href="#villkor">Medlemsvillkor &amp; communityregler</a><a href="#integritetspolicy">Integritetspolicy</a><a href="#chattregler">Regler för medlemschatten</a><a href="#kulturbarare">Kulturbärare</a><a href="#ramverk">Teoretiskt ramverk</a>
+</nav>
+
+<article class="view doc" data-view="stadgar" data-doc aria-labelledby="h-stadgar" hidden>
+  <div><span class="kicker">Officiella stadgar</span><h1 id="h-stadgar">Stadgar för Horizonten medlemsförening</h1></div>
+
+  <section>
+  <h2>§ 1 Föreningens namn, ändamål och karaktär</h2>
+  <h3>1.1 Namn och säte</h3>
+  <p>Föreningens namn är <strong>Horizonten Gemenskap – Föreningen</strong>. Föreningen är en partipolitiskt och religiöst obunden, allmännyttig ideell förening med säte i Gävle kommun, Gävleborgs län.</p>
+  <h3>1.2 Ändamål och vision</h3>
+  <p>Föreningen har till ändamål att främja psykisk hälsa och folkhälsa, stärka individers och familjers egenmakt samt verka för ökad trygghet, gemenskap, dialog och rättssäkerhet i samhället.</p>
+  <p><em>Föreningen ska uppfylla sitt ändamål genom att:</em></p>
+  <ul>
+    <li>Skapa och tillhandahålla inkluderande fysiska och digitala mötesplatser, samtalsgrupper, nätverk och gemenskapsytor för kunskapsutbyte, självstärkande processer och kamratstöd.</li>
+    <li>Verka för ökad traumamedvetenhet, dialog och tidiga insatser inom samhällets stöd- och välfärdssystem, med särskilt fokus på barns och ungas rättigheter, trygghet och rättssäkerhet.</li>
+    <li>Främja etablering, utbildning, metodutveckling och organisering av oberoende dialog- och familjeombud som stöd till enskilda och familjer i kontakt med samhällsinstanser.</li>
+    <li>Driva opinionsbildning, sprida folkbildande material samt anordna föreläsningar, seminarier, kulturarrangemang, konferenser och workshops kring trauma, bemötande, relationer och psykiskt välbefinnande.</li>
+    <li>Främja digital delaktighet och utveckling av tillgängliga metoder och digitala verktyg för självhjälp, stöd, reflektion och gemenskap.</li>
+  </ul>
+  <h3>1.3 Verksamhetsformer och samverkan</h3>
+  <p>Föreningen äger rätt att för förverkligandet av sitt ändamål:</p>
+  <ul>
+    <li>Söka, ta emot och förvalta projektbidrag, anslag, verksamhetsstöd, gåvor och stipendier från allmänna arvsfonden, myndigheter, kommuner, regioner, stiftelser och enskilda.</li>
+    <li>Bedriva projektverksamhet såväl i egen regi som i partnerskap.</li>
+    <li>Ge ut skrifter, rapporter, böcker och digitala publikationer.</li>
+    <li>Skapa, äga, förvalta och licensiera digitala verktyg, metoder och immateriella resurser för allmännyttans främjande.</li>
+    <li>Ingå samverkans- och samarbetsavtal med idéburna organisationer, akademi och forskning, offentlig sektor samt privata aktörer.</li>
+  </ul>
+  </section>
+
+  <section>
+  <h2>§ 2 Medlemskap och medlemsformer</h2>
+  <h3>2.1 Medlemskategorier</h3>
+  <p>Medlemskap är öppet för alla som delar föreningens värdegrund, ställer sig bakom dess ändamål och förbinder sig att följa dess stadgar. Föreningen har följande medlemsformer:</p>
+  <ul>
+    <li><strong>Ordinarie medlem:</strong> Fysisk person. Har full närvaro-, yttrande-, förslags- och rösträtt vid årsmöte.</li>
+    <li><strong>Ungdoms- och familjemedlem:</strong> Fysisk person som beviljas medlemskap enligt differentierad avgiftsmodell fastställd av årsmötet. Har fulla medlemsrättigheter från det år medlemmen fyller 15 år.</li>
+    <li><strong>Stödmedlem / samverkansmedlem:</strong> Fysisk eller juridisk person (företag, stiftelse, organisation) som vill stödja föreningens verksamhet ekonomiskt eller ideellt. Har närvaro-, yttrande- och förslagsrätt, men saknar rösträtt vid årsmötet.</li>
+    <li><strong>Hedersmedlem:</strong> Person som på ett exceptionellt sätt främjat föreningens ändamål och utses av årsmötet på förslag av styrelsen. Befrias från medlemsavgift med bibehållen rösträtt.</li>
+  </ul>
+  <h3>2.2 Inträde</h3>
+  <p>Ansökan om medlemskap sker via föreningens anvisade rutiner. Medlemskapet träder i kraft så snart fastställd medlemsavgift är erlagd (gäller ej hedersmedlem).</p>
+  <h3>2.3 Medlemsavgift</h3>
+  <p>Medlemsavgifternas storlek för respektive medlemskategori fastställs årligen av ordinarie årsmöte. Avgiften avser löpande tolv (12) månader eller kalenderår enligt årsmötets beslut.</p>
+  <h3>2.4 Utträde</h3>
+  <p>Medlem som önskar utträda ur föreningen anmäler detta skriftligen till styrelsen. Medlemskapet upphör omedelbart. Erlagda avgifter återbetalas ej.</p>
+  <h3>2.5 Uteslutning</h3>
+  <p>Medlem som uppenbart motarbetar föreningens ändamål, agerar kränkande, bryter mot dess stadgar eller allvarligt skadar föreningens anseende kan uteslutas av styrelsen. Medlemmen ska beredas tillfälle att yttra sig skriftligen minst två (2) veckor innan beslut fattas. Beslut om uteslutning kan överklagas till nästkommande ordinarie årsmöte.</p>
+  </section>
+
+  <section>
+  <h2>§ 3 Medlemmarnas rättigheter och skyldigheter</h2>
+  <ul>
+    <li>Medlem har rätt att ta del av föreningens verksamhet, mötesplatser, föreläsningar och material samt engagera sig i arbetsgrupper, sektioner och projekt.</li>
+    <li>Röstberättigad medlem har en (1) röst vid föreningens årsmöte. Rösträtten är personlig och kan inte utövas genom ombud om inte årsmötet uttryckligen beslutat om fullmaktsförfarande.</li>
+    <li>Medlem förbinder sig att respektera föreningens stadgar, hålla en respektfull och konstruktiv samtalston samt efterleva fattade föreningsbeslut.</li>
+  </ul>
+  </section>
+
+  <section>
+  <h2>§ 4 Verksamhets- och räkenskapsår</h2>
+  <p>Föreningens verksamhetsår och räkenskapsår sammanfaller med kalenderåret, från och med 1 januari till och med 31 december.</p>
+  </section>
+
+  <section>
+  <h2>§ 5 Årsmötet</h2>
+  <h3>5.1 Status och tidpunkt</h3>
+  <p>Årsmötet är föreningens högsta beslutande organ. Ordinarie årsmöte ska hållas årligen senast före utgången av april månad.</p>
+  <h3>5.2 Mötesformer</h3>
+  <p>Årsmöte och extra allmänt möte kan genomföras som fysiskt möte, helt digitalt möte eller som hybridmöte, i enlighet med styrelsens beslut.</p>
+  <h3>5.3 Kallelse</h3>
+  <p>Kallelse jämte förslag till dagordning skickas digitalt via e-post till medlemmarna samt tillkännages på föreningens officiella digitala informationskanaler senast tre (3) veckor före mötet.</p>
+  <h3>5.4 Motioner och handlingar</h3>
+  <ul>
+    <li>Motioner från röstberättigade medlemmar ska vara styrelsen tillhanda senast två (2) veckor före årsmötet. Styrelsen ska yttra sig över inkomna motioner.</li>
+    <li>Verksamhetsberättelse, årsredovisning/bokslut, revisionsberättelse, verksamhetsplan, budget och styrelsens propositioner samt motionssvar ska hållas tillgängliga för medlemmarna senast en (1) vecka före årsmötet.</li>
+  </ul>
+  <h3>5.5 Ärenden vid ordinarie årsmöte</h3>
+  <p>Vid ordinarie årsmöte ska följande ärenden behandlas och protokollföras:</p>
+  <ol>
+    <li>Mötets öppnande.</li>
+    <li>Fastställande av röstlängd.</li>
+    <li>Val av mötesordförande och mötessekreterare.</li>
+    <li>Val av två (2) protokolljusterare tillika rösträknare.</li>
+    <li>Fråga om mötet blivit behörigen sammankallat.</li>
+    <li>Fastställande av dagordning.</li>
+    <li>Framläggande av styrelsens verksamhetsberättelse och ekonomiska redovisning för det gångna verksamhetsåret.</li>
+    <li>Revisorernas berättelse.</li>
+    <li>Beslut om fastställande av resultat- och balansräkning.</li>
+    <li>Beslut om ansvarsfrihet för styrelsens ledamöter för den tid revisionen avser.</li>
+    <li>Fastställande av medlemsavgifter för kommande verksamhetsår.</li>
+    <li>Behandling av styrelsens verksamhetsplan och rambudget för det kommande verksamhetsåret.</li>
+    <li>Val av föreningens ordförande (för en mandattid om 1–2 år).</li>
+    <li>Val av övriga ordinarie styrelseledamöter samt eventuella suppleanter (för en mandattid om 1–2 år).</li>
+    <li>Val av minst en (1) ordinarie revisor samt vid behov en (1) revisorssuppleant.</li>
+    <li>Val av valberedning (1–3 personer, varav en sammankallande).</li>
+    <li>Behandling av styrelsens propositioner och i rätt tid inkomna motioner.</li>
+    <li>Övriga anmälda frågor (endast informationsärenden, ej beslut).</li>
+    <li>Mötets avslutande.</li>
+  </ol>
+  <h3>5.6 Röstning och beslutsgång</h3>
+  <p>Alla frågor vid årsmötet avgörs med enkel majoritet där inte annat uttryckligen föreskrivs i dessa stadgar. Vid lika röstetal gäller den mening som biträds av mötesordföranden, utom vid personval där lotten skiljer. Omröstning sker öppet, men personval ska ske med sluten omröstning om röstberättigad medlem så begär.</p>
+  <h3>5.7 Extra årsmöte</h3>
+  <p>Styrelsen kan kalla till extra årsmöte vid behov. Styrelsen är skyldig att kalla till extra årsmöte om revisor eller minst en tiondel (1/10) av föreningens röstberättigade medlemmar skriftligen begär det för att behandla ett angivet ärende. Kallelse jämte dagordning och beslutsunderlag ska skickas senast två (2) veckor före det extra mötet. Endast de ärenden som uttryckligen angetts i kallelsen får beslutas på extra årsmöte.</p>
+  </section>
+
+  <section>
+  <h2>§ 6 Styrelsen</h2>
+  <h3>6.1 Sammansättning och val</h3>
+  <p>Styrelsen leder föreningens verksamhet mellan årsmötena och ansvarar för dess strategiska och löpande förvaltning. Styrelsen ska bestå av ordförande samt minst två (2) och högst sex (6) ordinarie ledamöter, med noll till tre (0–3) suppleanter.</p>
+  <h3>6.2 Konstituering</h3>
+  <p>Om inte årsmötet beslutat annorlunda konstituerar styrelsen sig själv internt avseende roller som vice ordförande, kassör och sekreterare samt eventuella andra funktioner vid sitt första sammanträde efter årsmötet.</p>
+  <h3>6.3 Beslutsförhet och möten</h3>
+  <p>Styrelsen sammanträder på kallelse av ordföranden eller när minst två (2) ledamöter så begär. Styrelsemöten kan genomföras fysiskt, digitalt eller i hybridform. Styrelsen är beslutsför när mer än hälften av samtliga ledamöter är närvarande. Som styrelsens beslut gäller den mening som mer än hälften av de närvarande röstar för. Vid lika röstetal har ordföranden utslagsröst.</p>
+  <h3>6.4 Firmateckning</h3>
+  <p>Föreningens firma tecknas av styrelsen i dess helhet eller av minst två styrelseledamöter i förening efter styrelsens bemyndigande. Styrelsen kan för specifika bank-, betaltjänst- eller myndighetsärenden utfärda särskild fullmakt till enskild person.</p>
+  <h3>6.5 Sektioner, arbetsgrupper och nätverk</h3>
+  <p>Styrelsen äger formellt mandat att inrätta och upplösa lokala sektioner, tematiska arbetsgrupper, projektorganisationer, referensgrupper och ombudsnätverk (exempelvis för utbildning, digital utveckling, stödverksamhet, gemenskap och påverkansarbete). Styrelsen fastställer verksamhetsdirektiv, riktlinjer och ekonomiska ramar för dessa organs arbete.</p>
+  <h3>6.6 Verksamhetsledning, personal och avtal</h3>
+  <p>Styrelsen förvaltar föreningens ekonomi och egendom, beslutar om ingående av samverkansavtal och upphandlingar, tillsätter och entledigar eventuell personal eller uppdragstagare samt fastställer arvoden och ersättningar för utförda uppdrag inom ramen för föreningens verksamhet och budget.</p>
+  </section>
+
+  <section>
+  <h2>§ 7 Revision</h2>
+  <p>För oberoende granskning av styrelsens förvaltning och föreningens räkenskaper utser årsmötet minst en (1) ordinarie revisor samt vid behov en (1) revisorssuppleant.</p>
+  <p>Revisorn behöver inte vara auktoriserad men ska ha nödvändig erfarenhet av ekonomisk granskning och får inte sitta i föreningens styrelse eller ha nära jävsförhållande till styrelseledamot.</p>
+  <p>Styrelsens räkenskaper, protokoll och underlag ska överlämnas till revisorn senast fyra (4) veckor före ordinarie årsmöte. Revisionsberättelsen ska överlämnas till styrelsen senast två (2) veckor före årsmötet.</p>
+  </section>
+
+  <section>
+  <h2>§ 8 Stadgeändring</h2>
+  <p>För ändring av dessa stadgar krävs beslut vid ordinarie årsmöte med minst två tredjedelars (2/3) majoritet av de avgivna rösterna. Förslag till stadgeändring ska bifogas kallelsen till årsmötet.</p>
+  </section>
+
+  <section>
+  <h2>§ 9 Föreningens upplösning</h2>
+  <p>För upplösning av föreningen krävs beslut med minst två tredjedelars (2/3) majoritet vid två på varandra följande föreningsmöten med minst trettio (30) dagars mellanrum, varav det ena ska vara ordinarie årsmöte.</p>
+  <p>Vid föreningens upplösning ska samtliga skulder och förpliktelser regleras. Eventuella kvarvarande ekonomiska, materiella eller immateriella tillgångar får inte skiftas ut bland medlemmarna eller tillfalla kommersiella intressen, utan ska oavkortat överlåtas till ett allmännyttigt, ideellt ändamål eller organisation som verkar i linje med föreningens syfte.</p>
+  <p>Beslut om vilken mottagare tillgångarna ska tillfalla fattas vid det sista upplösningsmötet.</p>
+  </section>
+</article>
+
+<article class="view doc" data-view="villkor" data-doc aria-labelledby="h-villkor" hidden>
+  <div>
+    <span class="kicker">Medlemsvillkor</span>
+    <h1 id="h-villkor">Medlemsvillkor &amp; communityregler för Horizonten Gemenskap</h1>
+    <p class="meta">Version 2026-11-28</p>
+  </div>
+  <p><em>Välkommen till vår digitala plattform! Här bygger vi en miljö präglad av värme, kunskap och ömsesidigt stöd. Oavsett om du är här för att lära dig mer om mänsklig utveckling eller för att finna din egen väg framåt, är du en viktig del av fältet.</em></p>
+
+  <h2>1. Tre nivåer av delaktighet</h2>
+  <h3>Nivå 1: Besökare (gratis för alla)</h3>
+  <p>Vissa delar av vår kunskapsbank är alltid öppna. Du kan läsa grundläggande artiklar om våra modeller, ta del av allmän information om våra utbildningar till behandlingspedagog och socialpedagog, samt kontakta oss för bokning av terapi.</p>
+  <h3>Nivå 2: Registrerad användare – Gratis Medlem (gratis inlogg)</h3>
+  <p>Genom att skapa ett gratis konto här på horizonten.nu får du:</p>
+  <ul>
+    <li>Möjlighet att prenumerera på snabba notiser om föreläsningar och event.</li>
+    <li>Tillgång till den öppna medlemschatten och grundläggande arbetsblad.</li>
+    <li>En egen medlemssida där du kan hålla ordning på dina kontakter med oss.</li>
+  </ul>
+  <h3>Nivå 3: Horizonten Medlem (betalande)</h3>
+  <p>För dig som vill fördjupa dig och bidra till gemenskapen finns två betalande nivåer: <strong>Horizonten Stöd</strong> (295 kr/år) och <strong>Gemenskap Premium</strong> (950 kr/år eller 95 kr/månad). Som betalande medlem får du, beroende på nivå:</p>
+  <ul>
+    <li><strong>Exklusiv tillgång:</strong> Full tillgång till gemenskapsplattformen Horizonten.</li>
+    <li><strong>Förmåner:</strong> Rabatter på utvalda kurser, föreläsningar och material.</li>
+    <li><strong>Fördjupat stöd:</strong> Tillgång till låsta rum där vi går på djupet i ämnen som neurobiologi, traumaterapi och vår egen Self-care-modell (Gemenskap Premium).</li>
+    <li><strong>Fadderskap &amp; trygghet:</strong> Möjligheten att agera som ”trygghetsvärd” eller fadder för nya medlemmar – en chans att ge tillbaka och hjälpa andra att landa mjukt i gemenskapen. Se <a href="#kulturbarare">Kulturbärare</a>.</li>
+  </ul>
+  <p>Exakt vad som ingår på varje nivå framgår av <a href="#oversikt">förmånsmatrisen</a>.</p>
+
+  <h2>2. Våra spelregler (förhållningssätt)</h2>
+  <p>För att få behålla ditt inlogg och ditt medlemskap krävs att du följer våra grundläggande regler för samvaro:</p>
+  <ul>
+    <li><strong>Bidra till trygghet:</strong> Vi hjälps åt att skapa ett välkomnande fält. Som medlem förväntas du möta andra med nyfikenhet istället för dömande.</li>
+    <li><strong>Fadderskapstanken:</strong> Vi uppmuntrar erfarna medlemmar att vara en hjälpande hand för nya. Att dela med sig av sina erfarenheter och visa vägen är en central del av Horizonten.</li>
+    <li><strong>Respekt &amp; sekretess:</strong> Det som delas i våra slutna grupper stannar där. Vi respekterar varandras integritet och livsberättelser. Kränkningar eller personangrepp leder till omedelbar avstängning.</li>
+    <li><strong>Professionellt material:</strong> Allt material som delas (filmer, texter, övningar) är upphovsrättsskyddat och får endast användas för privat bruk.</li>
+  </ul>
+
+  <h2>3. Betalning och löptid</h2>
+  <ul>
+    <li><strong>Årsmedlemskap</strong> (Horizonten Stöd 295 kr, Gemenskap Premium 950 kr) löper i 12 månader från betaldatum och <strong>förnyas inte automatiskt</strong> – du väljer själv att förlänga det när året närmar sig sitt slut.</li>
+    <li><strong>Gemenskap Premium per månad</strong> (95 kr) är en löpande prenumeration som dras varje månad tills du avslutar den. Du avslutar den när du vill på din medlemssida, och den gäller då till och med den period du redan betalat.</li>
+    <li>Avgiften är inte återbetalningsbar då den går direkt till att underhålla och utveckla plattformen och föreningens verksamhet (stadgarna § 2.4).</li>
+    <li>Medlemsavgifternas storlek fastställs av föreningens årsmöte (stadgarna § 2.3).</li>
+  </ul>
+
+  <h2>4. Sekretess och GDPR</h2>
+  <p>Vi hanterar dina personuppgifter med största försiktighet. Genom att godkänna dessa villkor godkänner du också vår <a href="#integritetspolicy">integritetspolicy</a>. Vi delar aldrig dina uppgifter med utomstående.</p>
+
+  <h2>Det här gäller för ditt konto</h2>
+  <p>För att vi ska kunna hålla en hög kvalitet och en god stämning på våra sidor hos Klätterträdet och Horizonten har vi satt upp några enkla regler. Genom att skaffa ett inlogg godkänner du följande:</p>
+  <h3>1. Ditt konto är personligt</h3>
+  <p>Ditt inlogg är bara för dig. Dela inte dina inloggningsuppgifter med andra. Detta är extra viktigt eftersom vi hanterar material och diskussioner som kräver sekretess och förtroende.</p>
+  <h3>2. Visa respekt och sunt förnuft</h3>
+  <p>Vi har nolltolerans mot påhopp, kränkningar eller respektlöst beteende. Vi är här för att lära och utvecklas tillsammans. Diskutera gärna sakfrågor, men håll alltid en god ton mot andra medlemmar och personal.</p>
+  <h3>3. Sekretess och tystnadsplikt</h3>
+  <p>Det som sägs i våra grupper eller forum stannar där. För att alla ska våga vara öppna och delaktiga krävs det att vi kan lita på varandra. Det är strängt förbjudet att kopiera eller sprida vidare personlig information om andra medlemmar.</p>
+  <h3>4. Upphovsrätt på material</h3>
+  <p>Allt material du får tillgång till via ditt inlogg – texter, filmer, övningar och föreläsningar – tillhör Klätterträdet AB. Du får använda det för eget bruk, men inte sälja, kopiera eller distribuera det vidare utan vårt skriftliga tillstånd.</p>
+  <h3>5. Horizonten-medlemskap</h3>
+  <p>För dig som väljer att stödja vår gemenskap via Horizonten Stöd eller Gemenskap Premium ingår förmåner som rabatter och förtur. Medlemskapet betalas per år (eller per månad för Gemenskap Premium) och ger dig tillgång till våra låsta rum och extra resurser enligt din nivå.</p>
+  <h3>6. Om reglerna inte följs</h3>
+  <p>Vi vill ha en trygg miljö. Om någon bryter mot dessa regler eller agerar på ett sätt som skadar gemenskapen förbehåller vi oss rätten att stänga av inlogget och avsluta medlemskapet omedelbart. Uteslutning ur föreningen sker enligt stadgarna § 2.5.</p>
+  <p style="margin-top:24px"><strong>Billy Ljungberg</strong><br>Grundare, Klätterträdet AB &amp; Horizonten<br><span class="muted">076 054 26 59 · <span data-contact-mail>billy@klattertradet.com</span></span></p>
+</article>
+
+<article class="view doc" data-view="integritetspolicy" data-doc aria-labelledby="h-integ" hidden>
+  <div>
+    <span class="kicker">GDPR</span>
+    <h1 id="h-integ">Integritetspolicy &amp; information om GDPR</h1>
+    <p class="meta">För medlemskap, konton och köp · Version 2026-11-28 · För kartläggningen Kraftsamling gäller <a href="index.html#integritet">en egen integritetstext</a>.</p>
+  </div>
+  <p><em>Vi värnar om din personliga integritet. Denna policy beskriver hur vi samlar in, använder och skyddar dina personuppgifter i enlighet med dataskyddsförordningen (GDPR).</em></p>
+
+  <h2>1. Vem ansvarar för dina uppgifter?</h2>
+  <p>Klätterträdet AB (org.nr <span class="fill">[fylls i]</span>) är personuppgiftsansvarig för de uppgifter du lämnar till oss via våra hemsidor, appar eller i kontakt med vår personal.</p>
+
+  <h2>2. Vilka uppgifter samlar vi in?</h2>
+  <p>Vi samlar endast in de uppgifter som krävs för att kunna leverera våra tjänster:</p>
+  <ul>
+    <li><strong>Vid medlemskap/inlogg:</strong> Namn, e-postadress och i förekommande fall mobilnummer, organisation och adress, vald medlemsform och nivå samt när du godkände villkoren.</li>
+    <li><strong>Vid köp/medlemskap i Horizonten:</strong> Betalningsuppgifter och köphistorik. Kortuppgifter hanteras av Stripe och når aldrig oss.</li>
+    <li><strong>I medlemschatten:</strong> De inlägg du själv skriver, med ditt förnamn.</li>
+    <li><strong>Vid kontakt/bokning:</strong> Information som du själv väljer att lämna i formulär eller via e-post för att vi ska kunna hjälpa dig med matchning till terapi eller utbildning.</li>
+  </ul>
+
+  <h2>3. Vad använder vi uppgifterna till?</h2>
+  <ul>
+    <li>För att administrera ditt konto och ge dig tillgång till våra digitala tjänster.</li>
+    <li>För att föra föreningens medlemsregister och röstlängd enligt stadgarna.</li>
+    <li>För att kommunicera viktiga notiser, nyheter och erbjudanden (om du valt att ta emot dessa).</li>
+    <li>För att kunna genomföra fakturering och bokföring enligt lagkrav.</li>
+    <li>För att matcha dig med rätt terapeut eller utbildning utifrån dina behov.</li>
+  </ul>
+
+  <h2>4. Sekretess och tystnadsplikt</h2>
+  <p>Inom våra verksamheter tillämpar vi sträng sekretess.</p>
+  <ul>
+    <li><strong>Personuppgifter:</strong> Vi säljer aldrig dina uppgifter vidare till tredje part.</li>
+    <li><strong>Terapeutisk information:</strong> All information som rör enskild terapi eller handledning hanteras med lagstadgad tystnadsplikt och lagras i separata, säkrade system som inte är kopplade till den allmänna community-plattformen.</li>
+  </ul>
+
+  <h2>5. Var lagras uppgifterna?</h2>
+  <p>Medlemsregistret och chatten ligger i en databas hos Supabase inom EU (Irland). Kortbetalningar sköts av Stripe och e-post skickas via Resend. De behandlar uppgifterna för vår räkning och får inte använda dem för egna syften.</p>
+
+  <h2>6. Hur länge sparar vi uppgifterna?</h2>
+  <p>Vi sparar dina uppgifter så länge du har ett aktivt konto hos oss eller så länge som krävs enligt lag (exempelvis bokföringslagen eller patientdatalagen vid terapi). Du kan när som helst begära att få dina uppgifter raderade, förutsatt att det inte strider mot andra lagkrav. Raderar du ditt konto tas profil och chattinlägg bort direkt; uppgifter om betalningar sparas så länge bokföringslagen kräver.</p>
+
+  <h2>7. Dina rättigheter</h2>
+  <p>Du har enligt GDPR rätt att:</p>
+  <ul>
+    <li>Få ett utdrag på vilka uppgifter vi har sparade om dig – det kan du ladda ner direkt på din medlemssida.</li>
+    <li>Få felaktiga uppgifter rättade.</li>
+    <li>Begära att bli bortglömd (radering av uppgifter) – det kan du göra själv på din medlemssida.</li>
+    <li>Invända mot att dina uppgifter används för direktmarknadsföring.</li>
+  </ul>
+  <p>Du har också rätt att lämna klagomål till Integritetsskyddsmyndigheten (IMY).</p>
+
+  <h2>8. Säkerhet</h2>
+  <p>Vi använder moderna säkerhetslösningar för att skydda din data mot obehörig åtkomst. Endast personal med behörighet har tillgång till de uppgifter som krävs för att de ska kunna utföra sitt arbete.</p>
+
+  <h2>9. Kontakt</h2>
+  <p>Har du frågor om hur vi hanterar dina personuppgifter? Kontakta oss på:</p>
+  <p>E-post: <span data-contact-mail>billy@klattertradet.com</span><br>Adress: Gullregnsgatan 9A, Gävle</p>
+</article>
+
+<article class="view doc" data-view="chattregler" data-doc aria-labelledby="h-chattregler" hidden>
+  <div><span class="kicker">Medlemschatten</span><h1 id="h-chattregler">Regler för Horizonten Medlemschatt</h1></div>
+  <p>För att skapa en trygg och hållbar miljö med utgångspunkt i Self-care – där gränser, trygghet och självvalidering står i centrum – gäller följande ramverk:</p>
+  <ul>
+    <li><strong>Hållbar ton:</strong> Vi bemöter varandra med ömsesidig respekt och nyfikenhet. Kom ihåg att bakom varje skärm finns ett nervsystem med olika förutsättningar och dagsform.</li>
+    <li><strong>Sekretess och integritet:</strong> Det som delas i stängda rum stannar i rummet. Vi värnar varandras integritet och individuella processer.</li>
+    <li><strong>Fokus på process framför fixering:</strong> Vi strävar efter att mötas i här och nu. Undvik oombedda råd eller ”fixande”; fokusera hellre på att dela egna reflektioner och stödja varandras medvetenhet.</li>
+    <li><strong>Moderering och åtgärder:</strong> Horizonten förbehåller sig rätten att moderera och ta bort inlägg eller deltagare som bryter mot våra riktlinjer för trygghet och etik. Vid upprepade eller allvarliga övertramp kan medlemskapet i chatten avslutas utan förvarning för att skydda gruppens gemensamma trygghet och <em>containment</em>.</li>
+  </ul>
+  <h2>Så fungerar chatten</h2>
+  <ul>
+    <li>Den öppna medlemschatten är till för alla medlemmar. De stängda, nischade och modererade rummen ingår i Gemenskap Premium.</li>
+    <li>Andra medlemmar ser bara ditt förnamn. Dela inte personnummer, adresser eller uppgifter om andra.</li>
+    <li>Ser du något som inte känns tryggt? Tryck på <em>Anmäl</em> vid inlägget så tittar en moderator på det.</li>
+    <li>Chatten är inte en akutmottagning. Behöver du prata med någon nu: Självmordslinjen 90101, 1177 för sjukvårdsrådgivning, vid akut fara 112.</li>
+  </ul>
+</article>
+
+<article class="view doc" data-view="kulturbarare" data-doc aria-labelledby="h-kultur" hidden>
+  <div><span class="kicker">Manifest &amp; uppdrag</span><h1 id="h-kultur">Kulturbärare i Horizonten</h1></div>
+  <p>Som Kulturbärare är du mer än en medlem; du är en levande del av Horizontens fundament. Du har valt att kliva fram för att vårda det ”fält” av trygghet och utveckling som vi bygger tillsammans.</p>
+  <h2>Din roll som Kulturbärare</h2>
+  <ol>
+    <li><strong>Trygghetsvärd:</strong> Du är den som ser den nya medlemmen. Genom ett enkelt ”Välkommen” eller genom att svara på en praktisk fråga hjälper du till att reglera rädslan och osäkerheten som ofta finns vid ett första steg in i en ny gemenskap.</li>
+    <li><strong>Förebild i kommunikation:</strong> Du praktiserar ett lyssnande och icke-dömande förhållningssätt. Du förstår att bakom varje beteende finns ett behov eller en historia, och du bemöter andra utifrån den insikten.</li>
+    <li><strong>Ambassadör för lärande:</strong> Du uppmuntrar andra att utforska våra verktyg, oavsett om det handlar om att boka matchning för terapi eller att söka till våra utbildningar på Klätterträdet.</li>
+    <li><strong>Väktare av sekretess:</strong> Du är en garant för att communityn förblir en trygg plats där det som sägs stannar mellan oss.</li>
+  </ol>
+  <h2>Kulturbärarens löfte</h2>
+  <blockquote>”Jag lovar att efter bästa förmåga bidra till en miljö där vi växer tillsammans. Jag väljer att se möjligheter där andra ser hinder, och jag strävar efter att alltid vara en främjande kraft för mina medmänniskor och för Horizonten Medlemsförening.”</blockquote>
+  <h2>Dina förmåner som Kulturbärare</h2>
+  <ul>
+    <li><strong>Direkt inflytande:</strong> Inbjudan till strategiska möten där vi diskuterar föreningens och appens framtid.</li>
+    <li><strong>Fördjupad handledning:</strong> Möjlighet till specifika träffar med Billy och hans kollegor för att prata om ledarskap och gruppdynamik.</li>
+    <li><strong>Särskild status:</strong> En markering i din profil och i medlemschatten som visar att du är en betrodd Kulturbärare.</li>
+  </ul>
+  <h2>Så blir du Kulturbärare</h2>
+  <p>Kulturbärare är öppet för betalande medlemmar (Horizonten Stöd och Gemenskap Premium). Du avger löftet på din <a href="#min-sida">medlemssida</a>, och när vi har bekräftat det syns markeringen i din profil.</p>
+</article>
+
+<article class="view doc" data-view="ramverk" data-doc aria-labelledby="h-ramverk" hidden>
+  <div><span class="kicker">Teoretiskt &amp; metodologiskt ramverk</span><h1 id="h-ramverk">Vårt ramverk</h1></div>
+
+  <h2>Våra tre grundpelare</h2>
+  <div class="tbl"><table>
+    <thead><tr><th scope="col">Pelare</th><th scope="col">Innebörd i vår verksamhet</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Innovation</th><td>Vi nyttjar digitaliseringens möjligheter och integrerar modern neurobiologi, somatisk förståelse och fältteori i gemenskapens alla verktyg.</td></tr>
+      <tr><th scope="row">Trygghet</th><td>Vi skapar säker <em>containment</em> genom tydliga gränser, genomtänkt moderering och fokus på att bygga inre och yttre trygghet.</td></tr>
+      <tr><th scope="row">Tillgänglighet</th><td>Genom hemsidan och digitala verktyg sänker vi trösklarna så att verksamt stöd finns till hands i vardagen, oavsett var du befinner dig.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>A. Från grundsår till Self-care</h2>
+  <p>Visar hur gemenskapens verktyg och övningar direkt adresserar specifika sårbarheter och relationsmönster:</p>
+  <div class="tbl"><table>
+    <thead><tr><th scope="col">Grundsår / mönster</th><th scope="col">Behov i livsrummet</th><th scope="col">Self-care-fokus</th><th scope="col">Praktiskt verktyg / övning</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Övergivenhet</th><td>Behov av trygghet</td><td><strong>Containment</strong></td><td>Inre trygg röst &amp; Trygg plats-övning</td></tr>
+      <tr><th scope="row">Avvisning</th><td>Behov av bekräftelse</td><td><strong>Självmedkänsla</strong></td><td>Spegelövning &amp; Brev från en inre vän</td></tr>
+      <tr><th scope="row">Förödmjukelse</th><td>Behov av självrespekt</td><td><strong>Självvärde</strong></td><td>Livslinje med fokus på motståndskraft och styrka</td></tr>
+      <tr><th scope="row">Sviken</th><td>Behov av autonomi &amp; förutsägbarhet</td><td><strong>Gränssättning</strong></td><td>Inre gränsmarkör / JA- &amp; NEJ-träning</td></tr>
+      <tr><th scope="row">Rigiditet</th><td>Behov av flexibilitet &amp; tillit</td><td><strong>Perspektivbyte</strong></td><td>Dialogövning mellan kontroll och acceptans</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>B. Den terapeutiska resan (5-stegsmodellen)</h2>
+  <p>Ett strukturerat arbetsflöde från medvetenhet till varaktig förändring:</p>
+  <div class="tbl"><table>
+    <thead><tr><th scope="col">Steg</th><th scope="col">Fokus</th><th scope="col">Praktisk handling</th><th scope="col">Mål</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">1</th><td><strong>Identifiera</strong></td><td>Synliggöra aktiva grundsår och relationsmönster i här och nu.</td><td>Ökad fält- och självmedvetenhet.</td></tr>
+      <tr><th scope="row">2</th><td><strong>Namnge</strong></td><td>Beskriva och sätta ord på inre tillstånd och emotionella reglage.</td><td>Fenomenologisk förankring.</td></tr>
+      <tr><th scope="row">3</th><td><strong>Matcha</strong></td><td>Kartlägga vilka Self-care-funktioner eller resurser som saknas.</td><td>Tydlig behovsbild.</td></tr>
+      <tr><th scope="row">4</th><td><strong>Träna</strong></td><td>Genomföra riktade färdighetsövningar (reglering, gränssättning, kontakt).</td><td>Nya, integrerade handlingsmönster.</td></tr>
+      <tr><th scope="row">5</th><td><strong>Omformulera</strong></td><td>Etablera ett nytt självstärkande narrativ.</td><td>Långsiktig hållbarhet och autonomi.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>C. Våra hållpunkter i mötet</h2>
+  <ul>
+    <li><strong>Containment:</strong> Förmågan att hålla rummet stabilt även när starka affekter aktiveras.</li>
+    <li><strong>Resiliens:</strong> Stödja reglering och värna sunda gränser – vi forcerar inte förändring, vi stöttar kroppens och sinnets egen läkningsförmåga.</li>
+    <li><strong>Närvaro:</strong> Aktiv lyssning, spegling och följsamhet gentemot individens process i stunden.</li>
+    <li><strong>Nyfikenhet:</strong> Ett icke-dömande, undersökande förhållningssätt till de skydd och mönster som visar sig.</li>
+  </ul>
+</article>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span>Horizonten Gemenskap – Föreningen · Gävle · Kontakt: <span data-contact-mail>billy@klattertradet.com</span></span>
+    <span><a href="#stadgar">Stadgar</a> · <a href="#villkor">Medlemsvillkor</a> · <a href="#integritetspolicy">Integritetspolicy</a> · <a href="#chattregler">Chattregler</a> · <a href="index.html#cookies">Cookiepolicy</a></span>
+    <span>Behöver du prata med någon nu? Självmordslinjen 90101 · 1177 · vid akut fara 112</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="config.js"></script>
+<script src="medlem.js"></script>
+</body>
+</html>
