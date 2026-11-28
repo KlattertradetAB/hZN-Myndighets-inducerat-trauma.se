@@ -56,7 +56,8 @@ body{background-color:var(--bg);background-image:radial-gradient(circle at 12% 8
 .logo-stage::before{border:2px solid rgba(181,82,12,.38);animation:hzPulseRing 1.6s cubic-bezier(.16,1,.3,1) .15s both}
 .logo-stage::after{inset:-14px;border:1.5px solid rgba(5,34,59,.18);animation:hzPulseRing2 2s cubic-bezier(.16,1,.3,1) .3s both}
 .mark{width:108px;height:108px;border-radius:50%;box-shadow:0 12px 32px rgba(5,34,59,.14),0 0 0 4px rgba(255,255,255,.7);transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease;position:relative;z-index:1}
-.hero .mark:hover{transform:scale(1.06) rotate(4deg);box-shadow:0 16px 38px rgba(181,82,12,.25),0 0 0 4px rgba(181,82,12,.15)}
+.hero .mark{box-shadow:0 0 0 4px rgba(255,255,255,.7),0 0 18px rgba(240,138,60,.45),0 0 44px rgba(240,138,60,.22),0 12px 26px rgba(5,34,59,.35)}
+.hero .mark:hover{transform:scale(1.06) rotate(4deg);box-shadow:0 0 0 4px rgba(255,255,255,.8),0 0 24px rgba(240,138,60,.6),0 0 60px rgba(240,138,60,.3),0 16px 32px rgba(5,34,59,.38)}
 .hero h1{font-family:var(--display);font-weight:600;font-size:clamp(30px,6vw,44px);line-height:1.12;margin:0;text-wrap:balance;position:relative}
 .hero h1 .title-intro{display:inline-block;animation:hzFadeUp .85s cubic-bezier(.22,1,.36,1) .22s both}
 .hero h1 .title-brand{display:inline-block;background:linear-gradient(110deg,var(--ink) 0%,var(--ink) 35%,var(--accent) 50%,#E07B28 58%,var(--ink) 75%,var(--ink) 100%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hzBrandIn 1s cubic-bezier(.22,1,.36,1) .36s both,hzBrandShine 3.2s ease-in-out .9s 1 forwards}
